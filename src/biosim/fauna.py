@@ -5,22 +5,33 @@ class Fauna:
     Rossumøya.
     """
 
-    def __init__(self):
+    def __init__(self, position, age=0, weight,fitness):
         """"""
+        self.position = position
+        self.age = age
+        self.weight = weight
+        self.fitness = fitness
+
+
+
         pass
+
 
     def get_fitness(self):
-        pass
+        return self.fitness
 
     def get_weight(self):
-        pass
+        return self.weight
 
     def get_age(self):
-        pass
+        return self.age
+
+    def get_position(self):
+        return self.position
 
 
 class Herbivore:
-    pass
+
 
 
     def herbivore_fitness(self, age, weight, fitness):
