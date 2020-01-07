@@ -12,8 +12,6 @@ class Fauna:
         self.weight = weight
         self.fitness = fitness
 
-
-
         pass
 
 
