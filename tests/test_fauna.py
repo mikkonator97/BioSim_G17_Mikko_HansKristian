@@ -1,7 +1,7 @@
 
 # These tests will go through the needs and specifications for the faunas.
 # Fauna is the superclass, and all other creatures will be found under.
-
+from math import exp
 
 class TestFauna:
     """
@@ -28,11 +28,6 @@ class TestFauna:
         test_baby = Fauna()
         assert test_baby.get_weight() != 0
 
-    def test_fitness(self):
-        """
-        Will test that the fitness formula works.
-        :return:
-        """
 
 
     def test_migration(self):
@@ -61,6 +56,8 @@ class TestFauna:
         Will test the statistics behind the casualties.
         :return:
         """
+        fitness = Fauna.get_fitness()
+        assert fitness > 0
 
 
 class TestHerbivores:
@@ -74,8 +71,26 @@ class TestHerbivores:
         Will test that they eat if they are able to.
         :return:
         """
+        fodder = Landscape.get_fodder()
+        if fodder > 0:
+            herbivore_one = Herbivore()
+            herbivore_two = Herbivore()
+            fitness_one = herbivore_one.get_fitness()
+            fitness_two = herbivore_two.get_fitness()
 
-    # Test stats?
+
+
+
+
+    def test_herbivore_fitness(self):
+        """
+        Will test that the fitness formula works.
+        :return:
+        """
+        phi = Herbivore.get_fitness()
+        assert 0 <= phi <= 1
+
+# Test stats?
 
 
 class TestCarnivores:
@@ -97,3 +112,5 @@ class TestCarnivores:
         Will test that carnivores increases fitness whenever it eats.
         :return:
         """
+        phi = Carnivore.get_fitness()
+        assert 0 <= phi <= 1
