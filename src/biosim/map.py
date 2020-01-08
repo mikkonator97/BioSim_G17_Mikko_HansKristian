@@ -26,9 +26,17 @@ class Map:
         for i in range(antall_rader):
             for j in range(antall_kolonner):
                 # dictionary[index, sub_index] = item
-                self.dictionary[i, j] = self.map_string_split[i][j]
+                self.dictionary[i, j] = {'landscape':self.map_string_split[i][j]}, \
+                                        {'population': 0}, {'fodder': 0}
 
-        print(dictionary)
+        print(self.dictionary)
+
+    def add_fodder(self):
+
+        for element in self.dictionary:
+            if dictionary.values.landscape == 'J':
+
+
 
 
 """
