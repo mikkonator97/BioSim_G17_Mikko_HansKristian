@@ -46,13 +46,14 @@ class Map:
                 map_value = convert_landscape(self.map_string_split[i][j])
                 self.landscape_matrix[i][j] = map_value
 
-    def add_fodder(self):
+    def add_fodder_jungle(self):
 
         for element in self.dictionary:
             if dictionary.values.landscape == 'J':
+                pass
 
-
-
+    def add_fodder_savannah(self):
+        pass
 
 """
 dictionary = {}
