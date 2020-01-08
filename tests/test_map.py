@@ -19,9 +19,14 @@ class TestMap:
         test that the correct amount of fodder is added to the savannah cell.
         :return:
         """
+        alpha = 0.3
+        f_max = 300
+        fodderij =
         added_fodder = Map.add_fodder_savannah(100)
         assert added_fodder == 100
         assert added_fodder >= 0
+
+    def test_get_cell_info(self):
 
 
 

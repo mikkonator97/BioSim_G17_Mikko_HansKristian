@@ -1,8 +1,14 @@
 
 class Year:
     """
-    Will contain the functions which completes the yearly cycle.
-    """
+        Will contain the functions which completes the yearly cycle.
+        """
+    def add_fodder_jungle(self):
+        pass
+
+    def add_fodder_savannah(self):
+        pass
+
     def feeding():
         pass
 
@@ -29,10 +35,9 @@ class Year:
         :return:
         """
         pass
-
     def death():
         """
         Will let the creatures die.
         :return:
         """
-        pass
+

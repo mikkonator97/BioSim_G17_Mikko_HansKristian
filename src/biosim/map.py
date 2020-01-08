@@ -1,4 +1,3 @@
-
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
@@ -13,7 +12,7 @@ class Map:
         self.map_string = map_string
         self.map_string_split = map_string.split()
         self.n_rows = len(self.map_string_split)
-        self.n_cols = len(str(map_string_split[0]))
+        self.n_cols = len(str(self.map_string_split[0]))
         self.coords = []
         self.landscape_list = []
         self.landscape = []
@@ -24,8 +23,10 @@ class Map:
                 self.coords.append(test)
                 self.landscape_list.append(self.map_string_split[i][j])
 
-        self.landscape = list(zip(self.coords, self.landscape_list))
-        # self.landscape_matrix = np.column_stack((self.coords, self.landscape_list))
+    self.landscape = list(zip(self.coords, self.landscape_list))
+    for i in range(len(self.landscape)):
+        self.landscape.append({"Fodder:": 0})
+
 
     def convert_landscape(self, landscape_type):
         if landscape_type == 'O':
@@ -48,8 +49,8 @@ class Map:
 
     def add_fodder_jungle(self):
 
-        for element in self.dictionary:
-            if dictionary.values.landscape == 'J':
+        for element in self.landscape_list:
+            if self.landscape_list.values().landscape == 'J':
                 pass
 
     def add_fodder_savannah(self):
@@ -68,3 +69,21 @@ for i in range(antall_rader):
         dictionary[i, j] = map_string_split[i][j]
 
 print(dictionary)"""
+if __name__ == "__main__":
+    map_string = """\
+                  OOOOOOOOOOOOOOOOOOOOO
+                  OOOOOOOOSMMMMJJJJJJJO
+                  OSSSSSJJJJMMJJJJJJJOO
+                  OSSSSSSSSSMMJJJJJJOOO
+                  OSSSSSJJJJJJJJJJJJOOO
+                  OSSSSSJJJDDJJJSJJJOOO
+                  OSSJJJJJDDDJJJSSSSOOO
+                  OOSSSSJJJDDJJJSOOOOOO
+                  OSSSJJJJJDDJJJJJJJOOO
+                  OSSSSJJJJDDJJJJOOOOOO
+                  OOSSSSJJJJJJJJOOOOOOO
+                  OOOSSSSJJJJJJJOOOOOOO
+                  OOOOOOOOOOOOOOOOOOOOO"""
+
+    test_map = Map(map_string)
+    print((test_map.landscape))
