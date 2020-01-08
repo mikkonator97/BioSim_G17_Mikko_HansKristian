@@ -15,7 +15,7 @@ class Map:
         self.dictionary = {}
         antall_rader = len(self.map_string)
 
-        self.map_string = [k.replace(' ', '') for k in self.map_string]
+        self.map_string_split = [k.replace(' ', '') for k in self.map_string]
 
         # for i in range(antall_rader):
         #     old_value = str(map_string_split[i])
