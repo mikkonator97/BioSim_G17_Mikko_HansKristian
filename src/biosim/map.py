@@ -11,25 +11,40 @@ class Map:
 
     def __init__(self, map_string):
         self.map_string = map_string
-        self.map_string.splitlines()
-        self.dictionary = {}
-        antall_rader = len(self.map_string)
+        self.map_string_split = map_string.split()
+        self.n_rows = len(self.map_string_split)
+        self.n_cols = len(str(map_string_split[0]))
+        self.coords = []
+        self.landscape_list = []
+        self.landscape = []
+        # self.landscape_matrix = np.zeros([self.n_rows,self.n_cols])
+        for i in range(self.n_rows):
+            for j in range(self.n_cols):
+                test = (i, j)
+                self.coords.append(test)
+                self.landscape_list.append(self.map_string_split[i][j])
 
-        self.map_string_split = [k.replace(' ', '') for k in self.map_string]
+        self.landscape = list(zip(self.coords, self.landscape_list))
+        # self.landscape_matrix = np.column_stack((self.coords, self.landscape_list))
 
-        # for i in range(antall_rader):
-        #     old_value = str(map_string_split[i])
-        #     new_value = old_value.replace(' ', '')
-        #     map_string_split[i] = new_value
+    def convert_landscape(self, landscape_type):
+        if landscape_type == 'O':
+            return 0
+        elif landscape_type == 'M':
+            return 1
+        elif landscape_type == 'D':
+            return 2
+        elif landscape_type == 'S':
+            return 3
+        else:
+            return 4
 
-        antall_kolonner = len(str(self.map_string_split[0]))
-        for i in range(antall_rader):
-            for j in range(antall_kolonner):
-                # dictionary[index, sub_index] = item
-                self.dictionary[i, j] = {'landscape':self.map_string_split[i][j]}, \
-                                        {'population': 0}, {'fodder': 0}
-
-        print(self.dictionary)
+    def create_map(self):
+        for i in range(self.n_rows):
+            for j in range(self.n_cols):
+                test = (i, j)
+                map_value = convert_landscape(self.map_string_split[i][j])
+                self.landscape_matrix[i][j] = map_value
 
     def add_fodder(self):
 
