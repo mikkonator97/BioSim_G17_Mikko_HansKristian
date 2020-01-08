@@ -9,18 +9,36 @@ class Map:
     the corresponding landscape type
     """
 
-    def __init__(self, multi_line_map_string):
-        self.multi_line_map_string = multi_line_map_string
-        self.multi_line_map_string.splitlines()
+    def __init__(self, map_string):
+        self.map_string = map_string
+        self.map_string.splitlines()
         dictionary = {}
-        # length = len(self.multi_line_map_string)
-        # for i in range(length):
-        #     for j in range(length):
-        #         dictionary[(i, j)] = island_map[i][j]
-        #
-        for index, _ in enumerate(self.multi_line_map_string):
-            for sub_index, item in enumerate(_):
-                dictionary[index, sub_index] = item
+        antall_rader = len(self.map_string)
+
+        for i in range(antall_rader):
+            old_value = str(map_string_split[i])
+            new_value = old_value.replace(' ', '')
+            map_string_split[i] = new_value
+
+        antall_kolonner = len(str(map_string_split[0]))
+        for i in range(antall_rader):
+            for j in range(antall_kolonner):
+                # dictionary[index, sub_index] = item
+                dictionary[i, j] = map_string_split[i][j]
 
         print(dictionary)
-        print(dictionary)
+
+
+"""
+dictionary = {}
+antall_rader = len(map_string_split)
+for i in range(antall_rader):
+    old_value = str(map_string_split[i])
+    new_value = old_value.replace(' ','')
+    map_string_split[i] = new_value
+    # print(map_string_split[i])
+    antall_kolonnner = len(str(map_string_split[0]))
+    for j in range(antall_kolonner):
+        dictionary[i, j] = map_string_split[i][j]
+
+print(dictionary)"""
