@@ -10,6 +10,8 @@ savannah cells.
 
 
 class Cell:
+    alpha = 0.3
+    f_max = [800.0, 300.0]
 
     def __init__(self, coordinates=None, landscape=None, fodder=None):
         self.coordinates = coordinates
@@ -30,13 +32,10 @@ class Cell:
     def get_fodder(self):
         return self.fodder
 
-    def add_fodder_jungle(self):
-        f_max = 800.0
-        return self.fodder + f_max
-
-    def add_fodder_savannah(self):
-        alpha = 0.3
-        f_max = 300.0
-        available_fodder = self.get_fodder()
-        self.fodder = (available_fodder + alpha * (f_max - available_fodder))
-        return self.fodder
+    def add_fodder(self):
+        if self.landscape == "J":
+            self.fodder = self.f_max[0]
+        elif self.landscape == "S":
+            available_fodder = self.get_fodder()
+            self.fodder = (available_fodder
+                           + self.alpha * (self.f_max[1] - available_fodder))
