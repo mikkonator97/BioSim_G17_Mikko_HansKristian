@@ -21,12 +21,6 @@ class TestCell:
     def test_get_fodder(self):
         pass
 
-    def test_add_fodder_jungle(self):
-        f_max = 800.0
+    def test_add_fodder(self):
         pass
 
-    def test_add_fodder_savannah(self):
-        alpha = 0.3
-        f_max = 300.0
-        available_fodder = get_fodder()
-        pass
