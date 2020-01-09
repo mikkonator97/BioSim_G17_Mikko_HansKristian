@@ -40,21 +40,22 @@ class Map:
         else:
             return 4
 
+    # def create_map(self):
+    #     for i in range(self.n_rows):
+    #         for j in range(self.n_cols):
+    #             test = (i, j)
+    #             map_value = convert_landscape(self.map_string_split[i][j])
+    #             self.landscape_matrix[i][j] = map_value
+
     def create_map(self):
         for i in range(self.n_rows):
             for j in range(self.n_cols):
-                test = (i, j)
-                map_value = convert_landscape(self.map_string_split[i][j])
-                self.landscape_matrix[i][j] = map_value
+                self.current_map.append(
+                    Cell(self.map_string_split[i], self.coords[j]))
 
-    def add_fodder_jungle(self):
+    def get_map(self):
+        return self.current_map
 
-        for element in self.landscape_list:
-            if self.landscape_list.values().landscape == 'J':
-                pass
-
-    def add_fodder_savannah(self):
-        pass
 
 """
 dictionary = {}
