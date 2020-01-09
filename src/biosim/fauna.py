@@ -1,19 +1,20 @@
 from math import exp
+
+
 class Fauna:
     """
     This class will include the common properties for all creatures on
     Rossumøya.
     """
 
-    def __init__(self, position, age=0, weight,fitness):
-        """"""
+    def __init__(self, position, weight, fitness, age=0):
         self.position = position
         self.age = age
         self.weight = weight
         self.fitness = fitness
 
-        pass
-
+    def ageing(self):
+        self.age += 1
 
     def get_fitness(self):
         return self.fitness
@@ -28,9 +29,10 @@ class Fauna:
         return self.position
 
 
-class Herbivore:
+class Herbivore(Fauna):
 
-
+    def __init__(self, position, weight, fitness, age=0):
+        super().__init__(position, weight, fitness)
 
     def herbivore_fitness(self, age, weight, fitness):
         """
@@ -50,23 +52,15 @@ class Herbivore:
             phi = q_pos * q_neg
             return phi
 
-class Carnivore:
-    pass
+    def migrate(self, north, east, south, west):
+        """
+        Moves the creature to the most eligable adjecent position on the map.
+        """
+        pass
 
-    def carnivore_fitness(self):
+    def vegetarian_feast(self, fodder_amount):
         """
-        Function which computes the carnivore fitness according to the formula
-        :return:
+        This function will let the creature eat.
         """
-        weight = Fauna.get_weight()
-        if weight <= 0:
-            return 0
-        else:
-            age = Fauna.get_age()
-            a_half = 60.0
-            w_half = 4.0
-            fitness = Fauna.get_fitness()
-            q_pos = (1.0 / (1.0 + exp(fitness(age - a_half))))
-            q_neg = (1.0 / (1.0 + exp(-fitness(weight - w_half))))
-            phi = q_pos * q_neg
-            return phi
+        pass
+
