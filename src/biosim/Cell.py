@@ -19,6 +19,7 @@ class Cell:
         self.fodder = fodder
         self.number_of_herbivores = None
         self.number_of_carnivores = None
+        self.population = None
 
     def get_creatures(self):
         return self.number_of_carnivores + self.number_of_herbivores
@@ -49,6 +50,4 @@ class Cell:
             species = item['species']
             weight = item['weight']
             age = item['age']
-            Fauna(species, weight, age)
-
-        pass
+            self.population.append(Fauna(species, weight, age))

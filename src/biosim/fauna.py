@@ -1,11 +1,12 @@
 from math import exp
-
-
+import numpy as np
 class Fauna:
     """
     This class will include the common properties for all creatures on
     Rossumøya.
     """
+
+    omega = [0.4, 0.9]
 
     def __init__(self, position=None, species=None, weight=None, age=0):
         self.position = position
@@ -28,6 +29,19 @@ class Fauna:
 
     def get_position(self):
         return self.position
+
+    def death(self):
+        fitness = self.get_fitness()
+        if fitness <= 0:
+            Cell.population.remove()
+        random_death_probability = np.random.random()
+        elif (self.species == 'Herbivore'):
+            death_probability = self.omega[0]*(1 - fitness)
+            if random_death_probability < death_probability:
+                pass
+            pass
+
+
 
 
 class Herbivore(Fauna):
