@@ -24,3 +24,5 @@ class TestCell:
     def test_add_fodder(self):
         pass
 
+    def test_add_pop(self):
+        pass

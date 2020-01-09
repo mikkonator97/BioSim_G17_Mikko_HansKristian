@@ -39,3 +39,16 @@ class Cell:
             available_fodder = self.get_fodder()
             self.fodder = (available_fodder
                            + self.alpha * (self.f_max[1] - available_fodder))
+
+    def add_pop(self, cell_pop):
+        """
+        :param cell_pop: dictionary containing species, age, and weight
+        :return:
+        """
+        for item in cell_pop:
+            species = item['species']
+            weight = item['weight']
+            age = item['age']
+            Fauna(species, weight, age)
+
+        pass

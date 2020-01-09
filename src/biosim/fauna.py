@@ -7,11 +7,12 @@ class Fauna:
     Rossumøya.
     """
 
-    def __init__(self, position, weight, fitness, age=0):
+    def __init__(self, position=None, species=None, weight=None, age=0):
         self.position = position
+        self.species = species
         self.age = age
         self.weight = weight
-        self.fitness = fitness
+        self.fitness = None
 
     def ageing(self):
         self.age += 1
