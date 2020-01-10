@@ -23,9 +23,9 @@ class Map:
                 self.coords.append(test)
                 self.landscape_list.append(self.map_string_split[i][j])
 
-    self.landscape = list(zip(self.coords, self.landscape_list))
-    for i in range(len(self.landscape)):
-        self.landscape.append({"Fodder:": 0})
+    # self.landscape = list(zip(self.coords, self.landscape_list))
+    # for i in range(len(self.landscape)):
+    #     self.landscape.append({"Fodder:": 0})
 
 
     def convert_landscape(self, landscape_type):
@@ -51,7 +51,7 @@ class Map:
         for i in range(self.n_rows):
             for j in range(self.n_cols):
                 self.current_map.append(
-                    Cell(self.map_string_split[i], self.coords[j]))
+                    Cell((self.map_string_split[i], self.coords[j])),)
 
     def get_map(self):
         return self.current_map
