@@ -74,3 +74,13 @@ class Cell:
             weight = item['weight']
             age = item['age']
             self.population.append(Fauna(species, weight, age))
+
+    def remove_pop(self):
+        """
+        Removes an animal from the population list if it is dead.
+        :return:
+        """
+        for i in self.population:
+            if i.death():
+                del i
+

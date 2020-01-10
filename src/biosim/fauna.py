@@ -1,5 +1,8 @@
 from math import exp
 import numpy as np
+from biosim import Cell
+
+
 class Fauna:
     """
     This class will include the common properties for all creatures on
@@ -9,7 +12,10 @@ class Fauna:
     omega = [0.4, 0.9]
 
     def __init__(self, species=None, weight=None, age=0):
-
+        if species == 'herbivore':
+            self.species = 0
+        else:
+            self.species = 1
         self.species = species
         self.age = age
         self.weight = weight
@@ -44,27 +50,22 @@ class Fauna:
 
         if self.weight <= 0:
             return 0
-        elif self.species == 'herbivore':
-            q_pos = (1.0 / (1.0 + exp(phi_age[0]*(age - a_half[0]))))
-            q_neg = (1.0 / (1.0 + exp(-phi_weight[0]*(weight - w_half[0]))))
-            phi = q_pos * q_neg
-            return phi
-        else
-            q_pos = (1.0 / (1.0 + exp(phi_age[1]*(age - a_half[1]))))
-            q_neg = (1.0 / (1.0 + exp(-phi_weight[1]*(weight - w_half[1]))))
+        else:
+            q_pos = (1.0 / (1.0 + exp(phi_age[self.species_id]*(age - a_half[self.species_id]))))
+            q_neg = (1.0 / (1.0 + exp(-phi_weight[self.species_id]*(weight - w_half[self.species_id]))))
             phi = q_pos * q_neg
             return phi
 
     def death(self):
         fitness = self.get_fitness()
         if fitness <= 0:
-            Cell.population.remove()
-        random_death_probability = np.random.random()
-        elif (self.species == 'Herbivore'):
-            death_probability = self.omega[0]*(1 - fitness)
+            return True
+
+        else:
+            random_death_probability = np.random.random()
+            death_probability = self.omega[self.species_id]*(1 - fitness)
             if random_death_probability < death_probability:
-                pass
-            pass
+                return True
 
 
 
