@@ -8,8 +8,8 @@ class Fauna:
 
     omega = [0.4, 0.9]
 
-    def __init__(self, position=None, species=None, weight=None, age=0):
-        self.position = position
+    def __init__(self, species=None, weight=None, age=0):
+
         self.species = species
         self.age = age
         self.weight = weight
@@ -30,6 +30,31 @@ class Fauna:
     def get_position(self):
         return self.position
 
+    def calculate_fitness(self):
+        """
+        Function which computes the herbivore fitness according to the formula
+        :return:
+        """
+        age = self.age
+        weight = self.weight
+        a_half = [40.0, 60.0]
+        w_half =[10.0, 4.0]
+        phi_age = [0.2, 0.4]
+        phi_weight = [0.1, 0.4]
+
+        if self.weight <= 0:
+            return 0
+        elif self.species == 'herbivore':
+            q_pos = (1.0 / (1.0 + exp(phi_age[0]*(age - a_half[0]))))
+            q_neg = (1.0 / (1.0 + exp(-phi_weight[0]*(weight - w_half[0]))))
+            phi = q_pos * q_neg
+            return phi
+        else
+            q_pos = (1.0 / (1.0 + exp(phi_age[1]*(age - a_half[1]))))
+            q_neg = (1.0 / (1.0 + exp(-phi_weight[1]*(weight - w_half[1]))))
+            phi = q_pos * q_neg
+            return phi
+
     def death(self):
         fitness = self.get_fitness()
         if fitness <= 0:
@@ -48,24 +73,6 @@ class Herbivore(Fauna):
 
     def __init__(self, position, weight, fitness, age=0):
         super().__init__(position, weight, fitness)
-
-    def herbivore_fitness(self, age, weight, fitness):
-        """
-        Function which computes the herbivore fitness according to the formula
-        :return:
-        """
-        weight = Fauna.get_weight()
-        if weight <= 0:
-            return 0
-        else:
-            age = Fauna.get_age()
-            a_half = 40.0
-            w_half = 10.0
-            fitness = Fauna.get_fitness()
-            q_pos = (1.0 / (1.0 + exp(fitness(age - a_half))))
-            q_neg = (1.0 / (1.0 + exp(-fitness(weight - w_half))))
-            phi = q_pos * q_neg
-            return phi
 
     def migrate(self, north, east, south, west):
         """
