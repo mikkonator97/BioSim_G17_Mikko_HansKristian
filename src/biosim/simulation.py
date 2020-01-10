@@ -2,6 +2,7 @@
 
 """
 """
+from biosim.map import Map
 
 __author__ = ""
 __email__ = ""
@@ -75,6 +76,15 @@ class BioSim:
 
         :param population: List of dictionaries specifying population
         """
+
+        dicts = population
+        for d in dicts:
+            location = d['loc']
+            cell_pop = d['pop']
+            cell_index = Map.find(location)
+            for _ in range(len(cell_pop)):
+                Map.cell_map[cell_index].add_pop(cell_pop)
+
 
     @property
     def year(self):
