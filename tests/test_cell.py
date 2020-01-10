@@ -36,7 +36,15 @@ class TestCell:
         Test that the correct number of carnivores are returned
         :return:
         """
+        num_carnivores = 0
+        creatures_added = [Fauna(species='herbivore', age=10, weight=15),
+                           Fauna(species='carnivore', age=15, weight=40),
+                           Fauna(species='carnivore', age=12, weight=20)]
+        for i in creatures_added:
+            if i.species == 'carnivore':
+                num_carnivores += 1
 
+        assert num_carnivores == 2
         pass
 
     def test_get_number_of_herbivores(self):
@@ -44,6 +52,15 @@ class TestCell:
         Test that the correct number of herbivores are returned
         :return:
         """
+        num_carnivores = 0
+        creatures_added = [Fauna(species='herbivore', age=10, weight=15),
+                           Fauna(species='carnivore', age=9, weight=40),
+                           Fauna(species='herbivore', age=14, weight=20)]
+        for i in creatures_added:
+            if i.species == 'herbivore':
+                num_carnivores += 1
+
+        assert num_carnivores == 2
         pass
 
     def test_get_fodder(self):
@@ -51,7 +68,9 @@ class TestCell:
         Test that the correct amount of fodder is returned
         :return:
         """
-
+        fodder_test = Cell((2,2), 'J', fodder=300)
+        amount_of_fodder = fodder_test.get_fodder()
+        assert amount_of_fodder == 300
         pass
 
     def test_add_fodder(self):
@@ -59,6 +78,9 @@ class TestCell:
         Test that fodder can be added to the cell
         :return:
         """
+        fodder_test = Cell((2,2), 'J', fodder=300)
+        amount_of_fodder = fodder_test.get_fodder()
+        assert amount_of_fodder is not None
         pass
 
     def test_add_pop(self):
