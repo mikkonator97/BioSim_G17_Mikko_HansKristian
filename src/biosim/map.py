@@ -70,26 +70,26 @@ for i in range(antall_rader):
 
 print(dictionary)"""
 
-def population(list_of_dicts):
-    population_list = []
-    position = list_of_dicts[0].get('loc')
-    print(position)
-    print(list_of_dicts[1].get('pop'))
-    for i, item in enumerate(list_of_dicts[1].get('pop')):
-        species = list_of_dicts[i].get('species')
-        print(species)
-        age = list_of_dicts[i].get('age')
-        print(age)
-
-        weight = list_of_dicts[i].get('weight')
-        print(weight)
-        population_list.append(Fauna(position, species, age, weight))
-
-for d in pop:
-    location = d['loc']
-    cell_pop = d['pop']
-    #finn hvilken celle tilhører pop, kall den celle
-    celle.add_pop(cell_pop)
+# def population(list_of_dicts):
+#     population_list = []
+#     position = list_of_dicts[0].get('loc')
+#     print(position)
+#     print(list_of_dicts[1].get('pop'))
+#     for i, item in enumerate(list_of_dicts[1].get('pop')):
+#         species = list_of_dicts[i].get('species')
+#         print(species)
+#         age = list_of_dicts[i].get('age')
+#         print(age)
+#
+#         weight = list_of_dicts[i].get('weight')
+#         print(weight)
+#         population_list.append(Fauna(position, species, age, weight))
+#
+# for d in pop:
+#     location = d['loc']
+#     cell_pop = d['pop']
+#     #finn hvilken celle tilhører pop, kall den celle
+#     celle.add_pop(cell_pop)
 
 if __name__ == "__main__":
     map_string = """\

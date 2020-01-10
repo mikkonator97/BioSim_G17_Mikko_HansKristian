@@ -42,6 +42,13 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
+        self.island_map = island_map
+        self.ini_pop = ini_pop
+        self.seed = seed
+        self.ymax_animals = ymax_animals
+        self.cmax_animals = cmax_animals
+        self.img_base = img_base
+        self.img_fmt = img_fmt
 
     def set_animal_parameters(self, species, params):
         """

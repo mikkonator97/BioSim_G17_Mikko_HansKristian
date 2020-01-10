@@ -84,3 +84,9 @@ class Cell:
             if i.death():
                 del i
 
+    def ranked_fitness(self):
+        self.population.sort(key=lambda x: x.fitness)
+
+
+    def feeding(self):
+        pass
