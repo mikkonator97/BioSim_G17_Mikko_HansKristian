@@ -10,12 +10,13 @@ class Fauna:
     """
 
     omega = [0.4, 0.9]
+    eta = [0.05, 0.125]
 
     def __init__(self, species=None, weight=None, age=0):
         if species == 'herbivore':
-            self.species = 0
+            self.species_id = 0
         else:
-            self.species = 1
+            self.species_id = 1
         self.species = species
         self.age = age
         self.weight = weight
@@ -29,6 +30,9 @@ class Fauna:
 
     def get_weight(self):
         return self.weight
+
+    def reduce_weight(self):
+        self.weight -= (self.weight*eta[self.species_id])
 
     def get_age(self):
         return self.age
@@ -72,8 +76,8 @@ class Fauna:
 
 class Herbivore(Fauna):
 
-    def __init__(self, position, weight, fitness, age=0):
-        super().__init__(position, weight, fitness)
+    def __init__(self, weight, fitness, age=0):
+        super().__init__(weight, fitness, age)
 
     def migrate(self, north, east, south, west):
         """
@@ -81,9 +85,12 @@ class Herbivore(Fauna):
         """
         pass
 
-    def vegetarian_feast(self, fodder_amount):
+    def vegetarian_feast(self, fodder_amount=0):
         """
         This function will let the creature eat.
         """
-        pass
+        if fodder_amount > 10:
+            fodder_amount =10
+        if fodder_amount > 0:
+            self.weight += 0.9 * fodder_amount
 
