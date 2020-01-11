@@ -42,13 +42,38 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
-        self.island_map = island_map
-        self.ini_pop = ini_pop
-        self.seed = seed
-        self.ymax_animals = ymax_animals
-        self.cmax_animals = cmax_animals
-        self.img_base = img_base
-        self.img_fmt = img_fmt
+        valid_landscape = ['O', 'J', 'S', 'D', 'M']
+        temp_lines = island_map.splitlines()
+        line_lengths = []
+        valid_string = all((temp_lines[0].count('O') == len(temp_lines[0]))
+                           and (temp_lines[-1].count('O') == len(temp_lines[-1])))
+
+        for line in temp_lines:
+            if valid_string is False:
+                break
+            else:
+                if (line[0] or line[-1]) != 'O':
+                    valid_string = False
+                    break
+
+                line_lengths.append(len(line))
+                for letter in line:
+                    if letter not in valid_landscape:
+                        valid_string = False
+                    break
+
+        equal_list_length = all(line_lengths)
+
+        if (valid_string or equal_list_length) is False:
+            raise ValueError
+        else:
+            self.island_map = island_map
+            self.ini_pop = ini_pop
+            self.seed = seed
+            self.ymax_animals = ymax_animals
+            self.cmax_animals = cmax_animals
+            self.img_base = img_base
+            self.img_fmt = img_fmt
 
     def set_animal_parameters(self, species, params):
         """
