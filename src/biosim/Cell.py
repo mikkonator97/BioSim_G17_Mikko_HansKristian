@@ -17,9 +17,9 @@ class Cell:
         self.coordinates = coordinates
         self.landscape = landscape
         self.fodder = fodder
-        self.number_of_herbivores = None
-        self.number_of_carnivores = None
-        self.population = None
+        self.number_of_herbivores = 0
+        self.number_of_carnivores = 0
+        self.population = []
 
     def get_creatures(self):
         """
@@ -73,20 +73,34 @@ class Cell:
             species = item['species']
             weight = item['weight']
             age = item['age']
-            self.population.append(Fauna(species, weight, age))
+            if species == 'herbivore':
+                self.population.append(herbivore(species, weight, age))
+
+
 
     def remove_pop(self):
         """
         Removes an animal from the population list if it is dead.
         :return:
         """
-        for i in self.population:
-            if i.death():
-                del i
+        for creature in self.population:
+            will_die = False
+            will_die = creature.death()
+            print('Død: ', will_die)
+            if will_die:
+                # self.population.remove(creature)
+                creature.state = 'dying'
+                print('A creature is dying')
+                # print('Hallo')
+
+        for index in range(len(self.population)):
+            if self.population[index].state == 'dying':
+                self.population.pop(index)
+        self.number_of_herbivores = len(self.population)
 
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness)
 
-
-    def feeding(self):
+    def yearly_cycle(self):
         pass
+
