@@ -32,7 +32,8 @@ class Fauna:
         return self.weight
 
     def reduce_weight(self):
-        self.weight -= (self.weight*eta[self.species_id])
+        # self.weight -= (self.weight*eta[self.species_id])
+        self.weight -= (self.weight * self.eta[self.species_id])
 
     def get_age(self):
         return self.age

@@ -7,10 +7,14 @@ next problem, which is implementing carnivores and then using the entire map.
 
 
 """
-from fauna import Herbivore
-import Cell
+from fauna import Fauna, Herbivore
+from Cell import Cell
 
 cell = Cell((3 ,4), landscape='J', fodder=800)
+
+
+
+
 def run_simulation(number_years, start_population):
 
     # Creating the start population in the cell.
