@@ -7,28 +7,18 @@ next problem, which is implementing carnivores and then using the entire map.
 
 
 """
-from fauna import Fauna, Herbivore
+#from .fauna import Fauna, Herbivore
+#from fauna import Herbivore
+#from Cell import Cell
 from Cell import Cell
 
+
 cell = Cell((3 ,4), landscape='J', fodder=800)
-
-
-
 
 def run_simulation(number_years, start_population):
 
     # Creating the start population in the cell.
-    for element in start_population:
-        print(element['loc'])
-        # print(element['pop'])
-        for item in element['pop']:
-            # print(item.get('species'))
-            species = item.get('species')
-            weight = item.get('weight')
-            age = item.get('age')
-            # print(item['species'])
-            cell.population.append(Herbivore(species, weight, age))
-            cell.number_of_herbivores += 1
+    cell.add_pop(start_population)
 
     for year in range(number_years):
         cell.add_fodder()
@@ -44,9 +34,12 @@ def run_simulation(number_years, start_population):
 
 
 
+
 test = [{'loc': (3,4),
          'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
                 {'species': 'herbivore', 'age': 5, 'weight': 40},
                 {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
 
 run_simulation(20,test)
+
+

@@ -1,6 +1,6 @@
 from math import exp
 import numpy as np
-from biosim import Cell
+
 
 
 class Fauna:
@@ -21,6 +21,7 @@ class Fauna:
         self.age = age
         self.weight = weight
         self.fitness = None
+        self.state = 'alive'
 
     def ageing(self):
         self.age += 1

@@ -8,6 +8,7 @@ information out of this cell, and methods for adding fodder to jungel and
 savannah cells.
 """
 
+from fauna import Herbivore
 
 class Cell:
     alpha = 0.3
@@ -69,13 +70,20 @@ class Cell:
         :param cell_pop: dictionary containing species, age, and weight
         :return:
         """
-        for item in cell_pop:
-            species = item['species']
-            weight = item['weight']
-            age = item['age']
-            if species == 'herbivore':
-                self.population.append(herbivore(species, weight, age))
+        for element in cell_pop:
 
+            for creature in element['pop']:
+                # print(item.get('species'))
+                species = creature.get('species')
+                weight = creature.get('weight')
+                age = creature.get('age')
+                # print(item['species'])
+                #self.population.append(Fauna(species, weight, age))
+                self.number_of_herbivores += 1
+
+                if species == 'herbivore':
+                    self.population.append(Herbivore(species, weight, age))
+                    print('Added a herbivore to the population in this cell.')
 
 
     def remove_pop(self):
@@ -90,7 +98,7 @@ class Cell:
             if will_die:
                 # self.population.remove(creature)
                 creature.state = 'dying'
-                print('A creature is dying')
+                print('A creature is dying at age: ', creature.get_age())
                 # print('Hallo')
 
         for index in range(len(self.population)):
