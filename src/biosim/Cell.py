@@ -8,11 +8,13 @@ information out of this cell, and methods for adding fodder to jungel and
 savannah cells.
 """
 
-from fauna import Herbivore
+from fauna import Fauna, Herbivore
 
 class Cell:
     alpha = 0.3
     f_max = [800.0, 300.0]
+    gamma = [0.2, 0.8]
+    
 
     def __init__(self, coordinates=None, landscape=None, fodder=None):
         self.coordinates = coordinates
@@ -121,6 +123,27 @@ class Cell:
                 self.number_of_herbivores = len(self.population)
                 index += 1
             index += 1
+
+    def feed_herbivores(self):
+        for creature in self.population:
+            if self.fodder > 10:
+                self.fodder -= 10
+                fodder = 10
+            else:
+                fodder = self.fodder
+                self.fodder = 0
+            if creature.species == 'herbivore':
+                beta = 0.9
+                creature.weight += beta * fodder
+
+    def mating_season(self):
+        if self.number_of_herbivores > 1:
+            for herbivore in self.population:
+                if herbivore.species == 'herbivore':
+
+                    herbivore.give_birth()
+
+
 
 
 

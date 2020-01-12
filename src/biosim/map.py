@@ -57,6 +57,9 @@ class Map:
         plt.imshow(self.landscape_matrix, cmap=cmap)
         plt.show()
 
+    def set_animal_parameters(self, species, params):
+
+
     def get_map(self):
         return self.cell_map
 

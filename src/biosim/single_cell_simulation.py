@@ -15,17 +15,22 @@ from Cell import Cell
 
 cell = Cell((3 ,4), landscape='J', fodder=800)
 
+
 def run_simulation(number_years, start_population):
 
     # Creating the start population in the cell.
+    # set_animal_parameters('herbivore', params)
     cell.add_pop(start_population)
 
     for year in range(number_years):
-        cell.add_fodder()
+
+
+        cell.feed_herbivores()
         print('Year: ', year +1)
-        print('Population: ', cell.number_of_herbivores)
+        print('Population: ', cell.number_of_herbivores,'\n')
         for creature in cell.population:
             creature.reduce_weight()
+            creature.ageing()
             print('Weight: ' ,creature.weight)
             creature.fitness = creature.calculate_fitness()
             print('Fitness: ', creature.get_fitness())
@@ -33,8 +38,12 @@ def run_simulation(number_years, start_population):
             print('Will die: ', creature.state, '\n')
 
         cell.alter_population()
+        cell.ranked_fitness()
+        cell.add_fodder()
+
         if cell.number_of_herbivores == 0:
-            return 'The population is now extinct'
+            print('The population is now extinct')
+            return str('The population died after: ', str(year), ' years!')
 
 
 
@@ -44,6 +53,6 @@ test = [{'loc': (3,4),
                 {'species': 'herbivore', 'age': 5, 'weight': 40},
                 {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
 
-run_simulation(30,test)
+run_simulation(300,test)
 
 
