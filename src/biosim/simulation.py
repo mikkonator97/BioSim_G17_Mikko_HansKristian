@@ -44,28 +44,28 @@ class BioSim:
         """
         valid_landscape = ['O', 'J', 'S', 'D', 'M']
         temp_lines = island_map.splitlines()
-        line_lengths = []
-        valid_string = all((temp_lines[0].count('O') == len(temp_lines[0]))
-                           and (temp_lines[-1].count('O') == len(temp_lines[-1])))
+
+        valid_string = ((temp_lines[0].count('O') == len(temp_lines[0]))
+                        and (temp_lines[-1].count('O') == len(temp_lines[-1])))
 
         for line in temp_lines:
             if valid_string is False:
                 break
             else:
-                if (line[0] or line[-1]) != 'O':
+
+                if (line[0] and line[-1]) != 'O':
                     valid_string = False
                     break
+                else:
+                    for letter in line:
+                        if letter not in valid_landscape:
+                            raise ValueError
+                        
 
-                line_lengths.append(len(line))
-                for letter in line:
-                    if letter not in valid_landscape:
-                        valid_string = False
-                    break
-
-        equal_list_length = all(line_lengths)
+        equal_list_length = len(set(temp_lines)) == 1
 
         if (valid_string or equal_list_length) is False:
-            raise ValueError
+            raise ValueError("Invalid multiline mapstring!")
         else:
             self.island_map = island_map
             self.ini_pop = ini_pop
