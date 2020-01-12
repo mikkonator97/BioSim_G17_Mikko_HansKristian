@@ -46,6 +46,11 @@ class BioSim:
         valid_landscape = ['O', 'J', 'S', 'D', 'M']
         temp_lines = island_map.splitlines()
 
+        for i in temp_lines[1:]:
+            if len(i) != len(temp_lines[0]):
+                raise ValueError("ValueError: The strings in the multiline "
+                                 "string must have equal length!")
+
         valid_string = ((temp_lines[0].count('O') == len(temp_lines[0]))
                         and (temp_lines[-1].count('O') == len(temp_lines[-1])))
 
@@ -72,10 +77,6 @@ class BioSim:
             self.cmax_animals = cmax_animals
             self.img_base = img_base
             self.img_fmt = img_fmt
-
-            # for item in island_map.splitlines():
-            #     if len(item) != len(item[0]):
-            #         raise ValueError
 
     def set_animal_parameters(self, species, params):
         """
