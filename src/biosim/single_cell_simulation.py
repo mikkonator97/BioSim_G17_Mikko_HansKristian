@@ -31,6 +31,8 @@ def run_simulation(number_years, start_population):
             print('Fitness: ', creature.get_fitness(), '\n')
 
         cell.remove_pop()
+        if cell.number_of_herbivores == 0:
+            return 'The population is now extinct'
 
 
 
@@ -40,6 +42,6 @@ test = [{'loc': (3,4),
                 {'species': 'herbivore', 'age': 5, 'weight': 40},
                 {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
 
-run_simulation(20,test)
+run_simulation(30,test)
 
 

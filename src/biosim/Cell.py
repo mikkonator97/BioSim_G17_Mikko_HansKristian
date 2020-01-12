@@ -101,10 +101,14 @@ class Cell:
                 print('A creature is dying at age: ', creature.get_age())
                 # print('Hallo')
 
-        for index in range(len(self.population)):
+        for index in range(self.number_of_herbivores):
             if self.population[index].state == 'dying':
-                self.population.pop(index)
-        self.number_of_herbivores = len(self.population)
+                if index != 0:
+                    print(self.population[index])
+                    self.population.pop(index)
+                    self.number_of_herbivores = len(self.population)
+                    print('Remaining population: ',self.number_of_herbivores)
+
 
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness)
