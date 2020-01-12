@@ -1,6 +1,11 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
+from Cell import Cell
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
 
 class Map:
     """
@@ -25,9 +30,9 @@ class Map:
         for i in range(self.n_rows):
             for j in range(self.n_cols):
                 current_cell = Cell((i, j), self.map_string_split[i][j],
-                                       fodder=0, population_herbivores=0)
+                                       fodder=0)
                 self.cell_map.append(current_cell)
-                map_value = self.convert_landscape(map_string_split[i][j])
+                map_value = self.convert_landscape(self.map_string_split[i][j])
                 self.landscape_matrix[i][j] = map_value
 
     def convert_landscape(self, landscape_type):
@@ -108,4 +113,5 @@ if __name__ == "__main__":
                   OOOOOOOOOOOOOOOOOOOOO"""
 
     test_map = Map(map_string)
-    print((test_map.landscape))
+    test_map.show_map()
+    # print((test_map.landscape_matrix))
