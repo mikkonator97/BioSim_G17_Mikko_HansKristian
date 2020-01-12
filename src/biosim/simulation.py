@@ -42,6 +42,7 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
+
         valid_landscape = ['O', 'J', 'S', 'D', 'M']
         temp_lines = island_map.splitlines()
 
@@ -60,11 +61,8 @@ class BioSim:
                     for letter in line:
                         if letter not in valid_landscape:
                             raise ValueError
-                        
 
-        equal_list_length = len(set(temp_lines)) == 1
-
-        if (valid_string or equal_list_length) is False:
+        if valid_string is False:
             raise ValueError("Invalid multiline mapstring!")
         else:
             self.island_map = island_map
@@ -74,6 +72,10 @@ class BioSim:
             self.cmax_animals = cmax_animals
             self.img_base = img_base
             self.img_fmt = img_fmt
+
+            # for item in island_map.splitlines():
+            #     if len(item) != len(item[0]):
+            #         raise ValueError
 
     def set_animal_parameters(self, species, params):
         """
