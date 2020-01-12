@@ -21,7 +21,7 @@ class Fauna:
         self.age = age
         self.weight = weight
         self.fitness = None
-        self.state = 'alive'
+        self.state = False
 
     def ageing(self):
         self.age += 1
@@ -66,13 +66,13 @@ class Fauna:
         fitness = self.get_fitness()
         if fitness <= 0:
             return True
-
         else:
             random_death_probability = np.random.random()
             death_probability = self.omega[self.species_id]*(1 - fitness)
             if random_death_probability < death_probability:
                 return True
-
+            else:
+                return False
 
 
 

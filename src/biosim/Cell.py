@@ -92,7 +92,6 @@ class Cell:
         :return:
         """
         for creature in self.population:
-            will_die = False
             will_die = creature.death()
             print('Død: ', will_die)
             if will_die:
@@ -108,6 +107,22 @@ class Cell:
                     self.population.pop(index)
                     self.number_of_herbivores = len(self.population)
                     print('Remaining population: ',self.number_of_herbivores)
+
+    def alter_population(self):
+
+        # for index in range(self.number_of_herbivores):
+        index = 0
+        while index < self.number_of_herbivores:
+            # print(self.number_of_herbivores)
+            # print(self.population[index].death)
+            if self.population[index].state == True:
+                print(self.population[index].age,' should be dead')
+                self.population.pop(index)
+                self.number_of_herbivores = len(self.population)
+                index += 1
+            index += 1
+
+
 
 
     def ranked_fitness(self):

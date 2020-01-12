@@ -28,9 +28,11 @@ def run_simulation(number_years, start_population):
             creature.reduce_weight()
             print('Weight: ' ,creature.weight)
             creature.fitness = creature.calculate_fitness()
-            print('Fitness: ', creature.get_fitness(), '\n')
+            print('Fitness: ', creature.get_fitness())
+            creature.state = creature.death()
+            print('Will die: ', creature.state, '\n')
 
-        cell.remove_pop()
+        cell.alter_population()
         if cell.number_of_herbivores == 0:
             return 'The population is now extinct'
 
