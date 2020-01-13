@@ -64,12 +64,15 @@ class BioSim:
         self.map = Map(self.island_map)
 
         for cell in self.map.cell_map:
-            for index in range(len(self.ini_pop)):
-                coordinates = self.ini_pop[index]['loc']
+            for item in self.ini_pop:
+                coordinates = item['loc']
+                print(coordinates)
+                # print(coordinates)
+                #coordinates = self.ini_pop[index]['loc']
                 if cell.coordinates == coordinates:
                     # Flere locations kan være et problem..
-                    print(self.ini_pop)
-                    cell.add_pop(self.ini_pop)
+                    print(item)
+                    # cell.add_pop(item)
 
         """
         for dic in self.ini_pop:
@@ -187,10 +190,8 @@ if __name__ == '__main__':
              'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 15, 'weight': 25}]},
-            {
-                "loc": (2, 3),
-                "pop": [
-                    {"species": "Herbivore", "age": 1, "weight": 10.0}
+            {"loc": (10, 10),
+                "pop": [{"species": "herbivore", "age": 1, "weight": 10},
             ]}]
 
     seed = 1

@@ -64,7 +64,7 @@ test = [{'loc': (3,4),
                 {'species': 'herbivore', 'age': 5, 'weight': 40},
                 {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
 
-x, y = run_simulation(200,test)
+x, y = run_simulation(200, test)
 z = np.mean(x)
 plt.plot(x,y)
 # plt.plot(x,z)
