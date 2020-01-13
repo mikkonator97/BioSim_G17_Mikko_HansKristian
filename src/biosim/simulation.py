@@ -140,18 +140,23 @@ class BioSim:
     @property
     def year(self):
         """Last year simulated."""
+        pass
 
     @property
     def num_animals(self):
         """Total number of animals on island."""
+        pass
 
     @property
     def num_animals_per_species(self):
         """Number of animals per species in island, as dictionary."""
+        pass
 
     @property
     def animal_distribution(self):
         """Pandas DataFrame with animal count per species for each cell on island."""
+        pass
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""
+        pass
