@@ -11,13 +11,16 @@ next problem, which is implementing carnivores and then using the entire map.
 #from fauna import Herbivore
 #from Cell import Cell
 from Cell import Cell
+from matplotlib import pyplot as plt
+import numpy as np
 
 
 cell = Cell((3 ,4), landscape='J', fodder=800)
 
 
 def run_simulation(number_years, start_population):
-
+    x = []
+    y = []
     # Creating the start population in the cell.
     # set_animal_parameters('herbivore', params)
     cell.add_pop(start_population)
@@ -42,12 +45,16 @@ def run_simulation(number_years, start_population):
         cell.add_fodder()
         cell.mating_season()
 
-        print('År: ',year)
-        print(cell.number_of_herbivores)
+        # print('År: ',year)
+        # print(cell.number_of_herbivores)
+        x.append(year)
+        y.append(cell.number_of_herbivores)
+
 
         if cell.number_of_herbivores == 0:
             print('The population is now extinct')
-            return year
+
+    return x, y
 
 
 
@@ -57,6 +64,11 @@ test = [{'loc': (3,4),
                 {'species': 'herbivore', 'age': 5, 'weight': 40},
                 {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
 
-run_simulation(2000,test)
+x, y = run_simulation(200,test)
+z = np.mean(x)
+plt.plot(x,y)
+# plt.plot(x,z)
+plt.show()
+
 
 
