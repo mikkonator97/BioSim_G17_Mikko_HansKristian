@@ -58,6 +58,7 @@ class Map:
         plt.show()
 
     def set_animal_parameters(self, species, params):
+        pass
 
 
     def get_map(self):
