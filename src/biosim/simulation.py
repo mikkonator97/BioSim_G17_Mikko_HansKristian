@@ -2,6 +2,8 @@
 
 """
 """
+from biosim import Cell
+from biosim.fauna import Fauna
 from biosim.map import Map
 
 __author__ = ""
@@ -85,6 +87,13 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
+        if species == 'herbivore':
+            for key in params.keys():
+                getattr(Fauna, key)[0] = params[key]
+
+        else:
+            for key in params.keys():
+                getattr(Fauna, key)[1] = params[key]
 
     def set_landscape_parameters(self, landscape, params):
         """
@@ -93,6 +102,13 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
+        if landscape == 'J':
+            for key in params.keys():
+                getattr(Cell.Cell, key)[0] = params[key]
+
+        else:
+            for key in params.keys():
+                getattr(Cell.Cell, key)[1] = params[key]
 
     def simulate(self, num_years, vis_years=1, img_years=None):
         """

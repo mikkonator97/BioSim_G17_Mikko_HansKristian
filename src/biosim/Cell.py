@@ -10,8 +10,9 @@ savannah cells.
 
 
 class Cell:
-    alpha = 0.3
+
     f_max = [800.0, 300.0]
+    alpha = [None, 0.3]
 
     def __init__(self, coordinates=None, landscape=None, fodder=None):
         self.coordinates = coordinates
