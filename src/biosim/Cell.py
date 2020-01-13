@@ -157,33 +157,33 @@ class Cell:
 
 class Ocean(Cell):
     def __init__(self, habitable=False):
-        super().__init__(coordinates=None, landscape=0, fodder=0))
+        super().__init__(coordinates=None, landscape=0, fodder=0)
         self.habitable = habitable
 
 
 class Mountain(Cell):
     def __init__(self, habitable=False):
-        super().__init__(coordinates=None, landscape=1, fodder=0))
+        super().__init__(coordinates=None, landscape=1, fodder=0)
         self.habitable = habitable
 
 
 class Desert(Cell):
     def __init__(self, habitable=False):
-        super().__init__(coordinates=None, landscape=2, fodder=0))
+        super().__init__(coordinates=None, landscape=2, fodder=0)
         self.habitable = habitable
 
 
-class Savanna(Cell):
+class Savannah(Cell):
 
 
     def __init__(self, habitable = True):
-        super().__init__(coordinates=None, landscape=3, fodder=0))
+        super().__init__(coordinates=None, landscape=3, fodder=0)
         self.habitable = habitable
 
 
 class Jungle(Cell):
     def __init__(self, habitable=True):
-        super().__init__(coordinates=None, landscape=4 fodder=0))
+        super().__init__(coordinates=None, landscape=4, fodder=0)
         self.habitable = habitable
 
 

@@ -1,7 +1,7 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from Cell import Cell
+from Cell import Cell, Ocean, Mountain, Desert, Savannah, Jungle
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -29,11 +29,18 @@ class Map:
 
         for i in range(self.n_rows):
             for j in range(self.n_cols):
-                current_cell = Cell((i, j), self.map_string_split[i][j],
-                                       fodder=0)
-                self.cell_map.append(current_cell)
-                map_value = self.convert_landscape(self.map_string_split[i][j])
-                self.landscape_matrix[i][j] = map_value
+                landscape_type = self.map_string_split[i][j]
+                if landscape_type == 'O':
+                    self.cell_map[i][j] = Ocean(landscape=0, fodder=0)
+                elif landscape_type == 'M':
+                    self.cell_map[i][j] = Mountain(landscape=0, fodder=0)
+                elif landscape_type == 'D':
+                    self.cell_map[i][j] = Desert(landscape=0, fodder=0)
+                elif landscape_type == 'S':
+                    self.cell_map[i][j] = Savannah(landscape=0, fodder=0)
+                else:
+                    self.cell_map[i][j] = Jungle(landscape=0, fodder=0)
+
 
     def convert_landscape(self, landscape_type):
         if landscape_type == 'O':
@@ -57,12 +64,8 @@ class Map:
         plt.imshow(self.landscape_matrix, cmap=cmap)
         plt.show()
 
-    def set_animal_parameters(self, species, params):
-        pass
 
 
-    def get_map(self):
-        return self.cell_map
 
 
 """
@@ -117,5 +120,6 @@ if __name__ == "__main__":
                   OOOOOOOOOOOOOOOOOOOOO"""
 
     test_map = Map(map_string)
-    test_map.show_map()
+    print(test_map.cell_map[0][0].landscape)
+    # test_map.show_map()
     # print((test_map.landscape_matrix))
