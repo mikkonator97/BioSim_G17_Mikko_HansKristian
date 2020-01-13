@@ -24,22 +24,23 @@ class Map:
         self.n_rows = len(self.map_string_split)
         self.n_cols = len(str(self.map_string_split[0]))
 
-        self.landscape_matrix = np.zeros([self.n_rows, self.n_cols])
-        self.cell_map = []
+        # self.landscape_matrix = np.zeros([self.n_rows, self.n_cols])
+        self.cell_map = np.zeros([self.n_rows, self.n_cols])
+        #self.cell_map = np.zeros[self.]
 
         for i in range(self.n_rows):
             for j in range(self.n_cols):
                 landscape_type = self.map_string_split[i][j]
                 if landscape_type == 'O':
-                    self.cell_map[i][j] = Ocean(landscape=0, fodder=0)
+                    self.cell_map[i][j] = Ocean()
                 elif landscape_type == 'M':
-                    self.cell_map[i][j] = Mountain(landscape=0, fodder=0)
+                    self.cell_map[i][j] = Mountain()
                 elif landscape_type == 'D':
-                    self.cell_map[i][j] = Desert(landscape=0, fodder=0)
+                    self.cell_map[i][j] = Desert()
                 elif landscape_type == 'S':
-                    self.cell_map[i][j] = Savannah(landscape=0, fodder=0)
+                    self.cell_map[i][j] = Savannah()
                 else:
-                    self.cell_map[i][j] = Jungle(landscape=0, fodder=0)
+                    self.cell_map[i][j] = Jungle()
 
 
     def convert_landscape(self, landscape_type):
