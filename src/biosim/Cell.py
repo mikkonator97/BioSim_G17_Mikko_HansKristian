@@ -9,6 +9,7 @@ savannah cells.
 """
 
 from fauna import Fauna, Herbivore
+import numpy as np
 
 class Cell:
     alpha = 0.3
@@ -23,6 +24,7 @@ class Cell:
         self.number_of_herbivores = 0
         self.number_of_carnivores = 0
         self.population = []
+        self.gamma_herbivore = 0.2
 
     def get_creatures(self):
         """
@@ -99,16 +101,16 @@ class Cell:
             if will_die:
                 # self.population.remove(creature)
                 creature.state = 'dying'
-                print('A creature is dying at age: ', creature.get_age())
+                # print('A creature is dying at age: ', creature.get_age())
                 # print('Hallo')
 
         for index in range(self.number_of_herbivores):
             if self.population[index].state == 'dying':
                 if index != 0:
-                    print(self.population[index])
+                    # print(self.population[index])
                     self.population.pop(index)
                     self.number_of_herbivores = len(self.population)
-                    print('Remaining population: ',self.number_of_herbivores)
+                    # print('Remaining population: ',self.number_of_herbivores)
 
     def alter_population(self):
 
@@ -118,10 +120,10 @@ class Cell:
             # print(self.number_of_herbivores)
             # print(self.population[index].death)
             if self.population[index].state == True:
-                print(self.population[index].age,' should be dead')
+                # print(self.population[index].age,' should be dead')
                 self.population.pop(index)
                 self.number_of_herbivores = len(self.population)
-                index += 1
+                index -= 1
             index += 1
 
     def feed_herbivores(self):
@@ -140,12 +142,11 @@ class Cell:
         if self.number_of_herbivores > 1:
             for herbivore in self.population:
                 if herbivore.species == 'herbivore':
-
-                    herbivore.give_birth()
-
-
-
-
+                    if min(1, 0.2 * herbivore.fitness *
+                              (self.number_of_herbivores - 1)) > np.random.rand() and herbivore.age > 0:
+                        birth_weight = herbivore.give_birth()
+                        self.population.append(Herbivore('herbivore', birth_weight, 0))
+                        self.number_of_herbivores = len(self.population)
 
 
     def ranked_fitness(self):

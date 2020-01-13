@@ -31,19 +31,23 @@ def run_simulation(number_years, start_population):
         for creature in cell.population:
             creature.reduce_weight()
             creature.ageing()
-            print('Weight: ' ,creature.weight)
+            # print('Weight: ' ,creature.weight)
             creature.fitness = creature.calculate_fitness()
-            print('Fitness: ', creature.get_fitness())
+            # print('Fitness: ', creature.get_fitness())
             creature.state = creature.death()
-            print('Will die: ', creature.state, '\n')
+            # print('Will die: ', creature.state, '\n')
 
         cell.alter_population()
         cell.ranked_fitness()
         cell.add_fodder()
+        cell.mating_season()
+
+        print('År: ',year)
+        print(cell.number_of_herbivores)
 
         if cell.number_of_herbivores == 0:
             print('The population is now extinct')
-            return str('The population died after: ', str(year), ' years!')
+            return year
 
 
 
@@ -53,6 +57,6 @@ test = [{'loc': (3,4),
                 {'species': 'herbivore', 'age': 5, 'weight': 40},
                 {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
 
-run_simulation(300,test)
+run_simulation(2000,test)
 
 

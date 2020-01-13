@@ -20,7 +20,7 @@ class Fauna:
         self.species = species
         self.age = age
         self.weight = weight
-        self.fitness = None
+        self.fitness = self.calculate_fitness()
         self.state = False
 
     def ageing(self):
@@ -76,16 +76,27 @@ class Fauna:
 
 
 
+
+
 class Herbivore(Fauna):
 
     def __init__(self, weight, fitness, age=0):
         super().__init__(weight, fitness, age)
+        self.w_birth = 8.0
+        self.sigma_birth = 1.5
+        self.xi = 1.2
 
     def migrate(self, north, east, south, west):
         """
         Moves the creature to the most eligable adjecent position on the map.
         """
         pass
+
+    def give_birth(self):
+        birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
+        self.weight -= birth_weight * self.xi
+        # print('A baby has been born')
+        return birth_weight
 
     def vegetarian_feast(self, fodder_amount=0):
         """
