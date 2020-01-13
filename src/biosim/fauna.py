@@ -8,9 +8,23 @@ class Fauna:
     This class will include the common properties for all creatures on
     Rossumøya.
     """
-
-    omega = [0.4, 0.9]
+    w_birth = [8.0, 6.0]
+    sigma_birth = [1.5, 1.0]
+    beta = [0.9, 0.75]
     eta = [0.05, 0.125]
+    a_half = [40.0, 60.0]
+    phi_age = [0.2, 0.4]
+    w_half = [10.0, 4.0]
+    phi_weight = [0.1,0.4]
+    mu = [0.25, 0.4]
+    lambda1 = [1.0, 1.0]
+    gamma = [0.2, 0.8]
+    zeta = [3.5, 3.5]
+    xi = [1.2, 1.1]
+    omega = [0.4, 0.9]
+    F = [10.0, 50.0]
+    DeltaPhiMax = [None, 10.0]
+
 
     def __init__(self, species=None, weight=None, age=0):
         if species == 'herbivore':

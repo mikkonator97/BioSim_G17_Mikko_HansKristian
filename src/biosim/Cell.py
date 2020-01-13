@@ -12,10 +12,9 @@ from fauna import Fauna, Herbivore
 import numpy as np
 
 class Cell:
-    alpha = 0.3
+
     f_max = [800.0, 300.0]
-    gamma = [0.2, 0.8]
-    
+    alpha = [None, 0.3]
 
     def __init__(self, coordinates=None, landscape=None, fodder=None):
         self.coordinates = coordinates
