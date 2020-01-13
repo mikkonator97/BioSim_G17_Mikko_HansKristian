@@ -24,6 +24,10 @@ class Map:
         self.n_rows = len(self.map_string_split)
         self.n_cols = len(str(self.map_string_split[0]))
 
+        self.number_of_herbivores = 0
+        self.number_of_carnivores = 0
+        self.population = []
+
         self.landscape_matrix = np.zeros([self.n_rows, self.n_cols])
         self.cell_map = []
 
@@ -47,6 +51,29 @@ class Map:
         else:
             return 4
 
+    def get_creatures(self):
+        """
+        Returns the total number of creatures in the cell
+        :return: int
+        """
+        return self.number_of_carnivores + self.number_of_herbivores
+
+    def get_number_of_carnivores(self):
+        """
+        Returns the number of carnivores in the cell
+        :return: int
+        """
+        return self.number_of_carnivores
+
+
+
+    def get_number_of_herbivores(self):
+        """
+        Returns the number of herbivores in the cell
+        :return: int
+        """
+        return self.number_of_herbivores
+
     def find(self, coordinate_to_find):
         for i in range(len(self.cell_map)):
             if self.cell_map[i].coordinate == coordinate_to_find:
@@ -58,46 +85,71 @@ class Map:
         plt.show()
 
     def set_animal_parameters(self, species, params):
+        pass
 
 
-    def get_map(self):
-        return self.cell_map
+    def add_pop(self, cell_pop):
+        """
+        Calls the Fauna class to add animals to the cell.
+        :param cell_pop: dictionary containing species, age, and weight
+        :return:
+        """
+        for element in cell_pop:
+
+            for creature in element['pop']:
+                # print(item.get('species'))
+                species = creature.get('species')
+                weight = creature.get('weight')
+                age = creature.get('age')
+                # print(item['species'])
+                #self.population.append(Fauna(species, weight, age))
+                self.number_of_herbivores += 1
+
+                if species == 'herbivore':
+                    self.population.append(Herbivore(species, weight, age))
+                    print('Added a herbivore to the population in this cell.')
 
 
-"""
-dictionary = {}
-antall_rader = len(map_string_split)
-for i in range(antall_rader):
-    old_value = str(map_string_split[i])
-    new_value = old_value.replace(' ','')
-    map_string_split[i] = new_value
-    # print(map_string_split[i])
-    antall_kolonnner = len(str(map_string_split[0]))
-    for j in range(antall_kolonner):
-        dictionary[i, j] = map_string_split[i][j]
 
-print(dictionary)"""
 
-# def population(list_of_dicts):
-#     population_list = []
-#     position = list_of_dicts[0].get('loc')
-#     print(position)
-#     print(list_of_dicts[1].get('pop'))
-#     for i, item in enumerate(list_of_dicts[1].get('pop')):
-#         species = list_of_dicts[i].get('species')
-#         print(species)
-#         age = list_of_dicts[i].get('age')
-#         print(age)
-#
-#         weight = list_of_dicts[i].get('weight')
-#         print(weight)
-#         population_list.append(Fauna(position, species, age, weight))
-#
-# for d in pop:
-#     location = d['loc']
-#     cell_pop = d['pop']
-#     #finn hvilken celle tilhører pop, kall den celle
-#     celle.add_pop(cell_pop)
+    def alter_population(self):
+
+        # for index in range(self.number_of_herbivores):
+        index = 0
+        while index < self.number_of_herbivores:
+            # print(self.number_of_herbivores)
+            # print(self.population[index].death)
+            if self.population[index].state == True:
+                print(self.population[index].age,' should be dead')
+                self.population.pop(index)
+                self.number_of_herbivores = len(self.population)
+                index += 1
+            index += 1
+
+    def feed_herbivores(self):
+        for creature in self.population:
+            if self.fodder > 10:
+                self.fodder -= 10
+                fodder = 10
+            else:
+                fodder = self.fodder
+                self.fodder = 0
+            if creature.species == 'herbivore':
+                beta = 0.9
+                creature.weight += beta * fodder
+
+    def mating_season(self):
+        if self.number_of_herbivores > 1:
+            for herbivore in self.population:
+                if herbivore.species == 'herbivore':
+
+                    herbivore.give_birth()
+
+    def ranked_fitness(self):
+        self.population.sort(key=lambda x: x.fitness)
+
+
+
 
 if __name__ == "__main__":
     map_string = """\
