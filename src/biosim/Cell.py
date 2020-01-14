@@ -14,10 +14,12 @@ import numpy as np
 
 class Cell:
 
-    f_max = [800.0, 300.0]
-    alpha = [None, 0.3]
+    f_max = [0.0, 0.0, 0.0, 300.0, 800.0]
+    alpha = [None, None, None, 0.3, None]
 
     def __init__(self, coordinates=None, landscape=None, fodder=None):
+        self.f_max = self.f_max[landscape]
+        self.alpha = self.alpha[landscape]
         self.coordinates = coordinates
         self.landscape = landscape
         self.fodder = fodder

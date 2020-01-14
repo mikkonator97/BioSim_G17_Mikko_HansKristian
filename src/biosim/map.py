@@ -19,19 +19,18 @@ class Map:
         Will also create a matrix in order to be able to visualize the map
         easier later.
         """
-        # self.population_herbivores_list
+
         self.map_string_split = map_string.split()
         self.n_rows = len(self.map_string_split)
         self.n_cols = len(str(self.map_string_split[0]))
+        self.cell_map = np.empty((self.n_rows, self.n_cols),dtype=object)
 
-        # self.landscape_matrix = np.zeros([self.n_rows, self.n_cols])
-        self.cell_map = np.zeros([self.n_rows, self.n_cols])
-        #self.cell_map = np.zeros[self.]
 
         for i in range(self.n_rows):
             for j in range(self.n_cols):
                 landscape_type = self.map_string_split[i][j]
                 if landscape_type == 'O':
+                    #print(self.cell_map[i][j])
                     self.cell_map[i][j] = Ocean()
                 elif landscape_type == 'M':
                     self.cell_map[i][j] = Mountain()
@@ -121,6 +120,6 @@ if __name__ == "__main__":
                   OOOOOOOOOOOOOOOOOOOOO"""
 
     test_map = Map(map_string)
-    print(test_map.cell_map[0][0].landscape)
+    print(test_map.cell_map[10][10].f_max)
     # test_map.show_map()
-    # print((test_map.landscape_matrix))
+    #print((test_map.landscape_matrix))
