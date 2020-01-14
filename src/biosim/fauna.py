@@ -37,7 +37,7 @@ class Fauna:
         self.weight = weight
         self.fitness = self.calculate_fitness()
         self.state = False
-        self.have_mated = False
+        self.have_mated = True
         self.desired_location = tuple()
 
     def ageing(self):
@@ -66,7 +66,10 @@ class Fauna:
         Reduces the creatures weight
         :return:
         """
+        test = self.weight
         self.weight -= (self.weight * self.eta[self.species_id])
+        test -= self.weight
+        # print('Animal has lost ', self.weight)
 
     def get_age(self):
         """
@@ -105,6 +108,7 @@ class Fauna:
         :return: boolean
         """
         fitness = self.get_fitness()
+        print('Weight: ', self.weight, 'Fitness: ',fitness)
         if fitness <= 0:
             return True
         else:

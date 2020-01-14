@@ -176,6 +176,10 @@ class Cell:
         for creature in self.population:
             creature.age += 1
 
+    def lose_weight(self):
+        for creature in self.population:
+            creature.reduce_weight()
+
 
 
 class Ocean(Cell):

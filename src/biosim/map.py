@@ -127,6 +127,7 @@ class Map:
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
                 cell.add_age()
+                cell.lose_weight()
                 cell.alter_population()
                 for creature in cell.population:
                     creature.have_mated = False
@@ -135,6 +136,7 @@ class Map:
         # OPS! some of these functions can be put together
         self.yearly_stage1()
         self.yearly_stage_2()
+        # NB! first year none can mate
         self.yearly_stage3()
 
 
