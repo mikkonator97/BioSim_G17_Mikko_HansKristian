@@ -25,12 +25,10 @@ class Map:
         self.n_cols = len(str(self.map_string_split[0]))
         self.cell_map = np.empty((self.n_rows, self.n_cols),dtype=object)
 
-
         for i in range(self.n_rows):
             for j in range(self.n_cols):
                 landscape_type = self.map_string_split[i][j]
                 if landscape_type == 'O':
-                    #print(self.cell_map[i][j])
                     self.cell_map[i][j] = Ocean()
                 elif landscape_type == 'M':
                     self.cell_map[i][j] = Mountain()
@@ -41,27 +39,18 @@ class Map:
                 else:
                     self.cell_map[i][j] = Jungle()
 
-
-    def convert_landscape(self, landscape_type):
-        if landscape_type == 'O':
-            return 0
-        elif landscape_type == 'M':
-            return 1
-        elif landscape_type == 'D':
-            return 2
-        elif landscape_type == 'S':
-            return 3
-        else:
-            return 4
-
     def find(self, coordinate_to_find):
         for i in range(len(self.cell_map)):
             if self.cell_map[i].coordinate == coordinate_to_find:
                 return i
 
     def show_map(self):
+        landscape_matrix = np.zeros((self.n_rows, self.n_cols))
+        for i in range(self.n_rows):
+            for j in range(self.n_cols):
+                landscape_matrix[i][j] = self.cell_map[i][j].landscape
         cmap = mpl.colors.ListedColormap(['royalblue', 'grey', 'khaki', 'honeydew', 'forestgreen'])
-        plt.imshow(self.landscape_matrix, cmap=cmap)
+        plt.imshow(landscape_matrix, cmap=cmap)
         plt.show()
 
 
@@ -121,5 +110,5 @@ if __name__ == "__main__":
 
     test_map = Map(map_string)
     print(test_map.cell_map[10][10].f_max)
-    # test_map.show_map()
+    test_map.show_map()
     #print((test_map.landscape_matrix))

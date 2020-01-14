@@ -63,6 +63,14 @@ class BioSim:
     def initialize(self):
         self.map = Map(self.island_map)
 
+        for item in self.ini_pop:
+            coordinates = item['loc']
+            i = coordinates[0]
+            j = coordinates[1]
+            cell_pop = item['pop']
+            self.map.cell_map[i][j].add_pop(cell_pop)
+
+        """
         for cell in self.map.cell_map:
             for item in self.ini_pop:
                 coordinates = item['loc']
@@ -73,9 +81,9 @@ class BioSim:
                     # Flere locations kan være et problem..
                     print(item)
                     # cell.add_pop(item)
-
         """
-        for dic in self.ini_pop:
+        """
+            for dic in self.ini_pop:
             location = dic['loc']
             cell_pop = dic['pop']
             cell_index = self.map.find(location)
@@ -198,3 +206,5 @@ if __name__ == '__main__':
 
     BioSim_test = BioSim(map_string, test, seed)
     BioSim_test.initialize()
+    print('(3,4): ', BioSim_test.map.cell_map[3][4].population[1].age)
+    print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)

@@ -71,13 +71,21 @@ class Cell:
                            + self.alpha * (self.f_max[1] - available_fodder))
 
     def add_pop(self, cell_pop):
+        # creatures = cell_pop.get
+
+        for creature in cell_pop:
+            species = creature.get('species')
+            weight = creature.get('weight')
+            age = creature.get('age')
+            self.population.append(Herbivore(species, weight, age))
+            self.number_of_herbivores += 1
+        print('Current population: ', self.population)
         """
         Calls the Fauna class to add animals to the cell.
         :param cell_pop: dictionary containing species, age, and weight
         :return:
-        """
+        
         for element in cell_pop:
-
             for creature in element['pop']:
                 # print(item.get('species'))
                 species = creature.get('species')
@@ -90,6 +98,7 @@ class Cell:
                 if species == 'herbivore':
                     self.population.append(Herbivore(species, weight, age))
                     print('Added a herbivore to the population in this cell.')
+        """
 
 
     def remove_pop(self):
