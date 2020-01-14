@@ -48,7 +48,7 @@ class BioSim:
         """
 
         valid_landscape = ['O', 'J', 'S', 'D', 'M']
-        temp_lines = island_map.splitlines()
+        temp_lines = island_map.split()
 
         for i in temp_lines[1:]:
             if len(i) != len(temp_lines[0]):
@@ -195,6 +195,69 @@ if __name__ == '__main__':
     seed = 1
 
 
+    #
+    # BioSim_test = BioSim(map_string, test, seed)
+    # BioSim.initialize()
+    island_map = """OOOOOOOOOOOOOOOOOOOOO
+                    OOOOOOOOSMMMMJJJJJJJO
+                    OSSSSSJJJJMMJJJJJJJOO
+                    OSSSSSSSSSMMJJJJJJOOO
+                    OSSSSSJJJJJJJJJJJJOOO
+                    OSSSSSJJJDDJJJSJJJOOO
+                    OSSJJJJJDDDJJJSSSSOOO
+                    OOSSSSJJJDDJJJSOOOOOO
+                    OSSSJJJJJDDJJJJJJJOOO
+                    OSSSSJJJJDDJJJJOOOOOO
+                    OOSSSSJJJJJJJJOOOOOOO
+                    OOOSSSSJJJJJJJOOOOOOO
+                    OOOOOOOOOOOOOOOOOOOOO"""
 
-    BioSim_test = BioSim(map_string, test, seed)
-    BioSim.initialize()
+    ini_herbs = [
+        {
+            "loc": (10, 10),
+            "pop": [
+                {"species": "Herbivore", "age": 5, "weight": 20}
+                for _ in range(150)
+            ],
+        }
+    ]
+
+    ini_carns = [
+        {
+            "loc": (10, 10),
+            "pop": [
+                {"species": "Carnivore", "age": 5, "weight": 20}
+                for _ in range(40)
+            ],
+        }
+    ]
+    sim = BioSim(str(island_map), ini_herbs, seed)
+    sim.set_animal_parameters("Herbivore", {"zeta": 3.2, "xi": 1.8})
+    sim.set_animal_parameters(
+        "Carnivore",
+        {
+            "a_half": 70,
+            "phi_age": 0.5,
+            "omega": 0.3,
+            "F": 65,
+            "DeltaPhiMax": 9.0,
+        },
+    )
+    sim.set_animal_parameters(
+        "Carnivore",
+        {
+            "a_half": 70,
+            "phi_age": 0.5,
+            "omega": 0.3,
+            "F": 65,
+            "DeltaPhiMax": 9.0,
+        },
+    )
+
+    sim.add_population(population=ini_carns)
+    for i in range(sim.map.n_rows):
+        for j in range(sim.map.n_cols):
+            sim.map.define_adjecent_cells(i, j)
+
+    sim.map.migrate()
+

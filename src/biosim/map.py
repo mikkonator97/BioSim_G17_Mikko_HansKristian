@@ -65,15 +65,25 @@ class Map:
     def migrate(self):
         # Note to self: Må bruke antall dyr før man kjører migrate...
         creatures_to_move = []
-        for cell in self.cell_map:
-            migrating_probabilites = cell.find_migration()
-            for creature in cell.population:
-                if creature.wants_to_migrate():
-                    chosen_probabilty = np.random.choice(migrating_probabilites)
-                    ind = migrating_probabilites.index[chosen_probabilty]
-                    i, j = cell.adjecent_cells[ind]
-                    creature.desired_location(i, j)
-                    creatures_to_move.append(creature)
+
+        for i in range(1, self.n_rows):
+            for j in range(1, self.n_cols):
+                # for cell in self.cell_map:
+                current_cell = self.cell_map[i][j]
+
+                print('current cell', current_cell)
+                migrating_probabilites = current_cell.find_migration()
+                print('Migration', migrating_probabilites)
+
+                # migrating_probabilites = cell.find_migration()
+                for creature in current_cell.population:
+                    if creature.wants_to_migrate():
+                        chosen_probabilty = np.random.choice(migrating_probabilites)
+                        ind = migrating_probabilites.index[chosen_probabilty]
+                        i, j = current_cell.adjecent_cells[ind]
+                        print('A creature has moved')
+                        creature.desired_location(i, j)
+                        creatures_to_move.append(creature)
 
         for creature in creatures_to_move:
             for i in self.n_rows:

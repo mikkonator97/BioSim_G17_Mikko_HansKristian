@@ -28,11 +28,15 @@ class Cell:
         self.number_of_carnivores = 0
         self.population = []
         self.gamma_herbivore = 0.2
-        self.adjecent_cells = []
+        self.adjacent_cells = []
 
     def find_migration(self):
         highest_relevance = []
+        print("adjacent cells", self.adjacent_cells)
+
+        # print('adjacent cells', adjecent_cells)
         for tup in self.adjacent_cells:
+            print('tup', tup)
             i, j = tup
             if self.cell_map[i][j].landscape == 'M' or 'O':
                 break
@@ -97,8 +101,13 @@ class Cell:
             species = creature.get('species')
             weight = creature.get('weight')
             age = creature.get('age')
-            self.population.append(Herbivore(species, weight, age))
-            self.number_of_herbivores += 1
+            if species == 'herbivore':
+                self.population.append(Herbivore(species, weight, age))
+                self.number_of_herbivores += 1
+            # else:
+            #     self.population.append(Carnivore(species, weight, age))
+            #     self.number_of_carnivores += 1
+
         print('Current population: ', self.population)
 
 
