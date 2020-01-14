@@ -154,9 +154,12 @@ class Cell:
                             (self.number_of_herbivores - 1)) >\
                             np.random.rand() and herbivore.age > 0:
                         birth_weight = herbivore.give_birth()
-                        self.population.append(Herbivore('herbivore',
-                                                         birth_weight, 0))
-                        self.number_of_herbivores = len(self.population)
+                        # IS THIS CORRECT? :-)
+                        zeta = 3.5
+                        if herbivore.weight > zeta * (9.5):
+                            self.population.append(Herbivore('herbivore',
+                                                             birth_weight, 0))
+                            self.number_of_herbivores = len(self.population)
 
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness)
