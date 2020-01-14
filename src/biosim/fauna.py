@@ -1,6 +1,8 @@
+__author__ = 'Hans Kristian Lunda, Mikko Rekstad'
+__email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
+
 from math import exp
 import numpy as np
-
 
 
 class Fauna:
@@ -15,7 +17,7 @@ class Fauna:
     a_half = [40.0, 60.0]
     phi_age = [0.2, 0.4]
     w_half = [10.0, 4.0]
-    phi_weight = [0.1,0.4]
+    phi_weight = [0.1, 0.4]
     mu = [0.25, 0.4]
     lambda1 = [1.0, 1.0]
     gamma = [0.2, 0.8]
@@ -24,7 +26,6 @@ class Fauna:
     omega = [0.4, 0.9]
     F = [10.0, 50.0]
     DeltaPhiMax = [None, 10.0]
-
 
     def __init__(self, species=None, weight=None, age=0):
         if species == 'herbivore':
@@ -38,45 +39,69 @@ class Fauna:
         self.state = False
 
     def ageing(self):
+        """
+        Increases the creatures age
+        :return:
+        """
         self.age += 1
 
     def get_fitness(self):
+        """
+        Returns the creatures fitness
+        :return: float
+        """
         return self.fitness
 
     def get_weight(self):
+        """
+        Returns the creatures weight
+        :return: float
+        """
         return self.weight
 
     def reduce_weight(self):
-        # self.weight -= (self.weight*eta[self.species_id])
+        """
+        Reduces the creatures weight
+        :return:
+        """
         self.weight -= (self.weight * self.eta[self.species_id])
 
     def get_age(self):
+        """
+        Returns the creatures age
+        :return: int
+        """
         return self.age
-
-    def get_position(self):
-        return self.position
 
     def calculate_fitness(self):
         """
         Function which computes the herbivore fitness according to the formula
-        :return:
+        :return: float
         """
-        age = self.age
-        weight = self.weight
-        a_half = [40.0, 60.0]
-        w_half =[10.0, 4.0]
-        phi_age = [0.2, 0.4]
-        phi_weight = [0.1, 0.4]
+        # age = self.age
+        # weight = self.weight
+        # a_half = [40.0, 60.0]
+        # w_half =[10.0, 4.0]
+        # phi_age = [0.2, 0.4]
+        # phi_weight = [0.1, 0.4]
 
         if self.weight <= 0:
             return 0
         else:
-            q_pos = (1.0 / (1.0 + exp(phi_age[self.species_id]*(age - a_half[self.species_id]))))
-            q_neg = (1.0 / (1.0 + exp(-phi_weight[self.species_id]*(weight - w_half[self.species_id]))))
+            q_pos = (1.0 / (1.0 + exp(self.phi_age[self.species_id]
+                                      * (self.age
+                                         - self.a_half[self.species_id]))))
+            q_neg = (1.0 / (1.0 + exp(-self.phi_weight[self.species_id]
+                                      * (self.weight
+                                         - self.w_half[self.species_id]))))
             phi = q_pos * q_neg
             return phi
 
     def death(self):
+        """
+        Returns True/False if the creature dies.
+        :return: boolean
+        """
         fitness = self.get_fitness()
         if fitness <= 0:
             return True
@@ -89,9 +114,6 @@ class Fauna:
                 return False
 
 
-
-
-
 class Herbivore(Fauna):
 
     def __init__(self, weight, fitness, age=0):
@@ -102,11 +124,16 @@ class Herbivore(Fauna):
 
     def migrate(self, north, east, south, west):
         """
-        Moves the creature to the most eligable adjecent position on the map.
+        Moves the creature to the most eligible adjacent position on the map.
         """
         pass
 
     def give_birth(self):
+        """
+        This function will calculate the birth weight of the baby
+         and update the weight of the parent.
+        :return: float
+        """
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
         self.weight -= birth_weight * self.xi
         # print('A baby has been born')
