@@ -113,6 +113,12 @@ class Fauna:
             else:
                 return False
 
+    def wants_to_migrate(self):
+        """
+        Depends that we already have calculated fitness.
+        :return:
+        """
+        return (self.mu * self.fitness) > np.random.random()
 
 class Herbivore(Fauna):
 
