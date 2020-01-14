@@ -8,7 +8,7 @@ information out of this cell, and methods for adding fodder to jungel and
 savannah cells.
 """
 
-from fauna import Fauna, Herbivore
+from biosim.fauna import Fauna, Herbivore
 import numpy as np
 
 

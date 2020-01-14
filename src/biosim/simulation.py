@@ -3,7 +3,8 @@
 """
 """
 # from Cell import Cell
-from map import Map
+from biosim import Cell
+from biosim.map import Map
 from biosim.fauna import Fauna
 from biosim.map import Map
 
@@ -80,6 +81,7 @@ class BioSim:
             self.cmax_animals = cmax_animals
             self.img_base = img_base
             self.img_fmt = img_fmt
+            self.map = Map(self.island_map)
 
     def initialize(self):
 
@@ -134,16 +136,13 @@ class BioSim:
 
         :param population: List of dictionaries specifying population
         """
+        for item in population:
+            coordinates = item['loc']
+            i = coordinates[0]
+            j = coordinates[1]
+            cell_pop = item['pop']
 
-        cell.add_pop(start_population)
-
-        dicts = population
-        for d in dicts:
-            location = d['loc']
-            cell_pop = d['pop']
-            cell_index = Map.find(location)
-            for _ in range(len(cell_pop)):
-                Map.cell_map[cell_index].add_pop(cell_pop)
+            self.map.cell_map[i][j].add_pop(cell_pop)
 
 
     @property

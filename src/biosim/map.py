@@ -1,7 +1,7 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from Cell import Cell, Ocean, Mountain, Desert, Savannah, Jungle
+from biosim.Cell import Cell, Ocean, Mountain, Desert, Savannah, Jungle
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -15,7 +15,7 @@ class Map:
 
     def __init__(self, map_string):
         """
-        Will create the map as a list, containing objects with cells.
+        Will create the map as an array, containing objects with cells.
         Will also create a matrix in order to be able to visualize the map
         easier later.
         """
