@@ -24,37 +24,29 @@ class Map:
         self.n_rows = len(self.map_string_split)
         self.n_cols = len(str(self.map_string_split[0]))
         self.cell_map = np.empty((self.n_rows, self.n_cols),dtype=object)
-        self.cell_map.adjacent_cells = []
+        self.create_map()
 
+    def create_map(self):
         for i in range(self.n_rows):
             for j in range(self.n_cols):
                 landscape_type = self.map_string_split[i][j]
                 if landscape_type == 'O':
                     self.cell_map[i][j] = Ocean()
-                    # self.cell_map[i][j].adjecent_cells =
                 elif landscape_type == 'M':
                     self.cell_map[i][j] = Mountain()
                 elif landscape_type == 'D':
                     self.cell_map[i][j] = Desert()
-                    self.cell_map[i][j].adjecent_cells =[(i+1, j), (i, j-1),
-                                                         (i, j+1), (i+1, j)]
-                    #     self.cell_map[i+1][j], self.cell_map[i][j-1],
-                    #     self.cell_map[i+1][j], self.cell_map[i+1][j]
-                    # ]
+                    self.define_adjecent_cells(i, j)
                 elif landscape_type == 'S':
                     self.cell_map[i][j] = Savannah()
-                    self.cell_map[i][j].adjecent_cells =[(i+1, j), (i, j-1),
-                                                         (i, j+1), (i+1, j)]
-                    #     self.cell_map[i + 1][j], self.cell_map[i][j - 1],
-                    #     self.cell_map[i + 1][j], self.cell_map[i + 1][j]
-                    # ]
+                    self.define_adjecent_cells(i, j)
                 else:
                     self.cell_map[i][j] = Jungle()
-                    self.cell_map[i][j].adjecent_cells =[(i+1, j), (i, j-1),
-                                                         (i, j+1), (i+1, j)]
-                    #     self.cell_map[i + 1][j], self.cell_map[i][j - 1],
-                    #     self.cell_map[i + 1][j], self.cell_map[i + 1][j]
-                    # ]
+                    self.define_adjecent_cells(i, j)
+
+    def define_adjecent_cells(self, i, j):
+        self.cell_map[i][j].adjecent_cells = [(i + 1, j), (i, j - 1),
+                                              (i, j + 1), (i + 1, j)]
 
     def find(self, coordinate_to_find):
         for i in range(len(self.cell_map)):
