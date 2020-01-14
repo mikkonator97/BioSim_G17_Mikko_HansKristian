@@ -68,6 +68,15 @@ class Map:
         plt.imshow(landscape_matrix, cmap=cmap)
         plt.show()
 
+    def migrate(self):
+        for cell in self.cell_map:
+            i, j = cell.find_migration()
+            for creature in cell.population:
+                if creature.wants_to_migrate():
+                    self.cell_map[i][j].population += cell.population.pop(creature)
+
+
+
 
 
 
