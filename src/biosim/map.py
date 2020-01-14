@@ -85,19 +85,22 @@ class Map:
     def get_populations(self):
         herbivores = 0
         carnivores = 0
-        for cell in self.cell_map:
-            herbivores += cell.number_of_herbivores
-            carnivores += cell.number_of_carnivores
+        for list_of_cells in self.cell_map:
+            for cell in list_of_cells:
+                herbivores += cell.number_of_herbivores
+                carnivores += cell.number_of_carnivores
         total = herbivores + carnivores
         return herbivores, carnivores, total
 
     def add_fodder_map(self):
-        for cell in self.cell_map:
-            cell.add_fodder()
+        for list_of_cells in self.cell_map:
+            for cell in list_of_cells:
+                cell.add_fodder()
 
     def add_age_map(self):
-        for cell in self.cell_map:
-            cell.add_age()
+        for list_of_cells in self.cell_map:
+            for cell in list_of_cells:
+                cell.add_age()
 
     def yearly_cycle(self):
         self.add_fodder_map()
