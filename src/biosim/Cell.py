@@ -151,6 +151,16 @@ class Cell:
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness)
 
+    def attractiveness_herbivore(self, F=10.0):
+        return self.fodder / ((self.number_of_herbivores+1)* F)
+
+    def attractiveness_carnivore(self, F=50.0):
+        food = 0
+        for creature in self.population:
+            if creature.species == 'herbivore'
+                food += creature.weight
+        return food / ((self.number_of_carnivores+1)* F)
+
     def yearly_cycle(self):
         pass
 
