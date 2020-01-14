@@ -97,22 +97,7 @@ class Cell:
             self.population.append(Herbivore(species, weight, age))
             self.number_of_herbivores += 1
         print('Current population: ', self.population)
-        """
-        Calls the Fauna class to add animals to the cell.
-        :param cell_pop: dictionary containing species, age, and weight
-        :return:
-        
-        for element in cell_pop:
-            for creature in element['pop']:
-                species = creature.get('species')
-                weight = creature.get('weight')
-                age = creature.get('age')
-                self.number_of_herbivores += 1
 
-                if species == 'herbivore':
-                    self.population.append(Herbivore(species, weight, age))
-                    print('Added a herbivore to the population in this cell.')
-        """
 
     def remove_pop(self):
         """
@@ -132,12 +117,12 @@ class Cell:
                     self.number_of_herbivores = len(self.population)
 
     def alter_population(self):
-
         index = 0
         while index < self.number_of_herbivores:
             if self.population[index].state:
                 self.population.pop(index)
                 self.number_of_herbivores = len(self.population)
+                print('A creature just died')
                 index -= 1
             index += 1
 
@@ -146,12 +131,16 @@ class Cell:
             if self.fodder > 10:
                 self.fodder -= 10
                 fodder = 10
+                print('Ate 10 fodder')
             else:
                 fodder = self.fodder
                 self.fodder = 0
             if creature.species == 'herbivore':
                 beta = 0.9
                 creature.weight += beta * fodder
+
+    def feed_carnivores(self):
+        pass
 
     def mating_season(self):
         if self.number_of_herbivores > 1:
@@ -181,7 +170,7 @@ class Cell:
     def add_age(self):
         for creature in self.population:
             creature.age += 1
-            print('The creatures have aged 1 year')
+            #print('The creatures have aged 1 year')
 
 
 class Ocean(Cell):

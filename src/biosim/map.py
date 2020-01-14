@@ -92,19 +92,47 @@ class Map:
         total = herbivores + carnivores
         return herbivores, carnivores, total
 
-    def add_fodder_map(self):
+    def yearly_stage1(self):
+        """
+        Here we wil feed and procreate. Names up for change.
+        NB! The order is important. Fodder grows first.
+        Used to have feed_map and procreate_map. But put them together.
+        :return:
+        """
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
+                for creature in cell.population:
+                    creature.calculate_fitness()
+                cell.ranked_fitness()
                 cell.add_fodder()
+                cell.feed_herbivores()
+                # OPS! Feed carnivores might need some more funcs
+                cell.feed_carnivores()
+                cell.mating_season()
 
-    def add_age_map(self):
+
+    def yearly_stage_2(self):
+        """
+        Here we will just summon the migration funcion when its redo.
+        :return:
+        """
+        pass
+
+    def yearly_stage3(self):
+        """
+        4. aging, 5. Loss of weight and 6. Death.
+        :return:
+        """
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
                 cell.add_age()
+                cell.alter_population()
 
     def yearly_cycle(self):
-        self.add_fodder_map()
-        self.add_age_map()
+        # OPS! some of these functions can be put together
+        self.yearly_stage1()
+        self.yearly_stage_2()
+        self.yearly_stage3()
 
 
 
