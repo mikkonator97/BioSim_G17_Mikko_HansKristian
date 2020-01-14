@@ -140,8 +140,8 @@ class Cell:
                 fodder = self.fodder
                 # print('A creature got ', fodder, ' food this year.')
                 self.fodder = 0
-            beta = 0.9
-            creature.weight += beta * fodder
+            omega = 0.4
+            creature.weight += omega * fodder
 
     def feed_carnivores(self):
         pass
@@ -149,7 +149,7 @@ class Cell:
     def mating_season(self):
         if self.number_of_herbivores > 1:
             for herbivore in self.population:
-                if herbivore.species == 'herbivore':
+                if herbivore.species == 'herbivore' and herbivore.have_mated == False:
                     if min(1, 0.2 * herbivore.fitness *
                             (self.number_of_herbivores - 1)) >\
                             np.random.rand() and herbivore.age > 0:
@@ -172,9 +172,10 @@ class Cell:
         return food / ((self.number_of_carnivores+1)* F)
 
     def add_age(self):
+        # print('All creatures will age')
         for creature in self.population:
             creature.age += 1
-            #print('The creatures have aged 1 year')
+
 
 
 class Ocean(Cell):

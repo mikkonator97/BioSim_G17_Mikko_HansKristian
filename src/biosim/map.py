@@ -128,6 +128,8 @@ class Map:
             for cell in list_of_cells:
                 cell.add_age()
                 cell.alter_population()
+                for creature in cell.population:
+                    creature.have_mated = False
 
     def yearly_cycle(self):
         # OPS! some of these functions can be put together

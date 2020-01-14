@@ -37,6 +37,7 @@ class Fauna:
         self.weight = weight
         self.fitness = self.calculate_fitness()
         self.state = False
+        self.have_mated = False
         self.desired_location = tuple()
 
     def ageing(self):
@@ -144,6 +145,7 @@ class Herbivore(Fauna):
         """
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
         self.weight -= birth_weight * self.xi
+        self.have_mated = True
         # print('A baby has been born')
         return birth_weight
 
@@ -151,8 +153,11 @@ class Herbivore(Fauna):
         """
         This function will let the creature eat.
         """
+        self.weight += 0.4 * fodder_amount
+        """
         if fodder_amount > 10:
             fodder_amount =10
         if fodder_amount > 0:
-            self.weight += 0.9 * fodder_amount
+            self.weight += 0.4 * fodder_amount
+        """
 
