@@ -87,19 +87,15 @@ class Cell:
         
         for element in cell_pop:
             for creature in element['pop']:
-                # print(item.get('species'))
                 species = creature.get('species')
                 weight = creature.get('weight')
                 age = creature.get('age')
-                # print(item['species'])
-                #self.population.append(Fauna(species, weight, age))
                 self.number_of_herbivores += 1
 
                 if species == 'herbivore':
                     self.population.append(Herbivore(species, weight, age))
                     print('Added a herbivore to the population in this cell.')
         """
-
 
     def remove_pop(self):
         """
@@ -110,28 +106,19 @@ class Cell:
             will_die = creature.death()
             print('Død: ', will_die)
             if will_die:
-                # self.population.remove(creature)
                 creature.state = 'dying'
-                # print('A creature is dying at age: ', creature.get_age())
-                # print('Hallo')
 
         for index in range(self.number_of_herbivores):
             if self.population[index].state == 'dying':
                 if index != 0:
-                    # print(self.population[index])
                     self.population.pop(index)
                     self.number_of_herbivores = len(self.population)
-                    # print('Remaining population: ',self.number_of_herbivores)
 
     def alter_population(self):
 
-        # for index in range(self.number_of_herbivores):
         index = 0
         while index < self.number_of_herbivores:
-            # print(self.number_of_herbivores)
-            # print(self.population[index].death)
-            if self.population[index].state == True:
-                # print(self.population[index].age,' should be dead')
+            if self.population[index].state:
                 self.population.pop(index)
                 self.number_of_herbivores = len(self.population)
                 index -= 1
@@ -154,17 +141,19 @@ class Cell:
             for herbivore in self.population:
                 if herbivore.species == 'herbivore':
                     if min(1, 0.2 * herbivore.fitness *
-                              (self.number_of_herbivores - 1)) > np.random.rand() and herbivore.age > 0:
+                            (self.number_of_herbivores - 1)) >\
+                            np.random.rand() and herbivore.age > 0:
                         birth_weight = herbivore.give_birth()
-                        self.population.append(Herbivore('herbivore', birth_weight, 0))
+                        self.population.append(Herbivore('herbivore',
+                                                         birth_weight, 0))
                         self.number_of_herbivores = len(self.population)
-
 
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness)
 
     def yearly_cycle(self):
         pass
+
 
 class Ocean(Cell):
     def __init__(self, habitable=False):
@@ -179,13 +168,12 @@ class Mountain(Cell):
 
 
 class Desert(Cell):
-    def __init__(self, habitable=False):
+    def __init__(self, habitable=True):
         super().__init__(coordinates=None, landscape=2, fodder=0)
         self.habitable = habitable
 
 
 class Savannah(Cell):
-
 
     def __init__(self, habitable = True):
         super().__init__(coordinates=None, landscape=3, fodder=0)
