@@ -37,6 +37,7 @@ class Fauna:
         self.weight = weight
         self.fitness = self.calculate_fitness()
         self.state = False
+        self.desired_location = tuple()
 
     def ageing(self):
         """

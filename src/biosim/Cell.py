@@ -27,7 +27,7 @@ class Cell:
         self.number_of_carnivores = 0
         self.population = []
         self.gamma_herbivore = 0.2
-        # self.adjecent_cells = []
+        self.adjecent_cells = []
 
     def find_migration(self):
         highest_relevance = []
@@ -43,8 +43,7 @@ class Cell:
         probability_to_move = []
         for i in highest_relevance:
             probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
-        best_choice = highest_relevance.index(max())
-        return self.adjacent_cells[best_choice]
+        return probability_to_move
 
     def get_creatures(self):
         """
