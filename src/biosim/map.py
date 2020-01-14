@@ -30,6 +30,7 @@ class Map:
                 landscape_type = self.map_string_split[i][j]
                 if landscape_type == 'O':
                     self.cell_map[i][j] = Ocean()
+                    # self.cell_map[i][j].adjecent_cells =
                 elif landscape_type == 'M':
                     self.cell_map[i][j] = Mountain()
                 elif landscape_type == 'D':

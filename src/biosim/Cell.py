@@ -27,6 +27,9 @@ class Cell:
         self.number_of_carnivores = 0
         self.population = []
         self.gamma_herbivore = 0.2
+        # self.adjecent_cells = []
+
+
 
     def get_creatures(self):
         """

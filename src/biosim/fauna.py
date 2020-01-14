@@ -116,7 +116,8 @@ class Fauna:
     def wants_to_migrate(self):
         """
         Depends that we already have calculated fitness.
-        :return:
+        Returns True if the creature wants to migrate.
+        :return: boolean
         """
         return (self.mu * self.fitness) > np.random.random()
 
