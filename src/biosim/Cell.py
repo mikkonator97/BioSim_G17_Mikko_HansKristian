@@ -29,6 +29,22 @@ class Cell:
         self.gamma_herbivore = 0.2
         # self.adjecent_cells = []
 
+    def find_migration(self):
+        highest_relevance = []
+        for tup in self.adjacent_cells:
+            i, j = tup
+            if self.cell_map[i][j].landscape == 'M' or 'O':
+                break
+            else:
+                fodder = self.cell_map[i][j].attractiveness_herbivore()
+                propensity = np.exp(Fauna.lambda1[0]*fodder)
+                highest_relevance.append(propensity)
+
+        probability_to_move = []
+        for i in highest_relevance:
+            probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
+        best_choice = highest_relevance.index(max())
+        return self.adjacent_cells[best_choice]
 
     def get_creatures(self):
         """
