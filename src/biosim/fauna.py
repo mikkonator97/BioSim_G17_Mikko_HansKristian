@@ -66,9 +66,9 @@ class Fauna:
         Reduces the creatures weight
         :return:
         """
-        test = self.weight
-        self.weight -= (self.weight * self.eta[self.species_id])
-        test -= self.weight
+        # reduction = (self.weight * self.eta[self.species_id])
+        self.weight = self.weight * (1 - self.eta[self.species_id])
+        # test -= self.weight
         # print('Animal has lost ', self.weight)
 
     def get_age(self):
