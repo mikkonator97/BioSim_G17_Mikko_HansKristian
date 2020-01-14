@@ -14,12 +14,13 @@ import numpy as np
 
 class Cell:
 
-    f_max = [0.0, 0.0, 0.0, 300.0, 800.0]
-    alpha = [None, None, None, 0.3, None]
+
 
     def __init__(self, coordinates=None, landscape=None, fodder=None):
-        self.f_max = self.f_max[landscape]
-        self.alpha = self.alpha[landscape]
+        self.f_max = [0.0, 0.0, 0.0, 300.0, 800.0]
+        self.alpha = [None, None, None, 0.3, None]
+        # self.f_max = self.f_max[landscape]
+        # self.alpha = self.alpha[landscape]
         self.coordinates = coordinates
         self.landscape = landscape
         self.fodder = fodder
@@ -80,12 +81,14 @@ class Cell:
         based on the available fodder in the cell.
         :return:
         """
-        if self.landscape == "J":
-            self.fodder = self.f_max[0]
-        elif self.landscape == "S":
-            available_fodder = self.get_fodder()
-            self.fodder = (available_fodder
-                           + self.alpha * (self.f_max[1] - available_fodder))
+
+        if self.landscape == 3:
+            available_fodder = float(self.get_fodder())
+            f_max = self.f_max[3]
+            self.fodder = (available_fodder + self.alpha[3] * (f_max - available_fodder))
+        elif self.landscape == 4:
+            self.fodder = int(self.f_max[4])
+
 
     def add_pop(self, cell_pop):
         # creatures = cell_pop.get
@@ -119,25 +122,26 @@ class Cell:
     def alter_population(self):
         index = 0
         while index < self.number_of_herbivores:
+            self.population[index].state =self.population[index].death()
             if self.population[index].state:
                 self.population.pop(index)
                 self.number_of_herbivores = len(self.population)
-                print('A creature just died')
                 index -= 1
             index += 1
 
     def feed_herbivores(self):
         for creature in self.population:
             if self.fodder > 10:
+                # print('A creature got 10 fodder')
                 self.fodder -= 10
                 fodder = 10
-                print('Ate 10 fodder')
+                #print('Ate 10 fodder')
             else:
                 fodder = self.fodder
+                # print('A creature got ', fodder, ' food this year.')
                 self.fodder = 0
-            if creature.species == 'herbivore':
-                beta = 0.9
-                creature.weight += beta * fodder
+            beta = 0.9
+            creature.weight += beta * fodder
 
     def feed_carnivores(self):
         pass

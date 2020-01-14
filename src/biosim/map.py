@@ -106,6 +106,7 @@ class Map:
                 cell.ranked_fitness()
                 cell.add_fodder()
                 cell.feed_herbivores()
+                # print('Amount of fodder left this year: ', cell.fodder)
                 # OPS! Feed carnivores might need some more funcs
                 cell.feed_carnivores()
                 cell.mating_season()
