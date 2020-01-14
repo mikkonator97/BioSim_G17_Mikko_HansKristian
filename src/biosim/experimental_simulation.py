@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
 
-"""
-"""
-# from Cell import Cell
+
 from map import Map
 from biosim.fauna import Fauna
 from biosim.map import Map
@@ -46,29 +43,11 @@ class BioSim:
         img_base should contain a path and beginning of a file name.
         """
 
-        valid_landscape = ['O', 'J', 'S', 'D', 'M']
-        temp_lines = island_map.splitlines()
+        # valid_landscape = ['O', 'J', 'S', 'D', 'M']
+        # temp_lines = island_map.splitlines()
 
-        for i in temp_lines[1:]:
-            if len(i) != len(temp_lines[0]):
-                raise ValueError("ValueError: The strings in the multiline "
-                                 "string must have equal length!")
 
-        valid_string = ((temp_lines[0].count('O') == len(temp_lines[0]))
-                        and (temp_lines[-1].count('O') == len(temp_lines[-1])))
-
-        for line in temp_lines:
-            if valid_string is False:
-                break
-            else:
-
-                if (line[0] and line[-1]) != 'O':
-                    valid_string = False
-                    break
-                else:
-                    for letter in line:
-                        if letter not in valid_landscape:
-                            raise ValueError
+        valid_string = True
 
         if valid_string is False:
             raise ValueError("Invalid multiline mapstring!")
@@ -82,8 +61,28 @@ class BioSim:
             self.img_fmt = img_fmt
 
     def initialize(self):
-
         self.map = Map(self.island_map)
+
+        for cell in self.map.cell_map:
+            for item in self.ini_pop:
+                coordinates = item['loc']
+                print(coordinates)
+                # print(coordinates)
+                #coordinates = self.ini_pop[index]['loc']
+                if cell.coordinates == coordinates:
+                    # Flere locations kan være et problem..
+                    print(item)
+                    # cell.add_pop(item)
+
+        """
+        for dic in self.ini_pop:
+            location = dic['loc']
+            cell_pop = dic['pop']
+            cell_index = self.map.find(location)
+            for _ in range(len(cell_pop)):
+                self.map.cell_map[cell_index].add_pop(cell_pop)
+                print('Added ', cell_pop,' to the population')"""
+
         self.map.show_map()
 
 
@@ -171,7 +170,7 @@ class BioSim:
         pass
 
 if __name__ == '__main__':
-    map1 = """\
+    map_string = """\
                   OOOOOOOOOOOOOOOOOOOOO
                   OOOOOOOOSMMMMJJJJJJJO
                   OSSSSSJJJJMMJJJJJJJOO
@@ -186,16 +185,16 @@ if __name__ == '__main__':
                   OOOSSSSJJJJJJJOOOOOOO
                   OOOOOOOOOOOOOOOOOOOOO"""
 
-    map_string = map1.split()
 
     test = [{'loc': (3, 4),
              'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
+                     {'species': 'herbivore', 'age': 15, 'weight': 25}]},
+            {"loc": (10, 10),
+                "pop": [{"species": "herbivore", "age": 1, "weight": 10},
+            ]}]
 
     seed = 1
 
-
-
     BioSim_test = BioSim(map_string, test, seed)
-    BioSim.initialize()
+    BioSim_test.initialize()

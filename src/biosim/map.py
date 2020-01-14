@@ -1,7 +1,7 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from Cell import Cell
+from Cell import Cell, Ocean, Mountain, Desert, Savannah, Jungle
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -19,21 +19,28 @@ class Map:
         Will also create a matrix in order to be able to visualize the map
         easier later.
         """
-        # self.population_herbivores_list
+
         self.map_string_split = map_string.split()
         self.n_rows = len(self.map_string_split)
         self.n_cols = len(str(self.map_string_split[0]))
+        self.cell_map = np.empty((self.n_rows, self.n_cols),dtype=object)
 
-        self.landscape_matrix = np.zeros([self.n_rows, self.n_cols])
-        self.cell_map = []
 
         for i in range(self.n_rows):
             for j in range(self.n_cols):
-                current_cell = Cell((i, j), self.map_string_split[i][j],
-                                       fodder=0)
-                self.cell_map.append(current_cell)
-                map_value = self.convert_landscape(self.map_string_split[i][j])
-                self.landscape_matrix[i][j] = map_value
+                landscape_type = self.map_string_split[i][j]
+                if landscape_type == 'O':
+                    #print(self.cell_map[i][j])
+                    self.cell_map[i][j] = Ocean()
+                elif landscape_type == 'M':
+                    self.cell_map[i][j] = Mountain()
+                elif landscape_type == 'D':
+                    self.cell_map[i][j] = Desert()
+                elif landscape_type == 'S':
+                    self.cell_map[i][j] = Savannah()
+                else:
+                    self.cell_map[i][j] = Jungle()
+
 
     def convert_landscape(self, landscape_type):
         if landscape_type == 'O':
@@ -57,11 +64,8 @@ class Map:
         plt.imshow(self.landscape_matrix, cmap=cmap)
         plt.show()
 
-    def set_animal_parameters(self, species, params):
 
 
-    def get_map(self):
-        return self.cell_map
 
 
 """
@@ -116,5 +120,6 @@ if __name__ == "__main__":
                   OOOOOOOOOOOOOOOOOOOOO"""
 
     test_map = Map(map_string)
-    test_map.show_map()
-    # print((test_map.landscape_matrix))
+    print(test_map.cell_map[10][10].f_max)
+    # test_map.show_map()
+    #print((test_map.landscape_matrix))

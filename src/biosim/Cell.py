@@ -11,12 +11,15 @@ savannah cells.
 from fauna import Fauna, Herbivore
 import numpy as np
 
+
 class Cell:
 
-    f_max = [800.0, 300.0]
-    alpha = [None, 0.3]
+    f_max = [0.0, 0.0, 0.0, 300.0, 800.0]
+    alpha = [None, None, None, 0.3, None]
 
     def __init__(self, coordinates=None, landscape=None, fodder=None):
+        self.f_max = self.f_max[landscape]
+        self.alpha = self.alpha[landscape]
         self.coordinates = coordinates
         self.landscape = landscape
         self.fodder = fodder
@@ -153,4 +156,36 @@ class Cell:
 
     def yearly_cycle(self):
         pass
+
+class Ocean(Cell):
+    def __init__(self, habitable=False):
+        super().__init__(coordinates=None, landscape=0, fodder=0)
+        self.habitable = habitable
+
+
+class Mountain(Cell):
+    def __init__(self, habitable=False):
+        super().__init__(coordinates=None, landscape=1, fodder=0)
+        self.habitable = habitable
+
+
+class Desert(Cell):
+    def __init__(self, habitable=False):
+        super().__init__(coordinates=None, landscape=2, fodder=0)
+        self.habitable = habitable
+
+
+class Savannah(Cell):
+
+
+    def __init__(self, habitable = True):
+        super().__init__(coordinates=None, landscape=3, fodder=0)
+        self.habitable = habitable
+
+
+class Jungle(Cell):
+    def __init__(self, habitable=True):
+        super().__init__(coordinates=None, landscape=4, fodder=0)
+        self.habitable = habitable
+
 
