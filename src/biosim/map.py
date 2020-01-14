@@ -36,20 +36,20 @@ class Map:
                 elif landscape_type == 'D':
                     self.cell_map[i][j] = Desert()
                     self.cell_map[i][j].adjecent_cells =[
-                        self.cell_map[i+1][j+1], self.cell_map[i+1][j-1],
-                        self.cell_map[i-1][j+1], self.cell_map[i-1][j-1]
+                        self.cell_map[i+1][j], self.cell_map[i][j-1],
+                        self.cell_map[i+1][j], self.cell_map[i+1][j]
                     ]
                 elif landscape_type == 'S':
                     self.cell_map[i][j] = Savannah()
                     self.cell_map[i][j].adjecent_cells =[
-                        self.cell_map[i+1][j+1], self.cell_map[i+1][j-1],
-                        self.cell_map[i-1][j+1], self.cell_map[i-1][j-1]
+                        self.cell_map[i + 1][j], self.cell_map[i][j - 1],
+                        self.cell_map[i + 1][j], self.cell_map[i + 1][j]
                     ]
                 else:
                     self.cell_map[i][j] = Jungle()
                     self.cell_map[i][j].adjecent_cells =[
-                        self.cell_map[i+1][j+1], self.cell_map[i+1][j-1],
-                        self.cell_map[i-1][j+1], self.cell_map[i-1][j-1]
+                        self.cell_map[i + 1][j], self.cell_map[i][j - 1],
+                        self.cell_map[i + 1][j], self.cell_map[i + 1][j]
                     ]
 
     def find(self, coordinate_to_find):
