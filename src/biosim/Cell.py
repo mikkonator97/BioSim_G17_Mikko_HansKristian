@@ -30,7 +30,6 @@ class Cell:
         # self.adjecent_cells = []
 
 
-
     def get_creatures(self):
         """
         Returns the total number of creatures in the cell
@@ -160,7 +159,7 @@ class Cell:
     def attractiveness_carnivore(self, F=50.0):
         food = 0
         for creature in self.population:
-            if creature.species == 'herbivore'
+            if creature.species == 'herbivore':
                 food += creature.weight
         return food / ((self.number_of_carnivores+1)* F)
 

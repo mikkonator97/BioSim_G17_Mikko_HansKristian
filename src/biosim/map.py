@@ -24,6 +24,7 @@ class Map:
         self.n_rows = len(self.map_string_split)
         self.n_cols = len(str(self.map_string_split[0]))
         self.cell_map = np.empty((self.n_rows, self.n_cols),dtype=object)
+        self.cell_map.adjacent_cells = []
 
         for i in range(self.n_rows):
             for j in range(self.n_cols):
@@ -35,10 +36,11 @@ class Map:
                     self.cell_map[i][j] = Mountain()
                 elif landscape_type == 'D':
                     self.cell_map[i][j] = Desert()
-                    self.cell_map[i][j].adjecent_cells =[
-                        self.cell_map[i+1][j], self.cell_map[i][j-1],
-                        self.cell_map[i+1][j], self.cell_map[i+1][j]
-                    ]
+                    self.cell_map[i][j].adjecent_cells =[(i+1, j), (i, j-1),
+                                                         (i, j+1), (i+1, j)]
+                    #     self.cell_map[i+1][j], self.cell_map[i][j-1],
+                    #     self.cell_map[i+1][j], self.cell_map[i+1][j]
+                    # ]
                 elif landscape_type == 'S':
                     self.cell_map[i][j] = Savannah()
                     self.cell_map[i][j].adjecent_cells =[
