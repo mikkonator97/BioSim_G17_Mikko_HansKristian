@@ -170,9 +170,25 @@ if __name__ == '__main__':
     test = [{'loc': (3, 4),
              'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 15, 'weight': 25}]},
             {"loc": (10, 10),
                 "pop": [{"species": "herbivore", "age": 1, "weight": 10},
+                        {'species': 'herbivore', 'age': 5, 'weight': 40},
+                        {'species': 'herbivore', 'age': 5, 'weight': 40},
+                        {'species': 'herbivore', 'age': 5, 'weight': 40},
+                        {'species': 'herbivore', 'age': 5, 'weight': 40},
+                        {'species': 'herbivore', 'age': 5, 'weight': 40}
             ]}]
 
     seed = 1
@@ -182,4 +198,4 @@ if __name__ == '__main__':
     print('(3,4): ', BioSim_test.map.cell_map[3][4].population[1].age)
     print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
 
-    BioSim_test.simulate(10)
+    BioSim_test.simulate(50)
