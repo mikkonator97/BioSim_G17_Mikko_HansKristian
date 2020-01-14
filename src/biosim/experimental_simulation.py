@@ -42,56 +42,23 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
-
-        # valid_landscape = ['O', 'J', 'S', 'D', 'M']
-        # temp_lines = island_map.splitlines()
-
-
-        valid_string = True
-
-        if valid_string is False:
-            raise ValueError("Invalid multiline mapstring!")
-        else:
-            self.island_map = island_map
-            self.ini_pop = ini_pop
-            self.seed = seed
-            self.ymax_animals = ymax_animals
-            self.cmax_animals = cmax_animals
-            self.img_base = img_base
-            self.img_fmt = img_fmt
-
-    def initialize(self):
+        # Boring stuff
+        self.island_map = island_map
+        self.ini_pop = ini_pop
+        self.seed = seed
+        self.ymax_animals = ymax_animals
+        self.cmax_animals = cmax_animals
+        self.img_base = img_base
+        self.img_fmt = img_fmt
+        # Cool stuff
         self.map = Map(self.island_map)
+        self.insert_population(ini_pop)
 
-        for item in self.ini_pop:
-            coordinates = item['loc']
-            i = coordinates[0]
-            j = coordinates[1]
+    def insert_population(self, population):
+        for item in population:
+            i, j = item['loc']
             cell_pop = item['pop']
             self.map.cell_map[i][j].add_pop(cell_pop)
-
-        """
-        for cell in self.map.cell_map:
-            for item in self.ini_pop:
-                coordinates = item['loc']
-                print(coordinates)
-                # print(coordinates)
-                #coordinates = self.ini_pop[index]['loc']
-                if cell.coordinates == coordinates:
-                    # Flere locations kan være et problem..
-                    print(item)
-                    # cell.add_pop(item)
-        """
-        """
-            for dic in self.ini_pop:
-            location = dic['loc']
-            cell_pop = dic['pop']
-            cell_index = self.map.find(location)
-            for _ in range(len(cell_pop)):
-                self.map.cell_map[cell_index].add_pop(cell_pop)
-                print('Added ', cell_pop,' to the population')"""
-
-        self.map.show_map()
 
 
     def set_animal_parameters(self, species, params):
@@ -205,6 +172,6 @@ if __name__ == '__main__':
     seed = 1
 
     BioSim_test = BioSim(map_string, test, seed)
-    BioSim_test.initialize()
+
     print('(3,4): ', BioSim_test.map.cell_map[3][4].population[1].age)
     print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)

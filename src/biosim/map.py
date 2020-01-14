@@ -140,6 +140,9 @@ if __name__ == "__main__":
                   OOOOOOOOOOOOOOOOOOOOO"""
 
     test_map = Map(map_string)
-    print(test_map.cell_map[10][10].f_max)
-    test_map.show_map()
+    print('f_max in a jungle cell: ', test_map.cell_map[10][10].f_max)
+    print('the adjecent cells to the same cell ([10][10])', test_map.cell_map[10][10].adjecent_cells)
+    y, x = test_map.cell_map[10][10].adjecent_cells[0]
+    print(y,x)
+    #test_map.show_map()
     #print((test_map.landscape_matrix))
