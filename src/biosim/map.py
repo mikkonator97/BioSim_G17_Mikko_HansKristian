@@ -82,6 +82,27 @@ class Map:
                         self.cell_map[i][j].population += cell.population.pop(creature)
                         creature.desired_location = (i, j)
 
+    def get_populations(self):
+        herbivores = 0
+        carnivores = 0
+        for cell in self.cell_map:
+            herbivores += cell.number_of_herbivores
+            carnivores += cell.number_of_carnivores
+        total = herbivores + carnivores
+        return herbivores, carnivores, total
+
+    def add_fodder_map(self):
+        for cell in self.cell_map:
+            cell.add_fodder()
+
+    def add_age_map(self):
+        for cell in self.cell_map:
+            cell.add_age()
+
+    def yearly_cycle(self):
+        self.add_fodder_map()
+        self.add_age_map()
+
 
 
 

@@ -101,6 +101,12 @@ class BioSim:
 
         Image files will be numbered consecutively.
         """
+        for year in range(num_years):
+            print('Year: ', year)
+            print('Ingoing population: ', self.map.get_populations())
+            self.map.yearly_cycle()
+
+
 
     def add_population(self, population):
         """
@@ -175,3 +181,5 @@ if __name__ == '__main__':
 
     print('(3,4): ', BioSim_test.map.cell_map[3][4].population[1].age)
     print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
+
+    BioSim_test.simulate(20)

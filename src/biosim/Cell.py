@@ -178,8 +178,10 @@ class Cell:
                 food += creature.weight
         return food / ((self.number_of_carnivores+1)* F)
 
-    def yearly_cycle(self):
-        pass
+    def add_age(self):
+        for creature in self.population:
+            creature.age += 1
+            print('The creatures have aged 1 year')
 
 
 class Ocean(Cell):
