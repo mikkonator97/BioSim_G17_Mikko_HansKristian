@@ -27,6 +27,8 @@ class Cell:
         self.number_of_herbivores = 0
         self.number_of_carnivores = 0
         self.population = []
+        self.population_herbivores = []
+        self.population_carnivores = []
         self.gamma_herbivore = 0.2
         self.adjacent_cells = []
 
@@ -50,13 +52,18 @@ class Cell:
     #         probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
     #     return probability_to_move
 
-    def get_creatures(self):
+    def number_creatures(self):
         """
         Returns the total number of creatures in the cell
         :return: int
         """
-        return self.number_of_carnivores + self.number_of_herbivores
+        return self.number_herbivores() + self.number_carnivores()
 
+    def number_herbivores(self):
+        return len(self.population_herbivores)
+
+    def number_carnivores(self):
+        return len(self.population_carnivores)
 
     def get_fodder(self):
         """
