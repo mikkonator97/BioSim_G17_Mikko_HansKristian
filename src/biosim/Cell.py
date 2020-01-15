@@ -161,18 +161,9 @@ class Cell:
     def mating_season(self):
         if self.number_of_herbivores > 1:
             for herbivore in self.population:
-                if herbivore.species == 'herbivore' and herbivore.have_mated == False:
-                    if min(1, 0.2 * herbivore.fitness *
-                            (self.number_of_herbivores - 1)) >\
-                            np.random.rand() and herbivore.age > 0:
-                        birth_weight = herbivore.give_birth()
-                        # IS THIS CORRECT? :-)
-                        zeta = 3.5
-                        if herbivore.weight > zeta * (9.5) and birth_weight > 0:
-                            self.population.append(Herbivore('herbivore',
-                                                             birth_weight, 0))
-                            self.number_of_herbivores = len(self.population)
-                            print('A baby has been born weighs: ', birth_weight)
+                    herbivore.birth(self.number_of_herbivores)
+
+
 
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness, reverse=True)

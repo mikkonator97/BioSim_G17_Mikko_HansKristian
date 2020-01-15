@@ -39,11 +39,21 @@ class Fauna:
         self.state = False
         self.have_mated = True
         self.desired_location = tuple()
-        
-    def birth(self):
-        if ():
-            self.weight -= #...
+
+    def birth(self, population):
+        # if ():
+        birth_probability = min(1, 0.2 * self.fitness * (population - 1))
+
+        zeta = 3.5
+        if herbivore.weight > zeta * (9.5) and birth_weight > 0:
+            self.population.append(Herbivore('herbivore',
+                                             birth_weight, 0))
+            self.number_of_herbivores = len(self.population)
+        if birth_probability > np.random.rand() and self.age > 0:
+
+            self.weight -=
             return self.__class__()
+            print('A baby has been born weighs: ', birth_weight)
 
     def ageing(self):
         """
