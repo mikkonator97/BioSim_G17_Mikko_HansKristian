@@ -131,7 +131,7 @@ class Cell:
 
     def alter_population(self):
         index = 0
-        while index < self.number_of_herbivores:
+        while index < self.number_of_herbivores():
             self.population[index].state =self.population[index].death()
             if self.population[index].state:
                 self.population.pop(index)

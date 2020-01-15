@@ -160,7 +160,7 @@ class Map:
         """
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
-                for creature in cell.population:
+                for creature in cell.population_herbivores:
                     creature.fitness = creature.calculate_fitness()
                 cell.ranked_fitness()
                 cell.add_fodder()
@@ -187,7 +187,7 @@ class Map:
             for cell in list_of_cells:
                 cell.add_age()
                 cell.lose_weight()
-                for creature in cell.population:
+                for creature in cell.population_herbivores:
                     creature.fitness = creature.calculate_fitness
                     creature.have_mated = False
                     if creature.weight < 0:
