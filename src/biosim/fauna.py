@@ -1,9 +1,9 @@
-from biosim import Cell
+
 
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-#from math import exp
+from math import exp
 import numpy as np
 
 
@@ -215,16 +215,19 @@ class Herbivore(Fauna):
         """
         pass
 
+
     def get_destination_probabilities(self):
         """
         Calculates the probability of moving to each of the adjacent cells,
         then returns a list with these probabilities.
         :return: list
         """
+        pass
+        """
 
         highest_relevance = []
-        position = 
-        print("position: ", position)
+        # position =
+        # print("position: ", position)
 
         # print("adjacent cells", self.cell_map[i][j].adjacent_cells)
         # print('adjacent cells', adjecent_cells)
@@ -242,7 +245,7 @@ class Herbivore(Fauna):
         for index in highest_relevance:
             probability_to_move.append(highest_relevance[index]/sum(highest_relevance))
         return probability_to_move
-
+"""
     def give_birth(self):
         """
         This function will calculate the birth weight of the baby
