@@ -169,6 +169,7 @@ class Cell:
                             self.population.append(Herbivore('herbivore',
                                                              birth_weight, 0))
                             self.number_of_herbivores = len(self.population)
+                            print('A baby has been born weighs: ', birth_weight)
 
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness)

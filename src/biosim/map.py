@@ -141,6 +141,8 @@ class Map:
                 cell.alter_population()
                 for creature in cell.population:
                     creature.have_mated = False
+                    if creature.weight < 0:
+                        print('Warning, serious bug. Creatures can weigh < 0.')
 
     def yearly_cycle(self):
         # OPS! some of these functions can be put together

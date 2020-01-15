@@ -66,10 +66,8 @@ class Fauna:
         Reduces the creatures weight
         :return:
         """
-        # reduction = (self.weight * self.eta[self.species_id])
-        self.weight = self.weight * (1 - self.eta[self.species_id])
-        # test -= self.weight
-        # print('Animal has lost ', self.weight)
+        reduction = (self.weight * self.eta[self.species_id])
+        self.weight -= reduction
 
     def get_age(self):
         """
@@ -116,6 +114,8 @@ class Fauna:
             death_probability = self.omega[self.species_id]*(1 - fitness)
             if random_death_probability < death_probability:
                 return True
+            elif self.weight < 0:
+                return True
             else:
                 return False
 
@@ -157,7 +157,7 @@ class Herbivore(Fauna):
         """
         This function will let the creature eat.
         """
-        self.weight += 0.4 * fodder_amount
+        self.weight += 0.9 * fodder_amount
         """
         if fodder_amount > 10:
             fodder_amount =10
