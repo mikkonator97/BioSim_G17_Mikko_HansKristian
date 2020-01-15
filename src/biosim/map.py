@@ -142,11 +142,13 @@ class Map:
     def get_populations(self):
         herbivores = 0
         carnivores = 0
+        total = 0
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
                 herbivores += cell.number_of_herbivores
                 carnivores += cell.number_of_carnivores
-        total = herbivores + carnivores
+                total += len(cell.population)
+
         return herbivores, carnivores, total
 
     def yearly_stage1(self):

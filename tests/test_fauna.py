@@ -2,6 +2,7 @@
 # These tests will go through the needs and specifications for the faunas.
 # Fauna is the superclass, and all other creatures will be found under.
 from math import exp
+from biosim.fauna import Fauna, Herbivore
 
 class TestFauna:
     """
@@ -12,21 +13,33 @@ class TestFauna:
     def test_age(self):
         """
         Will test that the age is correct when a new fauna is born.
+        Will also test that the age is the same amount if we set to something
+        other than zero.
+        Ageing will not be testet here, because that is manipulated in cell.
         :return:
         """
         test_baby = Fauna()
-        assert test_baby.get_age() == 0
+        test_adult = Fauna(age=30)
+        assert test_baby.age == 0
+        assert test_adult.age == 30
 
 
     def test_weight(self):
         """
-        Will test that the weight is not 0.
+        Will test that the weight is not 0 for a newborn.
+        Doing this test on a Herbivore, because __init__ function for Fauna
+        does not give proper parameters to give birth.
         Will also test that the animals is able to gain weight.
         Weight will also be tested in test_birth.
+
         :return:
         """
-        test_baby = Fauna()
-        assert test_baby.get_weight() != 0
+        mother = Herbivore(weight=40, age =10)
+        baby = mother.birth(10)
+        assert baby.weight != 0
+        test_herbi = Herbivore(weight=100, age=10)
+        test_herbi.reduce_weight()
+        assert test_herbi.weight == 95
 
 
 
@@ -38,17 +51,26 @@ class TestFauna:
         have to stay behind.
         :return:
         """
+        pass
 
     def test_birth(self):
         """
         Will test that there has to be multiple fauna in the same cell in
         order to give birth.
-        Will test that an animal only gives birth to one offspring per year.
+        Will test that an animal only gives birth to one offspring per year!!
         Will test that the mother loses weight equals the baby's weight.
-        Will test that the mother does not lose weight if there is no birth.
-        Will test that the birth comes through if weight is correct.
+        Will test that the mother does not lose weight if there is no birth.!!
+        Will test that the birth comes through if weight is correct.!!
         :return:
         """
+        mother1 = Herbivore(weight=40, age =10)
+        baby1 = mother1.birth(0)
+        assert baby1 is None
+
+        mother2 = Herbivore(weight=40, age =10)
+        mother2_weight_before_birth = 40
+        baby2 = mother2.birth(10)
+        assert baby2.weight + mother2.weight == mother2_weight_before_birth
 
     def test_death(self):
         """

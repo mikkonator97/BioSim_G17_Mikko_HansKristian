@@ -102,7 +102,7 @@ class Cell:
             weight = creature.get('weight')
             age = creature.get('age')
             if species == 'herbivore':
-                self.population.append(Herbivore(species, weight, age))
+                self.population.append(Herbivore(weight=weight, age=age))
                 self.number_of_herbivores += 1
             # else:
             #     self.population.append(Carnivore(species, weight, age))
@@ -163,6 +163,7 @@ class Cell:
         for herbivore in self.population:
                 new_creature = (herbivore.birth(self.number_of_herbivores))
                 if new_creature != None:
+
                     self.population.append(new_creature)
                     print(len(self.population))
 

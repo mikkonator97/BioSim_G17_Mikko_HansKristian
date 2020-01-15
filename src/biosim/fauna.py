@@ -28,11 +28,8 @@ class Fauna:
     DeltaPhiMax = [None, 10.0]
     """
 
-    def __init__(self, species=None, weight=None, age=0):
-        if species == 'herbivore':
-            self.species_id = 0
-        else:
-            self.species_id = 1
+    def __init__(self, weight=0, age=0):
+
         """
         self.w_birth = w_birth[species_id]
         self.sigma_birth = sigma_birth[species_id]
@@ -52,7 +49,7 @@ class Fauna:
         self.DeltaPhiMax = DeltaPhiMax[species_id]
         """
 
-        self.species = species
+        # self.species = species
         self.age = age
         self.weight = weight
         self.fitness = self.calculate_fitness()
@@ -67,7 +64,7 @@ class Fauna:
         if birth_weight > 0:
             self.weight -= birth_weight
             print('A baby has been born weighs: ', birth_weight)
-            return self.__class__(birth_weight, 0.5)
+            return self.__class__(weight=birth_weight, age=0)
 
 
 
@@ -146,15 +143,17 @@ class Fauna:
         :return: boolean
         """
         fitness = self.get_fitness()
+        death_number = np.random.random()
+        survival_number = 1 - (self.omega * (1 - fitness))
         # print('Weight: ', self.weight, 'Fitness: ',fitness)
         if fitness <= 0:
+            print('Dies because of negative fitness.')
             return True
         else:
-            random_death_probability = np.random.random()
-            death_probability = self.omega*(1 - fitness)
-            if random_death_probability < death_probability:
-                print('Random number: ', random_death_probability)
-                print('The probability: ', death_probability)
+            if death_number > survival_number:
+                print('-----> New Creature death, fitness: ', fitness)
+                print('Random number: ', death_number)
+                print('The probability: ', survival_number)
                 print('Will die at age: ',self.age,' and fitness: ', fitness)
                 return True
             elif self.weight < 0:
@@ -171,9 +170,10 @@ class Fauna:
         """
         return (self.mu * self.fitness) > np.random.random()
 
+
 class Herbivore(Fauna):
 
-    def __init__(self, weight, fitness, age=0):
+    def __init__(self, weight, age=0):
         self.w_birth = 8.0
         self.sigma_birth = 1.5
         self.beta = 0.9
@@ -190,7 +190,7 @@ class Herbivore(Fauna):
         self.omega = 0.4
         self.F = 10.0
         self.DeltaPhiMax = None
-        super().__init__(weight, fitness, age)
+        super().__init__(weight, age)
 
 
         # self.w_birth = 8.0
@@ -203,17 +203,7 @@ class Herbivore(Fauna):
         """
         pass
 
-    def give_birth(self):
-        """
-        This function will calculate the birth weight of the baby
-         and update the weight of the parent.
-        :return: float
-        """
-        birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
-        self.weight -= birth_weight * self.xi
-        self.have_mated = True
-        # print('A baby has been born')
-        return birth_weight
+
 
     def vegetarian_feast(self, fodder_amount=0):
         """
