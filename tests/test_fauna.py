@@ -63,14 +63,36 @@ class TestFauna:
         Will test that the birth comes through if weight is correct.!!
         :return:
         """
+
+        # Mother doesn't give birth if there are only 1 creature in cell.
         mother1 = Herbivore(weight=40, age =10)
-        baby1 = mother1.birth(0)
+        baby1 = mother1.birth(1)
         assert baby1 is None
 
+        # Mother loses weight equal to babys weigh.
         mother2 = Herbivore(weight=40, age =10)
         mother2_weight_before_birth = 40
         baby2 = mother2.birth(10)
         assert baby2.weight + mother2.weight == mother2_weight_before_birth
+
+        # Will test that mother don't create offspring if underweight.
+        mother3 = Herbivore(weight=20, age =10)
+        baby3 = mother3.birth(100)
+        mother4 = Herbivore(weight=30, age =10)
+        baby4 = mother4.birth(100)
+        mother5 = Herbivore(weight=32, age =10)
+        baby5 = mother5.birth(100)
+        assert baby3 is None
+        assert baby4 is None
+        assert baby5 is None
+
+        # Will test that the mother can only give birth to one baby per year
+        mother6 = Herbivore(weight=50, age =10)
+        baby6 = mother6.birth(100)
+        baby7 = mother6.birth(100)
+        assert baby6 is not None
+        # assert baby7 is None MIGHT IMPLEMENT SAFETY FOR THIS LATER
+
 
     def test_death(self):
         """
