@@ -9,7 +9,7 @@ class Fauna:
     """
     This class will include the common properties for all creatures on
     Rossumøya.
-    """
+
     w_birth = [8.0, 6.0]
     sigma_birth = [1.5, 1.0]
     beta = [0.9, 0.75]
@@ -26,13 +26,14 @@ class Fauna:
     omega = [0.4, 0.9]
     F = [10.0, 50.0]
     DeltaPhiMax = [None, 10.0]
+    """
 
     def __init__(self, species=None, weight=None, age=0):
         if species == 'herbivore':
             self.species_id = 0
         else:
             self.species_id = 1
-
+        """
         self.w_birth = w_birth[species_id]
         self.sigma_birth = sigma_birth[species_id]
         self.beta = beta[species_id]
@@ -49,11 +50,13 @@ class Fauna:
         self.omega = omega[species_id]
         self.F = F[species_id]
         self.DeltaPhiMax = DeltaPhiMax[species_id]
+        """
 
         self.species = species
         self.age = age
         self.weight = weight
         self.fitness = self.calculate_fitness()
+        # print(self.fitness)
         self.state = False
         self.have_mated = True
         self.desired_location = tuple()
@@ -64,14 +67,13 @@ class Fauna:
 
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
 
-        zeta = 3.5
-        if herbivore.weight > zeta * (9.5) and birth_weight > 0:
+        if self.weight > self.zeta * (9.5) and birth_weight > 0:
             #self.population.append(Herbivore('herbivore',
             #                                  birth_weight, 0))
-            self.number_of_herbivores = len(self.population)
+            #self.number_of_herbivores = len(self.population)
             if birth_probability > np.random.rand() and self.age > 0:
                 self.weight -= birth_weight
-                return self.__class__()
+                return self.__class__(birth_weight, 0.5)
                 print('A baby has been born weighs: ', birth_weight)
 
     def ageing(self):
@@ -101,7 +103,7 @@ class Fauna:
         Reduces the creatures weight
         :return:
         """
-        reduction = (self.weight * self.eta[self.species_id])
+        reduction = (self.weight * self.eta)
         self.weight -= reduction
         print('Creature that weighs: ', self.weight, ' lost : ', reduction)
 
@@ -112,27 +114,20 @@ class Fauna:
         """
         return self.age
 
+    # @property
     def calculate_fitness(self):
         """
         Function which computes the herbivore fitness according to the formula
         :return: float
         """
-        # age = self.age
-        # weight = self.weight
-        # a_half = [40.0, 60.0]
-        # w_half =[10.0, 4.0]
-        # phi_age = [0.2, 0.4]
-        # phi_weight = [0.1, 0.4]
 
         if self.weight <= 0:
+
             return 0
         else:
-            q_pos = (1.0 / (1.0 + exp(self.phi_age[self.species_id]
-                                      * (self.age
-                                         - self.a_half[self.species_id]))))
-            q_neg = (1.0 / (1.0 + exp(-self.phi_weight[self.species_id]
-                                      * (self.weight
-                                         - self.w_half[self.species_id]))))
+            print(self.a_half)
+            q_pos = 1.0 / (1.0 + exp(self.phi_age * (10.0 - self.a_half)))
+            q_neg = 1.0 / (1.0 + exp(-self.phi_weight * (self.weight - self.w_half)))
             phi = q_pos * q_neg
             return phi
 
@@ -147,7 +142,7 @@ class Fauna:
             return True
         else:
             random_death_probability = np.random.random()
-            death_probability = self.omega[self.species_id]*(1 - fitness)
+            death_probability = self.omega*(1 - fitness)
             if random_death_probability < death_probability:
                 print('Random number: ', random_death_probability)
                 print('The probability: ', death_probability)
@@ -170,7 +165,24 @@ class Fauna:
 class Herbivore(Fauna):
 
     def __init__(self, weight, fitness, age=0):
+        self.w_birth = 8.0
+        self.sigma_birth = 1.5
+        self.beta = 0.9
+        self.eta = 0.05
+        self.a_half = 40.0
+        self.phi_age = 0.2
+        self.w_half = 10
+        self.phi_weight = 0.1
+        self.mu = 0.25
+        self.lambda1 = 1.0
+        self.gamma = 0.2
+        self.zeta = 3.5
+        self.xi = 1.2
+        self.omega = 0.4
+        self.F = 10.0
+        self.DeltaPhiMax = None
         super().__init__(weight, fitness, age)
+
 
         # self.w_birth = 8.0
         # self.sigma_birth = 1.5

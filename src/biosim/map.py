@@ -165,7 +165,7 @@ class Map:
                 cell.add_age()
                 cell.lose_weight()
                 for creature in cell.population:
-                    creature.fitness = creature.calculate_fitness()
+                    creature.fitness = creature.calculate_fitness
                     creature.have_mated = False
                     if creature.weight < 0:
                         print('Warning, serious bug. Creatures can weigh < 0.')

@@ -163,8 +163,6 @@ class Cell:
             for herbivore in self.population:
                     herbivore.birth(self.number_of_herbivores)
 
-
-
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness, reverse=True)
 

@@ -35,7 +35,7 @@ def run_simulation(number_years, start_population):
             creature.reduce_weight()
             creature.ageing()
             # print('Weight: ' ,creature.weight)
-            creature.fitness = creature.calculate_fitness()
+            creature.fitness = creature.calculate_fitness
             # print('Fitness: ', creature.get_fitness())
             creature.state = creature.death()
             # print('Will die: ', creature.state, '\n')
