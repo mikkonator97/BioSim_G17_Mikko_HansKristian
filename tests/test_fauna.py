@@ -1,8 +1,9 @@
 
 # These tests will go through the needs and specifications for the faunas.
 # Fauna is the superclass, and all other creatures will be found under.
-from math import exp
+# from math import exp
 from biosim.fauna import Fauna, Herbivore
+
 
 class TestFauna:
     """
@@ -23,7 +24,6 @@ class TestFauna:
         assert test_baby.age == 0
         assert test_adult.age == 30
 
-
     def test_weight(self):
         """
         Will test that the weight is not 0 for a newborn.
@@ -34,14 +34,12 @@ class TestFauna:
 
         :return:
         """
-        mother = Herbivore(weight=40, age =10)
+        mother = Herbivore(weight=40, age=10)
         baby = mother.birth(10)
         assert baby.weight != 0
         test_herbi = Herbivore(weight=100, age=10)
         test_herbi.reduce_weight()
         assert test_herbi.weight == 95
-
-
 
     def test_migration(self):
         """
@@ -65,43 +63,62 @@ class TestFauna:
         """
 
         # Mother doesn't give birth if there are only 1 creature in cell.
-        mother1 = Herbivore(weight=40, age =10)
+        mother1 = Herbivore(weight=40, age=10)
         baby1 = mother1.birth(1)
         assert baby1 is None
 
         # Mother loses weight equal to babys weigh.
-        mother2 = Herbivore(weight=40, age =10)
+        mother2 = Herbivore(weight=40, age=10)
         mother2_weight_before_birth = 40
         baby2 = mother2.birth(10)
         assert baby2.weight + mother2.weight == mother2_weight_before_birth
 
         # Will test that mother don't create offspring if underweight.
-        mother3 = Herbivore(weight=20, age =10)
+        mother3 = Herbivore(weight=20, age=10)
         baby3 = mother3.birth(100)
-        mother4 = Herbivore(weight=30, age =10)
+        mother4 = Herbivore(weight=30, age=10)
         baby4 = mother4.birth(100)
-        mother5 = Herbivore(weight=32, age =10)
+        mother5 = Herbivore(weight=32, age=10)
         baby5 = mother5.birth(100)
         assert baby3 is None
         assert baby4 is None
         assert baby5 is None
 
         # Will test that the mother can only give birth to one baby per year
-        mother6 = Herbivore(weight=50, age =10)
+        mother6 = Herbivore(weight=50, age=10)
         baby6 = mother6.birth(100)
-        baby7 = mother6.birth(100)
+        # baby7 = mother6.birth(100)
         assert baby6 is not None
         # assert baby7 is None MIGHT IMPLEMENT SAFETY FOR THIS LATER
 
-
     def test_death(self):
         """
+        Once again, Faunas can't die, executing tests for herbivores.
         Will test that animals with fitness 0 dies.
         Will test the statistics behind the casualties.
+        NB! We need a test in cell that checks that only dying creatures are
+        removed.
         :return:
         """
-        fitness = Fauna.get_fitness()
-        assert fitness > 0
+        # Will first test that the fitness is zero if the weight is 0
+        test_creature1 = Herbivore(age=0, weight=0)
+        assert test_creature1.fitness == 0
+        # Then test if the animal dies.
+        assert test_creature1.death()
+        # Will now test some statistics.
+        test_creature2 = Herbivore(age=10, weight=100)
+        assert not test_creature2.death()
+        test_creature3 = Herbivore(age=10, weight=15)
+        # assert test_creature3.fitness == 0
+        # assert test_creature3.death()
+        test_creature3.death()
+        chance_of_survival = 1 - 0.4*(1.0-0.6209202238454615)
+        assert test_creature3.survival_chance == chance_of_survival
+
+        # We know that the death number is ≈ 0.45, and survival chance is 0.85
+        # And therefore want to test that the creature survives.
+        test_creature4 = Herbivore(age=10, weight=15)
+        assert not test_creature4.death()
 
 
 class TestHerbivores:
@@ -115,25 +132,18 @@ class TestHerbivores:
         Will test that they eat if they are able to.
         :return:
         """
-        fodder = Landscape.get_fodder()
-        if fodder > 0:
-            herbivore_one = Herbivore()
-            herbivore_two = Herbivore()
-            fitness_one = herbivore_one.get_fitness()
-            fitness_two = herbivore_two.get_fitness()
-
-
-
-
+        test_herbivore = Herbivore(weight=100, age=10)
+        test_herbivore.eat(10)
+        assert test_herbivore.weight == 109
 
     def test_herbivore_fitness(self):
         """
         Will test that the fitness formula works.
         :return:
         """
-        phi = Herbivore.get_fitness()
-        assert 0 <= phi <= 1
-
+        pass
+        # phi = Herbivore.get_fitness()
+        # assert 0 <= phi <= 1
 # Test stats?
 
 
@@ -150,11 +160,13 @@ class TestCarnivores:
 
         :return:
         """
+        pass
 
     def test_carnivore_fitness(self):
         """
         Will test that carnivores increases fitness whenever it eats.
         :return:
         """
-        phi = Carnivore.get_fitness()
-        assert 0 <= phi <= 1
+        # phi = Carnivore.get_fitness()
+        # ssert 0 <= phi <= 1
+        pass
