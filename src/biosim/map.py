@@ -160,6 +160,8 @@ class Map:
         """
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
+                if cell.population_herbivores != []:
+                    print('Antall herbivores her: ', len(cell.population_herbivores))
                 for creature in cell.population_herbivores:
                     creature.fitness = creature.calculate_fitness()
                 cell.ranked_fitness()
