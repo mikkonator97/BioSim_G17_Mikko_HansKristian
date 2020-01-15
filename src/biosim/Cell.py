@@ -93,6 +93,13 @@ class Cell:
         elif self.landscape == 4:
             self.fodder = int(self.f_max[4])
 
+    def get_adjacent_cells(self):
+        """
+        Returns the coordinates of the cell
+        :return:
+        """
+        return self.adjacent_cells
+
 
     def add_pop(self, cell_pop):
         # creatures = cell_pop.get
