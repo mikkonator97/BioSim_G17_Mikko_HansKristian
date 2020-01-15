@@ -69,53 +69,51 @@ class Map:
         # Note to self: Må bruke antall dyr før man kjører migrate...
         creatures_to_move = []
 
-        for i in range(1, self.n_rows):
-            for j in range(1, self.n_cols):
+        for x_coord in range(1, self.n_rows):
+            for y_coord in range(1, self.n_cols):
                 # for cell in self.cell_map:
-                current_cell = self.cell_map[i][j]
+                current_cell = self.cell_map[x_coord][y_coord]
 
                 # adj_cells = self.cell_map[i][j].adjacent_cells
                 print('current cell', current_cell)
-                migrating_probabilities = self.find_migration(i,j)
+                migrating_probabilities = self.get_destination_probabilities(x_coord, y_coord)
                 print('Migration', migrating_probabilities)
 
                 # migrating_probabilities = cell.find_migration()
                 for creature in current_cell.population:
                     if creature.wants_to_migrate():
                         chosen_probabilty = np.random.choice(migrating_probabilities)
-                        ind = migrating_probabilities.index[chosen_probabilty]
-                        i, j = current_cell.adjecent_cells[ind]
+                        index = migrating_probabilities.index[chosen_probabilty]
+                        current_x_coord, current_y_coord = current_cell.adjecent_cells[index]
                         print('A creature has moved')
-                        creature.desired_location(i, j)
+                        creature.desired_location(current_x_coord, current_y_coord)
                         creatures_to_move.append(creature)
 
         for creature in creatures_to_move:
-            for i in self.n_rows:
-                for j in self.n_cols:
-                    if self.cell_map[i][j] != creature.desired_location:
-                        self.cell_map[i][j].population += cell.population.pop(creature)
-                        creature.desired_location = (i, j)
+            for x_coord in self.n_rows:
+                for y_coord in self.n_cols:
+                    if self.cell_map[x_coord][y_coord] != creature.desired_location:
+                        self.cell_map[x_coord][y_coord].population += cell.population.pop(creature)
+                        creature.desired_location = (x_coord, y_coord)
 
-    def find_migration(self, i, j):
+    def get_destination_probabilities(self, x_coords, y_coords):
         highest_relevance = []
         # print("adjacent cells", self.cell_map[i][j].adjacent_cells)
 
         # print('adjacent cells', adjecent_cells)
-        for tup in self.cell_map[i][j].adjacent_cells:
+        for tup in self.cell_map[x_coords][y_coords].adjacent_cells:
             print('tup', tup)
-            i, j = tup
+            new_x_coord, new_y_coord = tup
             # print("landscape ", self.cell_map[i][j].landscape)
-            if self.cell_map[i][j].landscape == 0 or 1:
-                continue
-            else:
-                fodder = self.cell_map[i][j].attractiveness_herbivore()
+            if self.cell_map[new_x_coord][new_y_coord].landscape in {3, 4}:
+                fodder = self.cell_map[new_x_coord][new_y_coord].attractiveness_herbivore()
                 print("Fodder ", fodder)
                 propensity = np.exp(Fauna.lambda1[0]*fodder)
                 highest_relevance.append(propensity)
 
         probability_to_move = []
-        for i in highest_relevance:
-            probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
+        for index in highest_relevance:
+            probability_to_move.append(highest_relevance[index]/sum(highest_relevance))
         return probability_to_move
 
     def get_populations(self):

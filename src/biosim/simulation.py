@@ -232,6 +232,10 @@ if __name__ == '__main__':
         }
     ]
     sim = BioSim(str(island_map), ini_herbs, seed)
+    for i in range(sim.map.n_rows):
+        for j in range(sim.map.n_cols):
+            sim.map.cell_map[i][j].add_fodder()
+    print("Cell 10,10 amount of food: ", sim.map.cell_map[10][10].fodder)
     sim.set_animal_parameters("Herbivore", {"zeta": 3.2, "xi": 1.8})
     sim.set_animal_parameters(
         "Carnivore",
