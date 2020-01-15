@@ -98,10 +98,12 @@ class Cell:
         # creatures = cell_pop.get
 
         for creature in cell_pop:
+            print(creature)
             species = creature.get('species')
             weight = creature.get('weight')
             age = creature.get('age')
             if species == 'herbivore':
+                print('Hallo')
                 self.population_herbivores.append(Herbivore(weight=weight, age=age))
             # else:
             #     self.population.append(Carnivore(species, weight, age))
@@ -128,6 +130,11 @@ class Cell:
                     self.number_of_herbivores = len(self.population)
 
     def alter_population(self):
+        """
+        Removes an animal from the list if it is supposed to die.
+        :return:
+        """
+
         index = 0
         number_of_herbivores = self.number_herbivores()
         while index < number_of_herbivores:
@@ -219,5 +226,6 @@ class Jungle(Cell):
     def __init__(self, habitable=True):
         super().__init__(coordinates=None, landscape=4, fodder=0)
         self.habitable = habitable
+        self.f_max = self.f_max[4]
 
 
