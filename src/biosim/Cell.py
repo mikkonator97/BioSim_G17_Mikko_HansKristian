@@ -159,9 +159,12 @@ class Cell:
         pass
 
     def mating_season(self):
-        if self.number_of_herbivores > 1:
-            for herbivore in self.population:
-                    herbivore.birth(self.number_of_herbivores)
+        # if self.number_of_herbivores > 1:
+        for herbivore in self.population:
+                new_creature = (herbivore.birth(self.number_of_herbivores))
+                if new_creature != None:
+                    self.population.append(new_creature)
+                    print(len(self.population))
 
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness, reverse=True)
