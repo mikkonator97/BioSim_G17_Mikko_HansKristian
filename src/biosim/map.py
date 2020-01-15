@@ -118,7 +118,7 @@ class Map:
                 cell.feed_herbivores()
                 # print('Amount of fodder left this year: ', cell.fodder)
                 # OPS! Feed carnivores might need some more funcs
-                cell.feed_carnivores()
+                # cell.feed_carnivores()
                 cell.mating_season()
 
 
@@ -151,6 +151,7 @@ class Map:
         self.yearly_stage_2()
         # NB! first year none can mate
         self.yearly_stage3()
+
 
 
 

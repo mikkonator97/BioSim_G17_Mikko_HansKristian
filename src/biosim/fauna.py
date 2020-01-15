@@ -39,6 +39,11 @@ class Fauna:
         self.state = False
         self.have_mated = True
         self.desired_location = tuple()
+        
+    def birth(self):
+        if ():
+            self.weight -= #...
+            return self.__class__()
 
     def ageing(self):
         """
@@ -108,13 +113,15 @@ class Fauna:
         :return: boolean
         """
         fitness = self.get_fitness()
-        print('Weight: ', self.weight, 'Fitness: ',fitness)
+        # print('Weight: ', self.weight, 'Fitness: ',fitness)
         if fitness <= 0:
             return True
         else:
             random_death_probability = np.random.random()
             death_probability = self.omega[self.species_id]*(1 - fitness)
             if random_death_probability < death_probability:
+                print('Random number: ', random_death_probability)
+                print('The probability: ', death_probability)
                 print('Will die at age: ',self.age,' and fitness: ', fitness)
                 return True
             elif self.weight < 0:
