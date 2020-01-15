@@ -30,42 +30,58 @@ class Map:
         # self.adjacent_cells = []
 
     def create_map(self):
-        for i in range(self.n_rows):
-            for j in range(self.n_cols):
-                landscape_type = self.map_string_split[i][j]
+        """
+        Creates the map with cell objects and add lists with the adjacent
+         cell cordinates to each cell object.
+        :return:
+        """
+        for row_index in range(self.n_rows):
+            for col_index in range(self.n_cols):
+                landscape_type = self.map_string_split[row_index][col_index]
                 if landscape_type == 'O':
-                    self.cell_map[i][j] = Ocean()
+                    self.cell_map[row_index][col_index] = Ocean()
                 elif landscape_type == 'M':
-                    self.cell_map[i][j] = Mountain()
+                    self.cell_map[row_index][col_index] = Mountain()
                 elif landscape_type == 'D':
-                    self.cell_map[i][j] = Desert()
-                    self.define_adjacent_cells(i, j)
+                    self.cell_map[row_index][col_index] = Desert()
+                    self.define_adjacent_cells(row_index, col_index)
                 elif landscape_type == 'S':
-                    self.cell_map[i][j] = Savannah()
-                    self.define_adjacent_cells(i, j)
+                    self.cell_map[row_index][col_index] = Savannah()
+                    self.define_adjacent_cells(row_index, col_index)
                 else:
-                    self.cell_map[i][j] = Jungle()
-                    self.define_adjacent_cells(i, j)
+                    self.cell_map[row_index][col_index] = Jungle()
+                    self.define_adjacent_cells(row_index, col_index)
 
-    def define_adjacent_cells(self, i, j):
-        self.cell_map[i][j].adjacent_cells = [(i + 1, j), (i, j - 1),
-                                              (i - 1, j), (i, j + 1)]
+    def define_adjacent_cells(self, x_coord, y_coord):
+        """
+        Calculates the coordinates of the adjacent cells.
+        :param x_coord:
+        :param y_coord:
+        :return:
+        """
+        self.cell_map[x_coord][y_coord].adjacent_cells = [(x_coord + 1, y_coord), (x_coord, y_coord - 1),
+                                                          (x_coord - 1, y_coord), (x_coord, y_coord + 1)]
 
     def find(self, coordinate_to_find):
-        for i in range(len(self.cell_map)):
-            if self.cell_map[i].coordinate == coordinate_to_find:
-                return i
+        for index in range(len(self.cell_map)):
+            if self.cell_map[index].coordinate == coordinate_to_find:
+                return index
 
     def show_map(self):
         landscape_matrix = np.zeros((self.n_rows, self.n_cols))
-        for i in range(self.n_rows):
-            for j in range(self.n_cols):
-                landscape_matrix[i][j] = self.cell_map[i][j].landscape
+        for row_index in range(self.n_rows):
+            for col_index in range(self.n_cols):
+                landscape_matrix[row_index][col_index] = self.cell_map[row_index][col_index].landscape
         cmap = mpl.colors.ListedColormap(['royalblue', 'grey', 'khaki', 'honeydew', 'forestgreen'])
         plt.imshow(landscape_matrix, cmap=cmap)
         plt.show()
 
     def migrate(self):
+        """
+        Calculates the migration for each animal on the map,
+        then moves them to their new destination.
+        :return:
+        """
         # Note to self: Må bruke antall dyr før man kjører migrate...
         creatures_to_move = []
 
@@ -96,12 +112,19 @@ class Map:
                         self.cell_map[x_coord][y_coord].population += cell.population.pop(creature)
                         creature.desired_location = (x_coord, y_coord)
 
-    def get_destination_probabilities(self, x_coords, y_coords):
+    def get_destination_probabilities(self, x_coord, y_coord):
+        """
+        Calculates the probability of moving to each of the adjacent cells,
+         then returns a list with these probabilities.
+        :param x_coords: int
+        :param y_coords: int
+        :return: list
+        """
         highest_relevance = []
         # print("adjacent cells", self.cell_map[i][j].adjacent_cells)
 
         # print('adjacent cells', adjecent_cells)
-        for tup in self.cell_map[x_coords][y_coords].adjacent_cells:
+        for tup in self.cell_map[x_coord][y_coord].adjacent_cells:
             print('tup', tup)
             new_x_coord, new_y_coord = tup
             # print("landscape ", self.cell_map[i][j].landscape)
