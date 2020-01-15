@@ -173,15 +173,6 @@ if __name__ == '__main__':
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 15, 'weight': 25}]}
             ]
     """
@@ -198,7 +189,7 @@ if __name__ == '__main__':
 
     BioSim_test = BioSim(map_string, test, seed)
 
-    print('(10,10): ', BioSim_test.map.cell_map[10][10].population[1].age)
+    # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[1].age)
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
 
-    BioSim_test.simulate(500)
+    BioSim_test.simulate(10)

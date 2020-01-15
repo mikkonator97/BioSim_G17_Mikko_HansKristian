@@ -24,8 +24,7 @@ class Cell:
         self.coordinates = coordinates
         self.landscape = landscape
         self.fodder = fodder
-        self.number_of_herbivores = 0
-        self.number_of_carnivores = 0
+
         self.population = []
         self.population_herbivores = []
         self.population_carnivores = []
@@ -103,8 +102,7 @@ class Cell:
             weight = creature.get('weight')
             age = creature.get('age')
             if species == 'herbivore':
-                self.population.append(Herbivore(weight=weight, age=age))
-                self.number_of_herbivores += 1
+                self.population_herbivores.append(Herbivore(weight=weight, age=age))
             # else:
             #     self.population.append(Carnivore(species, weight, age))
             #     self.number_of_carnivores += 1
@@ -131,11 +129,12 @@ class Cell:
 
     def alter_population(self):
         index = 0
-        while index < self.number_of_herbivores():
-            self.population[index].state =self.population[index].death()
-            if self.population[index].state:
-                self.population.pop(index)
-                self.number_of_herbivores = len(self.population)
+        number_of_herbivores = self.number_herbivores()
+        while index < number_of_herbivores:
+            self.population_herbivores[index].state = self.population_herbivores[index].death()
+            if self.population_herbivores[index].state:
+                self.population_herbivores.pop(index)
+                number_of_herbivores -= 1
                 index -= 1
             index += 1
 
@@ -160,13 +159,10 @@ class Cell:
         pass
 
     def mating_season(self):
-        # if self.number_of_herbivores > 1:
-        for herbivore in self.population:
-                new_creature = (herbivore.birth(self.number_of_herbivores))
-                if new_creature != None:
-
-                    self.population.append(new_creature)
-                    print(len(self.population))
+        for herbivore in self.population_herbivores:
+            new_creature = (herbivore.birth(self.number_herbivores()))
+            if new_creature != None:
+                self.population_herbivores.append(new_creature)
 
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness, reverse=True)

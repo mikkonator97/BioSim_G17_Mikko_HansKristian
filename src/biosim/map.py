@@ -145,9 +145,9 @@ class Map:
         total = 0
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
-                herbivores += cell.number_of_herbivores
-                carnivores += cell.number_of_carnivores
-                total += len(cell.population)
+                herbivores += cell.number_herbivores()
+                carnivores += cell.number_carnivores()
+        total = herbivores + carnivores
 
         return herbivores, carnivores, total
 
