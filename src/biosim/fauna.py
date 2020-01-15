@@ -62,19 +62,29 @@ class Fauna:
         self.desired_location = tuple()
 
     def birth(self, population):
-        # if ():
-        birth_probability = min(1, 0.2 * self.fitness * (population - 1))
+        birth_weight = self.find_birth_weight(population)
+        print(birth_weight)
+        if birth_weight > 0:
+            self.weight -= birth_weight
+            print('A baby has been born weighs: ', birth_weight)
+            return self.__class__(birth_weight, 0.5)
 
+
+
+    def find_birth_weight(self, population):
+        birth_probability = min(1, 0.2 * self.fitness * (population - 1))
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
 
-        if self.weight > self.zeta * (9.5) and birth_weight > 0:
+        if self.weight > self.zeta * (9.5):
             #self.population.append(Herbivore('herbivore',
             #                                  birth_weight, 0))
             #self.number_of_herbivores = len(self.population)
             if birth_probability > np.random.rand() and self.age > 0:
-                self.weight -= birth_weight
-                return self.__class__(birth_weight, 0.5)
-                print('A baby has been born weighs: ', birth_weight)
+                return birth_weight
+        return 0
+
+
+
 
     def ageing(self):
         """
@@ -125,7 +135,6 @@ class Fauna:
 
             return 0
         else:
-            print(self.a_half)
             q_pos = 1.0 / (1.0 + exp(self.phi_age * (10.0 - self.a_half)))
             q_neg = 1.0 / (1.0 + exp(-self.phi_weight * (self.weight - self.w_half)))
             phi = q_pos * q_neg
