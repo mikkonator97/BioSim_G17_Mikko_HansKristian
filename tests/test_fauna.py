@@ -141,10 +141,10 @@ class TestHerbivores:
         Will test that the fitness formula works.
         :return:
         """
-        pass
-        # phi = Herbivore.get_fitness()
-        # assert 0 <= phi <= 1
-# Test stats?
+        # This was the easiest combination to calculate by hand...
+        # NB! Works with default parameters.
+        test_herbivore = Herbivore(weight=10, age=40)
+        assert test_herbivore.get_fitness() == 0.25
 
 
 class TestCarnivores:

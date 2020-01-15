@@ -57,19 +57,6 @@ class Cell:
         """
         return self.number_of_carnivores + self.number_of_herbivores
 
-    def get_number_of_carnivores(self):
-        """
-        Returns the number of carnivores in the cell
-        :return: int
-        """
-        return self.number_of_carnivores
-
-    def get_number_of_herbivores(self):
-        """
-        Returns the number of herbivores in the cell
-        :return: int
-        """
-        return self.number_of_herbivores
 
     def get_fodder(self):
         """
