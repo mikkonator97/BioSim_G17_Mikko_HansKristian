@@ -32,6 +32,24 @@ class Fauna:
             self.species_id = 0
         else:
             self.species_id = 1
+
+        self.w_birth = w_birth[species_id]
+        self.sigma_birth = sigma_birth[species_id]
+        self.beta = beta[species_id]
+        self.eta = eta[species_id]
+        self.a_half = a_half[species_id]
+        self.phi_age = phi_age[species_id]
+        self.w_half = w_half[species_id]
+        self.phi_weight = phi_weight[species_id]
+        self.mu = mu[species_id]
+        self.lambda1 = lamda1[species_id]
+        self.gamma = gamma[species_id]
+        self.zeta = zeta[species_id]
+        self.xi = xi[species_id]
+        self.omega = omega[species_id]
+        self.F = F[species_id]
+        self.DeltaPhiMax = DeltaPhiMax[species_id]
+
         self.species = species
         self.age = age
         self.weight = weight
@@ -44,16 +62,17 @@ class Fauna:
         # if ():
         birth_probability = min(1, 0.2 * self.fitness * (population - 1))
 
+        birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
+
         zeta = 3.5
         if herbivore.weight > zeta * (9.5) and birth_weight > 0:
-            self.population.append(Herbivore('herbivore',
-                                             birth_weight, 0))
+            #self.population.append(Herbivore('herbivore',
+            #                                  birth_weight, 0))
             self.number_of_herbivores = len(self.population)
-        if birth_probability > np.random.rand() and self.age > 0:
-
-            self.weight -=
-            return self.__class__()
-            print('A baby has been born weighs: ', birth_weight)
+            if birth_probability > np.random.rand() and self.age > 0:
+                self.weight -= birth_weight
+                return self.__class__()
+                print('A baby has been born weighs: ', birth_weight)
 
     def ageing(self):
         """
@@ -152,9 +171,10 @@ class Herbivore(Fauna):
 
     def __init__(self, weight, fitness, age=0):
         super().__init__(weight, fitness, age)
-        self.w_birth = 8.0
-        self.sigma_birth = 1.5
-        self.xi = 1.2
+
+        # self.w_birth = 8.0
+        # self.sigma_birth = 1.5
+        # self.xi = 1.2
 
     def migrate(self, north, east, south, west):
         """
