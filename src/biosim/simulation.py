@@ -255,9 +255,9 @@ if __name__ == '__main__':
     )
 
     sim.add_population(population=ini_carns)
-    for i in range(sim.map.n_rows):
-        for j in range(sim.map.n_cols):
-            sim.map.define_adjecent_cells(i, j)
+    # for i in range(sim.map.n_rows):
+    #     for j in range(sim.map.n_cols):
+    #         sim.map.define_adjacent_cells(i, j)
 
     sim.map.migrate()
 

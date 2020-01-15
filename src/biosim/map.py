@@ -1,3 +1,5 @@
+from biosim.fauna import Fauna
+
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
@@ -25,6 +27,7 @@ class Map:
         self.n_cols = len(str(self.map_string_split[0]))
         self.cell_map = np.empty((self.n_rows, self.n_cols),dtype=object)
         self.create_map()
+        # self.adjacent_cells = []
 
     def create_map(self):
         for i in range(self.n_rows):
@@ -36,17 +39,17 @@ class Map:
                     self.cell_map[i][j] = Mountain()
                 elif landscape_type == 'D':
                     self.cell_map[i][j] = Desert()
-                    self.define_adjecent_cells(i, j)
+                    self.define_adjacent_cells(i, j)
                 elif landscape_type == 'S':
                     self.cell_map[i][j] = Savannah()
-                    self.define_adjecent_cells(i, j)
+                    self.define_adjacent_cells(i, j)
                 else:
                     self.cell_map[i][j] = Jungle()
-                    self.define_adjecent_cells(i, j)
+                    self.define_adjacent_cells(i, j)
 
-    def define_adjecent_cells(self, i, j):
-        self.cell_map[i][j].adjecent_cells = [(i + 1, j), (i, j - 1),
-                                              (i, j + 1), (i + 1, j)]
+    def define_adjacent_cells(self, i, j):
+        self.cell_map[i][j].adjacent_cells = [(i + 1, j), (i, j - 1),
+                                              (i - 1, j), (i, j + 1)]
 
     def find(self, coordinate_to_find):
         for i in range(len(self.cell_map)):
@@ -71,15 +74,16 @@ class Map:
                 # for cell in self.cell_map:
                 current_cell = self.cell_map[i][j]
 
+                # adj_cells = self.cell_map[i][j].adjacent_cells
                 print('current cell', current_cell)
-                migrating_probabilites = current_cell.find_migration()
-                print('Migration', migrating_probabilites)
+                migrating_probabilities = self.find_migration(i,j)
+                print('Migration', migrating_probabilities)
 
-                # migrating_probabilites = cell.find_migration()
+                # migrating_probabilities = cell.find_migration()
                 for creature in current_cell.population:
                     if creature.wants_to_migrate():
-                        chosen_probabilty = np.random.choice(migrating_probabilites)
-                        ind = migrating_probabilites.index[chosen_probabilty]
+                        chosen_probabilty = np.random.choice(migrating_probabilities)
+                        ind = migrating_probabilities.index[chosen_probabilty]
                         i, j = current_cell.adjecent_cells[ind]
                         print('A creature has moved')
                         creature.desired_location(i, j)
@@ -91,6 +95,28 @@ class Map:
                     if self.cell_map[i][j] != creature.desired_location:
                         self.cell_map[i][j].population += cell.population.pop(creature)
                         creature.desired_location = (i, j)
+
+    def find_migration(self, i, j):
+        highest_relevance = []
+        # print("adjacent cells", self.cell_map[i][j].adjacent_cells)
+
+        # print('adjacent cells', adjecent_cells)
+        for tup in self.cell_map[i][j].adjacent_cells:
+            print('tup', tup)
+            i, j = tup
+            # print("landscape ", self.cell_map[i][j].landscape)
+            if self.cell_map[i][j].landscape == 0 or 1:
+                continue
+            else:
+                fodder = self.cell_map[i][j].attractiveness_herbivore()
+                print("Fodder ", fodder)
+                propensity = np.exp(Fauna.lambda1[0]*fodder)
+                highest_relevance.append(propensity)
+
+        probability_to_move = []
+        for i in highest_relevance:
+            probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
+        return probability_to_move
 
     def get_populations(self):
         herbivores = 0

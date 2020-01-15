@@ -30,25 +30,25 @@ class Cell:
         self.gamma_herbivore = 0.2
         self.adjacent_cells = []
 
-    def find_migration(self):
-        highest_relevance = []
-        print("adjacent cells", self.adjacent_cells)
-
-        # print('adjacent cells', adjecent_cells)
-        for tup in self.adjacent_cells:
-            print('tup', tup)
-            i, j = tup
-            if self.cell_map[i][j].landscape == 'M' or 'O':
-                break
-            else:
-                fodder = self.cell_map[i][j].attractiveness_herbivore()
-                propensity = np.exp(Fauna.lambda1[0]*fodder)
-                highest_relevance.append(propensity)
-
-        probability_to_move = []
-        for i in highest_relevance:
-            probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
-        return probability_to_move
+    # def find_migration(self):
+    #     highest_relevance = []
+    #     print("adjacent cells", self.adjacent_cells)
+    #
+    #     # print('adjacent cells', adjecent_cells)
+    #     for tup in self.adjacent_cells:
+    #         print('tup', tup)
+    #         i, j = tup
+    #         if Map.cell_map[i][j].landscape == 'M' or 'O':
+    #             break
+    #         else:
+    #             fodder = self.cell_map[i][j].attractiveness_herbivore()
+    #             propensity = np.exp(Fauna.lambda1[0]*fodder)
+    #             highest_relevance.append(propensity)
+    #
+    #     probability_to_move = []
+    #     for i in highest_relevance:
+    #         probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
+    #     return probability_to_move
 
     def get_creatures(self):
         """
@@ -177,15 +177,15 @@ class Cell:
     def ranked_fitness(self):
         self.population.sort(key=lambda x: x.fitness, reverse=True)
 
-    def attractiveness_herbivore(self, F=10.0):
-        return self.fodder / ((self.number_of_herbivores+1)* F)
+    def attractiveness_herbivore(self, f=10.0):
+        return self.fodder / ((self.number_of_herbivores+1) * f)
 
-    def attractiveness_carnivore(self, F=50.0):
+    def attractiveness_carnivore(self, f=50.0):
         food = 0
         for creature in self.population:
             if creature.species == 'herbivore':
                 food += creature.weight
-        return food / ((self.number_of_carnivores+1)* F)
+        return food / ((self.number_of_carnivores+1) * f)
 
     def add_age(self):
         # print('All creatures will age')
