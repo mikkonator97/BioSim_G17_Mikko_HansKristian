@@ -52,6 +52,7 @@ class Fauna:
         Returns the creatures fitness
         :return: float
         """
+        self.fitness = self.calculate_fitness()
         return self.fitness
 
     def get_weight(self):
@@ -68,6 +69,7 @@ class Fauna:
         """
         reduction = (self.weight * self.eta[self.species_id])
         self.weight -= reduction
+        print('Creature that weighs: ', self.weight, ' lost : ', reduction)
 
     def get_age(self):
         """
@@ -113,8 +115,10 @@ class Fauna:
             random_death_probability = np.random.random()
             death_probability = self.omega[self.species_id]*(1 - fitness)
             if random_death_probability < death_probability:
+                print('Will die at age: ',self.age,' and fitness: ', fitness)
                 return True
             elif self.weight < 0:
+                print('Dies because of negative weight.')
                 return True
             else:
                 return False
@@ -158,6 +162,7 @@ class Herbivore(Fauna):
         This function will let the creature eat.
         """
         self.weight += 0.9 * fodder_amount
+        print('Creature just ate and gained: ', 0.9 * fodder_amount)
         """
         if fodder_amount > 10:
             fodder_amount =10

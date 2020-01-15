@@ -112,7 +112,7 @@ class Map:
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
                 for creature in cell.population:
-                    creature.calculate_fitness()
+                    creature.fitness = creature.calculate_fitness()
                 cell.ranked_fitness()
                 cell.add_fodder()
                 cell.feed_herbivores()
@@ -138,11 +138,12 @@ class Map:
             for cell in list_of_cells:
                 cell.add_age()
                 cell.lose_weight()
-                cell.alter_population()
                 for creature in cell.population:
+                    creature.fitness = creature.calculate_fitness()
                     creature.have_mated = False
                     if creature.weight < 0:
                         print('Warning, serious bug. Creatures can weigh < 0.')
+                    cell.alter_population()
 
     def yearly_cycle(self):
         # OPS! some of these functions can be put together

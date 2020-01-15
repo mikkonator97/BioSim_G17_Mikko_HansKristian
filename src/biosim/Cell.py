@@ -149,8 +149,11 @@ class Cell:
                 fodder = self.fodder
                 # print('A creature got ', fodder, ' food this year.')
                 self.fodder = 0
-            omega = 0.4
-            creature.weight += omega * fodder
+            beta = 0.9
+            print('Creature weighing ', creature.weight,' going in for a snack.')
+            print('Creatures fitness is ', creature.fitness)
+            creature.weight += beta * fodder
+            print('Creature just ate and gained: ', beta * fodder, ' now weighs: ', creature.weight)
 
     def feed_carnivores(self):
         pass
@@ -165,14 +168,14 @@ class Cell:
                         birth_weight = herbivore.give_birth()
                         # IS THIS CORRECT? :-)
                         zeta = 3.5
-                        if herbivore.weight > zeta * (9.5):
+                        if herbivore.weight > zeta * (9.5) and birth_weight > 0:
                             self.population.append(Herbivore('herbivore',
                                                              birth_weight, 0))
                             self.number_of_herbivores = len(self.population)
                             print('A baby has been born weighs: ', birth_weight)
 
     def ranked_fitness(self):
-        self.population.sort(key=lambda x: x.fitness)
+        self.population.sort(key=lambda x: x.fitness, reverse=True)
 
     def attractiveness_herbivore(self, F=10.0):
         return self.fodder / ((self.number_of_herbivores+1)* F)

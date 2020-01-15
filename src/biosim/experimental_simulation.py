@@ -167,7 +167,7 @@ if __name__ == '__main__':
                   OOOOOOOOOOOOOOOOOOOOO"""
 
 
-    test = [{'loc': (3, 4),
+    test = [{'loc': (10, 10),
              'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
@@ -181,21 +181,23 @@ if __name__ == '__main__':
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
-                     {'species': 'herbivore', 'age': 15, 'weight': 25}]},
-            {"loc": (10, 10),
-                "pop": [{"species": "herbivore", "age": 1, "weight": 10},
-                        {'species': 'herbivore', 'age': 5, 'weight': 40},
-                        {'species': 'herbivore', 'age': 5, 'weight': 40},
-                        {'species': 'herbivore', 'age': 5, 'weight': 40},
-                        {'species': 'herbivore', 'age': 5, 'weight': 40},
-                        {'species': 'herbivore', 'age': 5, 'weight': 40}
-            ]}]
-
+                     {'species': 'herbivore', 'age': 15, 'weight': 25}]}
+            ]
+    """
+    {"loc": (10, 10),
+        "pop": [{"species": "herbivore", "age": 1, "weight": 10},
+                {'species': 'herbivore', 'age': 5, 'weight': 40},
+                {'species': 'herbivore', 'age': 5, 'weight': 40},
+                {'species': 'herbivore', 'age': 5, 'weight': 40},
+                {'species': 'herbivore', 'age': 5, 'weight': 40},
+                {'species': 'herbivore', 'age': 5, 'weight': 40}
+    ]}
+    """
     seed = 1
 
     BioSim_test = BioSim(map_string, test, seed)
 
-    print('(3,4): ', BioSim_test.map.cell_map[3][4].population[1].age)
-    print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
+    print('(10,10): ', BioSim_test.map.cell_map[10][10].population[1].age)
+    # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
 
     BioSim_test.simulate(50)
