@@ -1,10 +1,10 @@
-from biosim import Cell
 
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
 #from math import exp
 import numpy as np
+import biosim.Cell, biosim.map
 
 
 class Fauna:
@@ -21,7 +21,7 @@ class Fauna:
     w_half = [10.0, 4.0]
     phi_weight = [0.1, 0.4]
     mu = [0.25, 0.4]
-
+    lambda1 = [1.0, 1.0]
     gamma = [0.2, 0.8]
     zeta = [3.5, 3.5]
     xi = [1.2, 1.1]
@@ -134,8 +134,8 @@ class Fauna:
 
             return 0
         else:
-            q_pos = 1.0 / (1.0 + exp(self.phi_age * (10.0 - self.a_half)))
-            q_neg = 1.0 / (1.0 + exp(-self.phi_weight * (self.weight - self.w_half)))
+            q_pos = 1.0 / (1.0 + np.exp(self.phi_age * (10.0 - self.a_half)))
+            q_neg = 1.0 / (1.0 + np.exp(-self.phi_weight * (self.weight - self.w_half)))
             phi = q_pos * q_neg
             return phi
 
@@ -215,7 +215,7 @@ class Herbivore(Fauna):
         """
         pass
 
-    def get_destination_probabilities(self):
+    def get_destination_probabilities(self, row_index, col_index):
         """
         Calculates the probability of moving to each of the adjacent cells,
         then returns a list with these probabilities.
@@ -223,17 +223,21 @@ class Herbivore(Fauna):
         """
 
         highest_relevance = []
-        position = 
-        print("position: ", position)
+
+        adjacent_cells = biosim.Cell.Cell.get_adjacent_cells()
+        # .Map.cell_map[row_index][col_index].adjacent_cells
+
+        # print("position: ", position)
 
         # print("adjacent cells", self.cell_map[i][j].adjacent_cells)
-        # print('adjacent cells', adjecent_cells)
-        for tup in self.cell_map[x_coord][y_coord].adjacent_cells:
+        # print('adjacent cells', adjacent_cells)
+        for tup in adjacent_cells:
             print('tup', tup)
             new_x_coord, new_y_coord = tup
             # print("landscape ", self.cell_map[i][j].landscape)
-            if self.cell_map[new_x_coord][new_y_coord].landscape in {3, 4}:
-                relevant_fodder = self.cell_map[new_x_coord][new_y_coord].attractiveness_herbivore()
+            current_cell_map = biosim.map.Map.cell_map
+            if current_cell_map[new_x_coord][new_y_coord].landscape in {3, 4}:
+                relevant_fodder = current_cell_map[new_x_coord][new_y_coord].attractiveness_herbivore()
                 print("Fodder ", relevant_fodder)
                 propensity = propensity(relevant_fodder)
                 highest_relevance.append(propensity)
