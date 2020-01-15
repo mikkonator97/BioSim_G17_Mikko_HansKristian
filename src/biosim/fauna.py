@@ -28,7 +28,7 @@ class Fauna:
     DeltaPhiMax = [None, 10.0]
     """
 
-    def __init__(self, weight=0, age=0):
+    def __init__(self, weight=0, age=0, seed=1):
 
         """
         self.w_birth = w_birth[species_id]
@@ -48,7 +48,7 @@ class Fauna:
         self.F = F[species_id]
         self.DeltaPhiMax = DeltaPhiMax[species_id]
         """
-
+        np.random.seed(seed=seed)
         # self.species = species
         self.age = age
         self.weight = weight
@@ -57,6 +57,7 @@ class Fauna:
         self.state = False
         self.have_mated = True
         self.desired_location = tuple()
+        self.survival_chance = 1
 
     def birth(self, population):
         birth_weight = self.find_birth_weight(population)
@@ -144,22 +145,24 @@ class Fauna:
         """
         fitness = self.get_fitness()
         death_number = np.random.random()
-        survival_number = 1 - (self.omega * (1 - fitness))
+        self.survival_chance = 1 - (self.omega * (1 - fitness))
+        print('Death number: ', death_number)
         # print('Weight: ', self.weight, 'Fitness: ',fitness)
         if fitness <= 0:
             print('Dies because of negative fitness.')
             return True
         else:
-            if death_number > survival_number:
+            if death_number > self.survival_chance:
                 print('-----> New Creature death, fitness: ', fitness)
                 print('Random number: ', death_number)
-                print('The probability: ', survival_number)
+                print('The probability: ', self.survival_chance)
                 print('Will die at age: ',self.age,' and fitness: ', fitness)
                 return True
             elif self.weight < 0:
                 print('Dies because of negative weight.')
                 return True
             else:
+                print('Survives and thrives!')
                 return False
 
     def wants_to_migrate(self):
@@ -205,16 +208,10 @@ class Herbivore(Fauna):
 
 
 
-    def vegetarian_feast(self, fodder_amount=0):
+    def eat(self, fodder_amount=0):
         """
         This function will let the creature eat.
         """
         self.weight += 0.9 * fodder_amount
         print('Creature just ate and gained: ', 0.9 * fodder_amount)
-        """
-        if fodder_amount > 10:
-            fodder_amount =10
-        if fodder_amount > 0:
-            self.weight += 0.4 * fodder_amount
-        """
 
