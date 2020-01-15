@@ -263,5 +263,5 @@ if __name__ == '__main__':
     #     for j in range(sim.map.n_cols):
     #         sim.map.define_adjacent_cells(i, j)
 
-    sim.map.migrate()
+    # sim.map.migrate()
 

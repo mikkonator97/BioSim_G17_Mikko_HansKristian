@@ -1,7 +1,9 @@
+from biosim import Cell
+
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from math import exp
+#from math import exp
 import numpy as np
 
 
@@ -9,7 +11,7 @@ class Fauna:
     """
     This class will include the common properties for all creatures on
     Rossumøya.
-
+    """
     w_birth = [8.0, 6.0]
     sigma_birth = [1.5, 1.0]
     beta = [0.9, 0.75]
@@ -19,14 +21,13 @@ class Fauna:
     w_half = [10.0, 4.0]
     phi_weight = [0.1, 0.4]
     mu = [0.25, 0.4]
-    lambda1 = [1.0, 1.0]
+
     gamma = [0.2, 0.8]
     zeta = [3.5, 3.5]
     xi = [1.2, 1.1]
     omega = [0.4, 0.9]
     F = [10.0, 50.0]
     DeltaPhiMax = [None, 10.0]
-    """
 
     def __init__(self, weight=0, age=0):
 
@@ -171,6 +172,14 @@ class Fauna:
         return (self.mu * self.fitness) > np.random.random()
 
 
+    def propensity(self, fodder):
+        """
+        Calculates the propensity based on the amount of fodder
+        :param fodder:
+        :return: float
+        """
+        return np.exp(self.lambda1[self.species_id] * fodder)
+
 class Herbivore(Fauna):
 
     def __init__(self, weight, age=0):
@@ -203,6 +212,45 @@ class Herbivore(Fauna):
         """
         pass
 
+    def get_destination_probabilities(self):
+        """
+        Calculates the probability of moving to each of the adjacent cells,
+        then returns a list with these probabilities.
+        :return: list
+        """
+
+        highest_relevance = []
+        position = 
+        print("position: ", position)
+
+        # print("adjacent cells", self.cell_map[i][j].adjacent_cells)
+        # print('adjacent cells', adjecent_cells)
+        for tup in self.cell_map[x_coord][y_coord].adjacent_cells:
+            print('tup', tup)
+            new_x_coord, new_y_coord = tup
+            # print("landscape ", self.cell_map[i][j].landscape)
+            if self.cell_map[new_x_coord][new_y_coord].landscape in {3, 4}:
+                relevant_fodder = self.cell_map[new_x_coord][new_y_coord].attractiveness_herbivore()
+                print("Fodder ", relevant_fodder)
+                propensity = propensity(relevant_fodder)
+                highest_relevance.append(propensity)
+
+        probability_to_move = []
+        for index in highest_relevance:
+            probability_to_move.append(highest_relevance[index]/sum(highest_relevance))
+        return probability_to_move
+
+    def give_birth(self):
+        """
+        This function will calculate the birth weight of the baby
+         and update the weight of the parent.
+        :return: float
+        """
+        birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
+        self.weight -= birth_weight * self.xi
+        self.have_mated = True
+        # print('A baby has been born')
+        return birth_weight
 
 
     def vegetarian_feast(self, fodder_amount=0):
