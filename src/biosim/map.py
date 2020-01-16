@@ -195,9 +195,7 @@ class Map:
                 for creature in cell.population_herbivores:
                     creature.fitness = creature.calculate_fitness
                     creature.have_mated = False
-                    if creature.weight < 0:
-                        print('Warning, serious bug. Creatures can weigh < 0.')
-                    cell.alter_population()
+                cell.alter_population()
 
     def yearly_cycle(self):
         # OPS! some of these functions can be put together

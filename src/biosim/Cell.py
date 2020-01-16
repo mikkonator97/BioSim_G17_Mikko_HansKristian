@@ -106,7 +106,6 @@ class Cell:
             weight = creature.get('weight')
             age = creature.get('age')
             if species == 'herbivore':
-                print('Hallo')
                 self.population_herbivores.append(Herbivore(weight=weight, age=age))
             # else:
             #     self.population.append(Carnivore(species, weight, age))
@@ -155,18 +154,15 @@ class Cell:
         """
         for creature in self.population:
             if self.fodder > 10:
-                # print('A creature got 10 fodder')
                 self.fodder -= 10
                 fodder = 10
-                #print('Ate 10 fodder')
             else:
                 fodder = self.fodder
-                # print('A creature got ', fodder, ' food this year.')
                 self.fodder = 0
-            beta = 0.9
+            # beta = 0.9
             print('Creature weighing ', creature.weight,' going in for a snack.')
             print('Creatures fitness is ', creature.fitness)
-            creature.weight += beta * fodder
+            creature.weight += creature.beta * fodder
             print('Creature just ate and gained: ', beta * fodder, ' now weighs: ', creature.weight)
 
     def feed_carnivores(self):

@@ -31,6 +31,15 @@ class TestCell:
                      {'species': 'herbivore', 'age': 15, 'weight': 25}]}
             ]
 
+    test2 = [{'loc': (10, 10),
+             'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
+                     {'species': 'herbivore', 'age': 5, 'weight': 100},
+                     {'species': 'herbivore', 'age': 0, 'weight': 6},
+                     {'species': 'herbivore', 'age': 5, 'weight': 45},
+                     {'species': 'herbivore', 'age': 40, 'weight': 43},
+                     {'species': 'herbivore', 'age': 15, 'weight': 25}]}
+            ]
+
 
     def test_add_population(self, test=test):
         """
@@ -129,8 +138,47 @@ class TestCell:
         test_cell.mating_season()
         assert test_cell.number_herbivores() == 16
 
+    def test_ranked_fitness(self, test=test2):
+        """
+        Will test that each creature gest ranked properly. Uses test 2,
+        because there all creatures have different fitness.
+        :param test: List of creatures in a population.
+        :return:
+        """
+        for item in test:
+            cell_pop = item['pop']
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+        test_cell.ranked_fitness()
+        for i in range(test_cell.number_herbivores()-1):
+            fitness1 = test_cell.population_herbivores[i].fitness
+            fitness2 = test_cell.population_herbivores[i+1].fitness
+            assert fitness1 > fitness2
 
-        
+    def test_feed_herbivores(self, test=test):
+        """
+        We can do a couple different tests to check that the correct amount
+        of weight is added to the creature after it eats.
+        Also we have to check that the amount of available fodder is reduced.
+        :param test:
+        :return:
+        """
+        for item in test:
+            cell_pop = item['pop']
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+
+        weight = []
+        for creature in test_cell.population_herbivores:
+            weight.append(creature.weight)
+        test_cell.feed_herbivores()
+        assert 49 == test_cell.population_herbivores[0].weight
+        for i in range(len(weight)):
+            assert weight[i] + 9 == test_cell.population_herbivores[i].weight
+
+
+
+
 
 
 
