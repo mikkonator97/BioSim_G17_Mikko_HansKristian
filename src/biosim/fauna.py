@@ -76,11 +76,7 @@ class Fauna:
         birth_probability = min(1, 0.2 * self.fitness * (population - 1))
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
         print(self.weight)
-
         if self.weight > self.zeta * (9.5):
-            #self.population.append(Herbivore('herbivore',
-            #                                  birth_weight, 0))
-            #self.number_of_herbivores = len(self.population)
             if birth_probability > np.random.rand() and self.age > 0:
                 return birth_weight
         return 0

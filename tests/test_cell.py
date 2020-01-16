@@ -109,12 +109,10 @@ class TestCell:
         assert test_savannah.fodder == 300.0
         test_savannah.fodder = 0
         test_savannah.add_fodder()
-        assert test_savannah.fodder == 30.0
+        assert test_savannah.fodder == 90.0
         test_savannah.add_fodder()
-        assert test_savannah.fodder == 111.0
-        fodder_test = Cell((2, 2), 'J', fodder=300)
-        amount_of_fodder = fodder_test.get_fodder()
-        assert amount_of_fodder is not None
+        assert test_savannah.fodder == 153.0
+
 
     def test_habitability(self):
         test_jungle = Jungle()
@@ -233,27 +231,30 @@ class TestCell:
             cell_pop = item['pop']
         test_cell = Jungle()
         test_cell.add_pop(cell_pop)
-<<<<<<< HEAD
-        weight=[]
+        weight = []
+        weight2 = []
+
         # Stores current weight in a list
         for i in range(test_cell.number_herbivores()):
             weight.append(test_cell.population_herbivores[i].weight)
         test_cell.lose_weight()
+
         # Compares new weight to old weight - eta * old weight
+        # Also stores new weight in weight2 list
         for i in range(test_cell.number_herbivores()):
             new_weight = test_cell.population_herbivores[i].weight
-            assert  new_weight == weight[i] - weight[i] * 0.05
-=======
-        weight = []
-        for i in range(test_cell.number_herbivores()):
-            weight.append(test_cell.population_herbivores[i].weight)
+            assert new_weight == weight[i] - weight[i] * 0.05
+            weight2.append(new_weight)
+
+        # Will now test that they lose weight once more, using weight2 list.
         test_cell.lose_weight()
         for i in range(test_cell.number_herbivores()):
             new_weight = test_cell.population_herbivores[i].weight
-            assert new_weight == weight[i]
->>>>>>> master
+            assert new_weight == weight2[i] - weight2[i] * 0.05
 
-    def test_remove_pop(self, test=test):
+
+
+    def test_alter_population(self, test=test):
         """
         Will test that the animals die in correct fashion.
         :param test:
