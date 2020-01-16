@@ -56,8 +56,10 @@ class Fauna:
         # print(self.fitness)
         self.state = False
         self.have_mated = False
+        self.have_migrated = False
         self.desired_location = tuple()
         self.survival_chance = 1
+        self.adjacent_cells = None
         self.adjacent_cell_attractiveness = None
 
     def birth(self, population):
@@ -175,7 +177,7 @@ class Fauna:
     def propensity(self, relative_abundance_of_fodder):
         """
         Calculates the propensity based on the amount of fodder
-        :param fodder:
+        :param relative_abundance_of_fodder:
         :return: float
         """
         return np.exp(self.lambda1[self.species_id] * relative_abundance_of_fodder)
@@ -201,16 +203,24 @@ class Herbivore(Fauna):
         self.DeltaPhiMax = None
         super().__init__(weight, age)
 
-
         # self.w_birth = 8.0
         # self.sigma_birth = 1.5
         # self.xi = 1.2
 
-    def migrate(self, north, east, south, west):
+    def migrate(self):
         """
-        Moves the creature to the most eligible adjacent position on the map.
+        Moves the creature to the most eligible adjacent cell on the map.
         """
-        pass
+        print("migrate function called!")
+        if self.have_migrated is False:
+            if self.wants_to_migrate():
+                destination_probabilities = self.get_destination_probabilities()
+                chosen_destination = np.random.choice(destination_probabilities)
+                print("chosen destination: ", chosen_destination)
+
+
+
+
 
 
     def get_destination_probabilities(self):
@@ -221,22 +231,11 @@ class Herbivore(Fauna):
         """
         highest_relevance = []
         adjacent_cells = self.adjacent_cell_attractiveness
-
+        print(adjacent_cells)
         # print('adjacent cells', adjacent_cells)
         for relative_abundance_of_fodder in adjacent_cells:
             propensity = self.propensity(relative_abundance_of_fodder)
             highest_relevance.append(propensity)
-
-            # print('tup', tup)
-            # new_x_coord, new_y_coord = tup
-
-
-            # current_cell_map = cell_map
-            # if current_cell_map[new_x_coord][new_y_coord].landscape in {3, 4}:
-            #     relevant_fodder = current_cell_map[new_x_coord][new_y_coord].attractiveness_herbivore()
-            #     print("Fodder ", relevant_fodder)
-            #     propensity = propensity(relevant_fodder)
-            #     highest_relevance.append(propensity)
 
         probability_to_move = []
         for index in highest_relevance:

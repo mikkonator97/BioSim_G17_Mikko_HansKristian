@@ -29,7 +29,8 @@ class Cell:
         self.gamma_herbivore = 0.2
         self.adjacent_cells = []
 
-        """
+    def send_adjacent_cells_to_fauna(self):
+        Fauna.adjacent_cells = self.adjacent_cells
     # def find_migration(self):
     #     highest_relevance = []
     #     print("adjacent cells", self.adjacent_cells)
@@ -59,6 +60,9 @@ class Cell:
 
     def number_herbivores(self):
         return len(self.population_herbivores)
+
+    def get_herbivores(self):
+        return self.population_herbivores
 
     def number_carnivores(self):
         return len(self.population_carnivores)

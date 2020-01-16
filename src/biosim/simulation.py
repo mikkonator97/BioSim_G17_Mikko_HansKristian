@@ -235,7 +235,7 @@ if __name__ == '__main__':
     for i in range(sim.map.n_rows):
         for j in range(sim.map.n_cols):
             sim.map.cell_map[i][j].add_fodder()
-    print("Cell 10,10 amount of food: ", sim.map.cell_map[10][10].fodder)
+    #print("Cell 10,10 amount of food: ", sim.map.cell_map[10][10].fodder)
     sim.set_animal_parameters("Herbivore", {"zeta": 3.2, "xi": 1.8})
     sim.set_animal_parameters(
         "Carnivore",
@@ -264,7 +264,12 @@ if __name__ == '__main__':
         for j in range(sim.map.n_cols):
             sim.map.define_adjacent_cells(i, j)
 
-    print(sim.map.cell_map[10][10].adjacent_cells)
+    for i in range(sim.map.n_rows):
+        for j in range(sim.map.n_cols):
+            sim.map.cell_map[i][j].attractiveness_herbivore
+
+    sim.map.yearly_stage_2()
+    # print(sim.map.cell_map[10][10].adjacent_cells)
   #  print(dir(sim))
 
 

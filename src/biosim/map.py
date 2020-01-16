@@ -60,8 +60,10 @@ class Map:
         :param y_coord:
         :return:
         """
-        self.cell_map[x_coord][y_coord].adjacent_cells = [self.cell_map[x_coord + 1][y_coord], self.cell_map[x_coord][y_coord - 1],
-                                                          self.cell_map[x_coord - 1][y_coord], self.cell_map[x_coord][y_coord + 1]]
+        if (x_coord != (0 or self.n_rows-1)) and (y_coord != (0 or self.n_cols-1)):
+            self.cell_map[x_coord][y_coord].adjacent_cells = [self.cell_map[x_coord + 1][y_coord], self.cell_map[x_coord][y_coord - 1],
+                                                              self.cell_map[x_coord - 1][y_coord], self.cell_map[x_coord][y_coord + 1]]
+            # print("adj_Cells: ", self.cell_map[x_coord][y_coord].adjacent_cells)
 
     def find(self, coordinate_to_find):
         for index in range(len(self.cell_map)):
@@ -181,7 +183,29 @@ class Map:
         Here we will just summon the migration funcion when its redo.
         :return:
         """
-        pass
+        # for row_index in self.n_rows:
+        #     for col_index in self.n_cols:
+        #         self.cell_map[row_index][col_index].population_herbivores
+        #         self.cell_map[10][10].
+
+        # for cell in self.cell_map:
+        #     herbivores = cell.get_herbivores()
+        #     for creature in herbivores:
+        #         creature.migrate()
+
+        for row_index in range(self.n_rows):
+            for col_index in range(self.n_cols):
+                herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
+
+                for herbivore in herbivore_list:
+                    herbivore.migrate()
+
+        # for cell in self.cell_map:
+        #     cell.population_herbivores.migrate()
+        # for cell in self.cell_map:
+        #     for creature in cell:
+        #         creature.have_migrated = False
+
 
     def yearly_stage3(self):
         """
