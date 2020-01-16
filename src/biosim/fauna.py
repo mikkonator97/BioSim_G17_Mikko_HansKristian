@@ -64,7 +64,7 @@ class Fauna:
         birth_weight = self.find_birth_weight(population)
         # print(birth_weight)
         if birth_weight > 0 and not self.have_mated:
-            self.weight -= birth_weight
+            self.weight -= self.xi * birth_weight
             print('A baby has been born weighs: ', birth_weight)
             self.have_mated = True
             return self.__class__(weight=birth_weight, age=0)
@@ -75,6 +75,7 @@ class Fauna:
         birth_probability = min(1, 0.2 * self.fitness * (population - 1))
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
         print(self.weight)
+
         if self.weight > self.zeta * (9.5):
             if birth_probability > np.random.rand() and self.age > 0:
                 return birth_weight

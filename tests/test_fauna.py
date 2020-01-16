@@ -71,7 +71,7 @@ class TestFauna:
         mother2 = Herbivore(weight=40, age=10)
         mother2_weight_before_birth = 40
         baby2 = mother2.birth(10)
-        assert baby2.weight + mother2.weight == mother2_weight_before_birth
+        assert 1.2 * baby2.weight + mother2.weight == mother2_weight_before_birth
 
         # Will test that mother don't create offspring if underweight.
         mother3 = Herbivore(weight=20, age=10)

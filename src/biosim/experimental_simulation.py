@@ -192,4 +192,4 @@ if __name__ == '__main__':
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[1].age)
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
 
-    BioSim_test.simulate(1000)
+    BioSim_test.simulate(50)

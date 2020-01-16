@@ -1,5 +1,6 @@
 from biosim.fauna import Fauna
 from biosim.Cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
+import numpy as np
 
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
@@ -254,19 +255,29 @@ class TestCell:
 
 
 
-    def test_alter_population(self, test=test):
+    def test_alter_population_kills_when_0_weight(self, test=test):
         """
-        Will test that the animals die in correct fashion.
+        Will test that the animals die in correct fashion. This test is heavily
+        dependent on Fauna.death. The randomness comes from that funcion. To
+        test alter_population, we insert weight 0 to make sure the creature
+        will die. The rest is up to the Fauna.deat() funtion.
         :param test:
         :return:
         """
 
-        # First I will test that creatures with 0 or negative weight dies.
         cell_pop = {}
         for item in test:
             cell_pop = item['pop']
         test_cell = Jungle()
         test_cell.add_pop(cell_pop)
+
+        for creature in test_cell.population_herbivores:
+            creature.weight = 0
+        test_cell.alter_population()
+
+        assert test_cell.number_herbivores() == 0
+
+
 
     def test_add_age(self, test=test):
         """

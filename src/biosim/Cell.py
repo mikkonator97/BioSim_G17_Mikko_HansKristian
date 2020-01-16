@@ -265,5 +265,3 @@ class Jungle(Cell):
         self.habitable = habitable
         self.f_max = self.f_max[4]
         self.fodder = self.f_max
-
-
