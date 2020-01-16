@@ -59,6 +59,7 @@ class Fauna:
         self.have_mated = False
         self.desired_location = tuple()
         self.survival_chance = 1
+        self.current_adjacent_cells = None
 
     def birth(self, population):
         birth_weight = self.find_birth_weight(population)
@@ -223,23 +224,17 @@ class Herbivore(Fauna):
         then returns a list with these probabilities.
         :return: list
         """
-        pass
-        """
 
         highest_relevance = []
 
-        adjacent_cells = biosim.Cell.Cell.get_adjacent_cells()
-        # .Map.cell_map[row_index][col_index].adjacent_cells
-
+        adjacent_cells =
         # print("position: ", position)
 
-        # print("adjacent cells", self.cell_map[i][j].adjacent_cells)
         # print('adjacent cells', adjacent_cells)
         for tup in adjacent_cells:
             print('tup', tup)
             new_x_coord, new_y_coord = tup
-            # print("landscape ", self.cell_map[i][j].landscape)
-            current_cell_map = biosim.map.Map.cell_map
+            current_cell_map = cell_map
             if current_cell_map[new_x_coord][new_y_coord].landscape in {3, 4}:
                 relevant_fodder = current_cell_map[new_x_coord][new_y_coord].attractiveness_herbivore()
                 print("Fodder ", relevant_fodder)
@@ -250,7 +245,7 @@ class Herbivore(Fauna):
         for index in highest_relevance:
             probability_to_move.append(highest_relevance[index]/sum(highest_relevance))
         return probability_to_move
-"""
+
     def give_birth(self):
         """
         This function will calculate the birth weight of the baby
