@@ -79,10 +79,10 @@ class Cell:
 
         if self.landscape == 3:
             available_fodder = float(self.get_fodder())
-            f_max = self.f_max[3]
+            f_max = self.f_max
             self.fodder = (available_fodder + self.alpha[3] * (f_max - available_fodder))
         elif self.landscape == 4:
-            self.fodder = int(self.f_max[4])
+            self.fodder = self.f_max
 
     def get_adjacent_cells(self):
         """
@@ -252,6 +252,7 @@ class Savannah(Cell):
 
     def __init__(self, habitable = True):
         super().__init__(coordinates=None, landscape=3, fodder=0)
+        self.f_max = self.f_max[3]
         self.habitable = habitable
 
 
