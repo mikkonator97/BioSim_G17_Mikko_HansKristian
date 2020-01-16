@@ -178,7 +178,7 @@ class Cell:
             if new_creature != None:
                 print('---X--------------->', len(self.population_herbivores))
                 self.population_herbivores.append(new_creature)
-                print('New pop: ', len(self.population_herbivores))
+                print('New pop: ', self.number_herbivores())
 
     def ranked_fitness(self):
         """

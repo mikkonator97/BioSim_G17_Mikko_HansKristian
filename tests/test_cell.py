@@ -114,14 +114,23 @@ class TestCell:
         test_cell.add_pop(cell_pop)
         test_cell.mating_season()
         assert test_cell.number_herbivores() != 6
-        # Now I want to test that the creature only mates once a year.
+        # Will test that the creature only mates if they whey enough.
+        for creature in test_cell.population_herbivores:
+            creature.have_mated = False
         test_cell.mating_season()
         assert test_cell.number_herbivores() == 10
         # Now I want to test that they can procreate next year.
         for creature in test_cell.population_herbivores:
-            creature.have_mated = False
+            creature.weight += 20
         test_cell.mating_season()
         assert test_cell.number_herbivores() != 10
+        # Now I want to test that the creature only mates once a year.
+        # The population should now remain 16.
+        test_cell.mating_season()
+        assert test_cell.number_herbivores() == 16
+
+
+        
 
 
 
