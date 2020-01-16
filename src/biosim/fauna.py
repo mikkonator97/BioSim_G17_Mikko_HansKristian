@@ -211,9 +211,10 @@ class Herbivore(Fauna):
         """
         Moves the creature to the most eligible adjacent cell on the map.
         """
-        print("migrate function called!")
+        # print("migrate function called!")
         if self.have_migrated is False:
             if self.wants_to_migrate():
+                print("Creature wants to migrate")
                 destination_probabilities = self.get_destination_probabilities()
                 chosen_destination = np.random.choice(destination_probabilities)
                 print("chosen destination: ", chosen_destination)
@@ -231,15 +232,18 @@ class Herbivore(Fauna):
         adjacent_cells = self.adjacent_cell_attractiveness
         # print(adjacent_cells)
         print('adjacent cells', adjacent_cells)
-
-        for relative_abundance_of_fodder in adjacent_cells:
-            propensity = self.propensity(relative_abundance_of_fodder)
-            highest_relevance.append(propensity)
-
         probability_to_move = []
-        for index in highest_relevance:
-            probability_to_move.append(highest_relevance[index]/sum(highest_relevance))
-        return probability_to_move
+        if adjacent_cells is None:
+            probability_to_move = [1, 1, 1, 1]
+            return probability_to_move
+        else:
+            for relative_abundance_of_fodder in adjacent_cells:
+                propensity = self.propensity(relative_abundance_of_fodder)
+                highest_relevance.append(propensity)
+
+            for index in highest_relevance:
+                probability_to_move.append(highest_relevance[index]/sum(highest_relevance))
+            return probability_to_move
 
     def give_birth(self):
         """
