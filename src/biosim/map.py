@@ -142,6 +142,42 @@ class Map:
     #         probability_to_move.append(highest_relevance[index]/sum(highest_relevance))
     #     return probability_to_move
 
+    def migration(self):
+        """
+        This function will summon all functions related to migration.
+        :return:
+        """
+        # Will update preferred location to each creature.
+        self.update_preferred_locations()
+        self.move_to_preferred_location()
+
+    def update_preferred_locations(self):
+        """
+        Will first update the lucrativeness for each cell.
+        Will then create a list with chances of moving to each cell.
+        - For each species.
+        NB! lucrativeness is the chance for a creature to move there if it
+        will move at all.
+        :return:
+        """
+
+        for cell in self.cell_map:
+            cell.update_lucrativeness()
+        for cell in self.cell_map:
+            index = 0
+            for location in cell.adjacent_cells:
+                # Updates preferrence lists for both species
+                x, y = location
+                cell.herbivore_preferrence[index] = cell_map[x][
+                    y].lucrativeness_herbivores
+                cell.herbivore_preferrence[index] = cell_map[x][
+                    y].lucrativeness_herbivores
+                index += 1
+
+
+
+
+
     def get_populations(self):
         herbivores = 0
         carnivores = 0
