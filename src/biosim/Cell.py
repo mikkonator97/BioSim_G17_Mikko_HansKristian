@@ -22,9 +22,10 @@ class Cell:
         self.coordinates = coordinates
         self.landscape = landscape
         self.fodder = fodder
-        self.number_of_herbivores = 0
-        self.number_of_carnivores = 0
+
         self.population = []
+        self.population_herbivores = []
+        self.population_carnivores = []
         self.gamma_herbivore = 0.2
         self.adjacent_cells = []
 
@@ -48,26 +49,18 @@ class Cell:
     #         probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
     #     return probability_to_move
 
-    def get_creatures(self):
+    def number_creatures(self):
         """
         Returns the total number of creatures in the cell
         :return: int
         """
-        return self.number_of_carnivores + self.number_of_herbivores
+        return self.number_herbivores() + self.number_carnivores()
 
-    def get_number_of_carnivores(self):
-        """
-        Returns the number of carnivores in the cell
-        :return: int
-        """
-        return self.number_of_carnivores
+    def number_herbivores(self):
+        return len(self.population_herbivores)
 
-    def get_number_of_herbivores(self):
-        """
-        Returns the number of herbivores in the cell
-        :return: int
-        """
-        return self.number_of_herbivores
+    def number_carnivores(self):
+        return len(self.population_carnivores)
 
     def get_fodder(self):
         """
@@ -108,12 +101,13 @@ class Cell:
         # creatures = cell_pop.get
 
         for creature in cell_pop:
+            print(creature)
             species = creature.get('species')
             weight = creature.get('weight')
             age = creature.get('age')
             if species == 'herbivore':
-                self.population.append(Herbivore(weight=weight, age=age))
-                self.number_of_herbivores += 1
+                print('Hallo')
+                self.population_herbivores.append(Herbivore(weight=weight, age=age))
             # else:
             #     self.population.append(Carnivore(species, weight, age))
             #     self.number_of_carnivores += 1
@@ -138,12 +132,18 @@ class Cell:
                     self.number_of_herbivores = len(self.population)
 
     def alter_population(self):
+        """
+        Removes an animal from the list if it is supposed to die.
+        :return:
+        """
+
         index = 0
-        while index < self.number_of_herbivores:
-            self.population[index].state =self.population[index].death()
-            if self.population[index].state:
-                self.population.pop(index)
-                self.number_of_herbivores = len(self.population)
+        number_of_herbivores = self.number_herbivores()
+        while index < number_of_herbivores:
+            self.population_herbivores[index].state = self.population_herbivores[index].death()
+            if self.population_herbivores[index].state:
+                self.population_herbivores.pop(index)
+                number_of_herbivores -= 1
                 index -= 1
             index += 1
 
@@ -173,20 +173,19 @@ class Cell:
         pass
 
     def mating_season(self):
-        # if self.number_of_herbivores > 1:
-        for herbivore in self.population:
-                new_creature = (herbivore.birth(self.number_of_herbivores))
-                if new_creature != None:
-
-                    self.population.append(new_creature)
-                    print(len(self.population))
+        for herbivore in self.population_herbivores:
+            new_creature = (herbivore.birth(self.number_herbivores()))
+            if new_creature != None:
+                print('---X--------------->', len(self.population_herbivores))
+                self.population_herbivores.append(new_creature)
+                print('New pop: ', len(self.population_herbivores))
 
     def ranked_fitness(self):
         """
         Ranks the fitness of creatures from highest to lowest.
         :return:
         """
-        self.population.sort(key=lambda x: x.fitness, reverse=True)
+        self.population_herbivores.sort(key=lambda x: x.fitness, reverse=True)
 
     def attractiveness_herbivore(self, f=10.0):
         """
@@ -260,5 +259,6 @@ class Jungle(Cell):
     def __init__(self, habitable=True):
         super().__init__(coordinates=None, landscape=4, fodder=0)
         self.habitable = habitable
+        self.f_max = self.f_max[4]
 
 

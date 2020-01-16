@@ -1,5 +1,5 @@
 from biosim.fauna import Fauna
-
+from biosim.Cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
@@ -10,9 +10,9 @@ This file is used for testing of the class Cell.
 
 class TestCell:
     fauna_list = [{'loc': (3,4),
-      'pop': [{'species': 'Herbivore', 'age': 10, 'weight': 15},
-              {'species': 'Herbivore', 'age': 5, 'weight': 40},
-              {'species': 'Herbivore', 'age': 15, 'weight': 25}]},
+      'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
+              {'species': 'herbivore', 'age': 5, 'weight': 40},
+              {'species': 'herbivore', 'age': 15, 'weight': 25}]},
      {'loc': (4,4),
       'pop': [{'species': 'Herbivore', 'age': 2, 'weight': 60},
               {'species': 'Herbivore', 'age': 9, 'weight': 30},
@@ -22,14 +22,43 @@ class TestCell:
               {'species': 'Carnivore', 'age': 5, 'weight': 20},
               {'species': 'Carnivore', 'age': 8, 'weight': 5}]}]
 
-    def test_get_creatures(self):
+    test = [{'loc': (10, 10),
+             'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 15, 'weight': 25}]}
+            ]
+
+
+    def test_add_population(self, test=test):
+        """
+        Will test that we can add a population to the single cell.
+        :param test:
+        :return:
+        """
+        for item in test:
+            cell_pop = item['pop']
+
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+        assert test_cell.number_herbivores() == 6
+
+    def test_get_creatures(self, test=test):
         """
         Test that the correct number of animals are returned
         :return:
         """
-        creatures_added = Fauna(species='herbivore', age=10, weight=15)
-        assert len(creatures_added) == 1
-        pass
+        for item in test:
+            cell_pop = item['pop']
+
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+        assert test_cell.number_creatures() == 6
+
+
+
 
     def test_get_number_of_carnivores(self):
         """
