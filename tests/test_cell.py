@@ -260,4 +260,37 @@ class TestCell:
         :param test:
         :return:
         """
-        pass
+
+        # First I will test that creatures with 0 or negative weight dies.
+        cell_pop = {}
+        for item in test:
+            cell_pop = item['pop']
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+
+    def test_add_age(self, test=test):
+        """
+        Will test that all creatures get one year older from add_age function
+        :param test: dict
+        :return:
+        """
+        cell_pop = {}
+        for item in test:
+            cell_pop = item['pop']
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+
+        # Defines list with old age
+        creature_count = test_cell.number_herbivores()
+        age_list = []
+        for i in range(creature_count):
+            age_list.append(test_cell.population_herbivores[i].age)
+
+        # Compares new age to old age + 1
+        test_cell.add_age()
+        for i in range(creature_count):
+            assert test_cell.population_herbivores[i].age == age_list[i] + 1
+
+
+
+

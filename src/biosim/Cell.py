@@ -49,7 +49,7 @@ class Cell:
     #     for i in highest_relevance:
     #         probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
     #     return probability_to_move
-
+    """
     def number_creatures(self):
         """
         Returns the total number of creatures in the cell
@@ -114,22 +114,22 @@ class Cell:
 
         print('Current population: ', self.population)
 
-    def remove_pop(self):
-        """
-        Removes an animal from the population list if it is dead.
-        :return:
-        """
-        for creature in self.population:
-            will_die = creature.death()
-            print('Død: ', will_die)
-            if will_die:
-                creature.state = 'dying'
-
-        for index in range(self.number_of_herbivores):
-            if self.population[index].state == 'dying':
-                if index != 0:
-                    self.population.pop(index)
-                    self.number_of_herbivores = len(self.population)
+#    def remove_pop(self):
+#        """"""
+#        Removes an animal from the population list if it is dead.
+#        :return:
+#        """
+#        for creature in self.population:
+#            will_die = creature.death()
+#            print('Død: ', will_die)
+#            if will_die:
+#                creature.state = 'dying'
+#
+#        for index in range(self.number_of_herbivores):
+#            if self.population[index].state == 'dying':
+#                if index != 0:
+#                    self.population.pop(index)
+#                    self.number_of_herbivores = len(self.population)
 
     def alter_population(self):
         """
@@ -214,7 +214,9 @@ class Cell:
         :return:
         """
         # print('All creatures will age')
-        for creature in self.population:
+        for creature in self.population_herbivores:
+            creature.age += 1
+        for creature in self.population_carnivores:
             creature.age += 1
 
     def lose_weight(self):
