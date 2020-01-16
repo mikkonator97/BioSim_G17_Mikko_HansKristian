@@ -62,35 +62,26 @@ class TestCell:
 
     def test_get_number_of_carnivores(self):
         """
-        Test that the correct number of carnivores are returned
+        Test that the correct number of carnivores are returned.
+        Currently checks that the empty cell contains 0 carnivores.
         :return:
         """
-        num_carnivores = 0
-        creatures_added = [Fauna(species='herbivore', age=10, weight=15),
-                           Fauna(species='carnivore', age=15, weight=40),
-                           Fauna(species='carnivore', age=12, weight=20)]
-        for i in creatures_added:
-            if i.species == 'carnivore':
-                num_carnivores += 1
+        test_cell = Jungle()
+        num_carnivores = test_cell.number_creatures()
 
-        assert num_carnivores == 2
-        pass
+        assert num_carnivores == 0
 
-    def test_get_number_of_herbivores(self):
+    def test_get_number_of_herbivores(self, test=test):
         """
         Test that the correct number of herbivores are returned
         :return:
         """
-        num_carnivores = 0
-        creatures_added = [Fauna(species='herbivore', age=10, weight=15),
-                           Fauna(species='carnivore', age=9, weight=40),
-                           Fauna(species='herbivore', age=14, weight=20)]
-        for i in creatures_added:
-            if i.species == 'herbivore':
-                num_carnivores += 1
+        for item in test:
+            cell_pop = item['pop']
 
-        assert num_carnivores == 2
-        pass
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+        assert test_cell.number_herbivores() == 6
 
     def test_get_fodder(self):
         """
@@ -112,7 +103,7 @@ class TestCell:
         assert amount_of_fodder is not None
         pass
 
-    def test_add_pop(self):
+    def test_mating_season(self):
         """
         Test that population can be added to the cell
         :return:
