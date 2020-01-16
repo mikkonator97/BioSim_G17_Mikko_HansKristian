@@ -223,7 +223,9 @@ class Cell:
         list.
         :return:
         """
-        for creature in self.population:
+        for creature in self.population_herbivores:
+            creature.reduce_weight()
+        for creature in self.population_carnivores:
             creature.reduce_weight()
 
 

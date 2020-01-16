@@ -231,12 +231,14 @@ class TestCell:
         test_cell = Jungle()
         test_cell.add_pop(cell_pop)
         weight=[]
+        # Stores current weight in a list
         for i in range(test_cell.number_herbivores()):
             weight.append(test_cell.population_herbivores[i].weight)
-        cell.lose_weight()
-        for i in range(test_cell.number_herbivores())
+        test_cell.lose_weight()
+        # Compares new weight to old weight - eta * old weight
+        for i in range(test_cell.number_herbivores()):
             new_weight = test_cell.population_herbivores[i].weight
-            assert  new_weight == weight[i]
+            assert  new_weight == weight[i] - weight[i] * 0.05
 
     def test_remove_pop(self, test=test):
         """
