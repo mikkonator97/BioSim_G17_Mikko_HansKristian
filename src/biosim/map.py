@@ -180,31 +180,21 @@ class Map:
 
     def yearly_stage_2(self):
         """
-        Here we will just summon the migration funcion when its redo.
+        Here we will just summon the migration function when its redo.
+        The function loops through the map and calls migrate for all the herbivores.
         :return:
         """
-        # for row_index in self.n_rows:
-        #     for col_index in self.n_cols:
-        #         self.cell_map[row_index][col_index].population_herbivores
-        #         self.cell_map[10][10].
 
-        # for cell in self.cell_map:
-        #     herbivores = cell.get_herbivores()
-        #     for creature in herbivores:
-        #         creature.migrate()
-
+        print("Yearly stage 2 has started")
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
-                herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
+                herbivore_list = self.cell_map[row_index][col_index].population_herbivores
+                # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
+                print("herbivore list: ", herbivore_list)
 
                 for herbivore in herbivore_list:
                     herbivore.migrate()
-
-        # for cell in self.cell_map:
-        #     cell.population_herbivores.migrate()
-        # for cell in self.cell_map:
-        #     for creature in cell:
-        #         creature.have_migrated = False
+        print("Yearly stage 2 has finished")
 
 
     def yearly_stage3(self):

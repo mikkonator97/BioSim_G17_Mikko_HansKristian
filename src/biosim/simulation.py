@@ -258,7 +258,7 @@ if __name__ == '__main__':
         },
     )
 
-    sim.add_population(population=ini_carns)
+    sim.add_population(population=ini_herbs)
 
     for i in range(sim.map.n_rows):
         for j in range(sim.map.n_cols):
@@ -267,8 +267,10 @@ if __name__ == '__main__':
     for i in range(sim.map.n_rows):
         for j in range(sim.map.n_cols):
             sim.map.cell_map[i][j].attractiveness_herbivore
+            # print(sim.map.cell_map[i][j].attractiveness_herbivore)
 
     sim.map.yearly_stage_2()
+    # print(sim.map.cell_map[10][10])
     # print(sim.map.cell_map[10][10].adjacent_cells)
   #  print(dir(sim))
 

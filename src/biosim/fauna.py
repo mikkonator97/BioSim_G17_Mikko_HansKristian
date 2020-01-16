@@ -221,8 +221,6 @@ class Herbivore(Fauna):
 
 
 
-
-
     def get_destination_probabilities(self):
         """
         Calculates the probability of moving to each of the adjacent cells,
@@ -231,8 +229,9 @@ class Herbivore(Fauna):
         """
         highest_relevance = []
         adjacent_cells = self.adjacent_cell_attractiveness
-        print(adjacent_cells)
-        # print('adjacent cells', adjacent_cells)
+        # print(adjacent_cells)
+        print('adjacent cells', adjacent_cells)
+
         for relative_abundance_of_fodder in adjacent_cells:
             propensity = self.propensity(relative_abundance_of_fodder)
             highest_relevance.append(propensity)

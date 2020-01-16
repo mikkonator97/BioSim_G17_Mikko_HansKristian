@@ -14,7 +14,7 @@ import numpy as np
 
 class Cell:
 
-    def __init__(self, coordinates=None, landscape=None, fodder=None):
+    def __init__(self, coordinates=None, landscape=None, fodder=0):
         self.f_max = [0.0, 0.0, 0.0, 300.0, 800.0]
         self.alpha = [None, None, None, 0.3, None]
         # self.f_max = self.f_max[landscape]
@@ -50,7 +50,7 @@ class Cell:
     #     for i in highest_relevance:
     #         probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
     #     return probability_to_move
-    """
+
     def number_creatures(self):
         """
         Returns the total number of creatures in the cell
@@ -110,13 +110,13 @@ class Cell:
             species = creature.get('species')
             weight = creature.get('weight')
             age = creature.get('age')
-            if species == 'herbivore':
+            if species == 'Herbivore':
                 self.population_herbivores.append(Herbivore(weight=weight, age=age))
             # else:
             #     self.population.append(Carnivore(species, weight, age))
             #     self.number_of_carnivores += 1
 
-        print('Current population: ', self.population)
+        print('Current population: ', self.population_herbivores)
 
 #    def remove_pop(self):
 #        """"""

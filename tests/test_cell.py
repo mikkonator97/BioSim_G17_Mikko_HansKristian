@@ -304,4 +304,9 @@ class TestCell:
 
 
 
-
+    def test_migration(self):
+        """
+        Will test that the migration works properly.
+        :return:
+        """
+        pass
