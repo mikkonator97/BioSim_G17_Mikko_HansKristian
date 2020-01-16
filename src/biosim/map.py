@@ -67,16 +67,7 @@ class Map:
                                                               self.cell_map[x_coord - 1][y_coord], self.cell_map[x_coord][y_coord + 1]]
             # print("adj_Cells: ", self.cell_map[x_coord][y_coord].adjacent_cells)
 
-    def define_adjacent_cells2(self, x, y):
         """
-        Calculates the coordinates of the adjacent cells.
-        :param x_coord:
-        :param y_coord:
-        :return:
-        """
-        self.cell_map[x][y].adjacent_cells2 = [(x+1, y),(x, y+1),
-                                               (x-1, y),(x, y-1)]
-
     def find(self, coordinate_to_find):
         for index in range(len(self.cell_map)):
             if self.cell_map[index].coordinate == coordinate_to_find:
@@ -280,7 +271,7 @@ class Map:
             for col_index in range(self.n_cols):
                 herbivore_list = self.cell_map[row_index][col_index].population_herbivores
                 # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
-                print("herbivore list: ", herbivore_list)
+                # print("herbivore list: ", herbivore_list)
 
                 for herbivore in herbivore_list:
                     herbivore.migrate()

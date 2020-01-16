@@ -266,8 +266,16 @@ if __name__ == '__main__':
 
     for i in range(sim.map.n_rows):
         for j in range(sim.map.n_cols):
-            sim.map.cell_map[i][j].attractiveness_herbivore
+            if sim.map.cell_map[i][j].landscape == (0 or 1):
+                sim.map.cell_map[i][j].adjacent_cells_attractiveness = 0
+            else:
+                sim.map.cell_map[i][j].adjacent_cells_attractiveness = sim.map.cell_map[i][j].attractiveness_herbivore()
             # print(sim.map.cell_map[i][j].attractiveness_herbivore)
+
+    for i in range(sim.map.n_rows):
+        for j in range(sim.map.n_cols):
+            sim.map.cell_map[i][j].send_adjacent_cells_to_fauna()
+            # print("adjacent cells were sent to Fauna")
 
     sim.map.yearly_stage_2()
     # print(sim.map.cell_map[10][10])
