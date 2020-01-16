@@ -28,7 +28,6 @@ class Map:
         self.n_cols = len(str(self.map_string_split[0]))
         self.cell_map = np.empty((self.n_rows, self.n_cols),dtype=object)
         self.create_map()
-        # self.adjacent_cells = []
 
     def create_map(self):
         """
@@ -46,12 +45,15 @@ class Map:
                 elif landscape_type == 'D':
                     self.cell_map[row_index][col_index] = Desert()
                     self.define_adjacent_cells(row_index, col_index)
+                    self.define_adjacent_cells2(row_index, col_index)
                 elif landscape_type == 'S':
                     self.cell_map[row_index][col_index] = Savannah()
                     self.define_adjacent_cells(row_index, col_index)
+                    self.define_adjacent_cells2(row_index, col_index)
                 else:
                     self.cell_map[row_index][col_index] = Jungle()
                     self.define_adjacent_cells(row_index, col_index)
+                    self.define_adjacent_cells2(row_index, col_index)
 
     def define_adjacent_cells(self, x_coord, y_coord):
         """
@@ -64,6 +66,16 @@ class Map:
             self.cell_map[x_coord][y_coord].adjacent_cells = [self.cell_map[x_coord + 1][y_coord], self.cell_map[x_coord][y_coord - 1],
                                                               self.cell_map[x_coord - 1][y_coord], self.cell_map[x_coord][y_coord + 1]]
             # print("adj_Cells: ", self.cell_map[x_coord][y_coord].adjacent_cells)
+
+    def define_adjacent_cells2(self, x, y):
+        """
+        Calculates the coordinates of the adjacent cells.
+        :param x_coord:
+        :param y_coord:
+        :return:
+        """
+        self.cell_map[x][y].adjacent_cells2 = [(x+1, y),(x, y+1),
+                                               (x-1, y),(x, y-1)]
 
     def find(self, coordinate_to_find):
         for index in range(len(self.cell_map)):
@@ -164,16 +176,18 @@ class Map:
         """
 
         for cell in self.cell_map:
-            cell.update_lucrativeness()
+            cell.attractiveness_herbivore()
+            # cell.attractiveness_carnivore()
         for cell in self.cell_map:
             index = 0
             for location in cell.adjacent_cells:
                 # Updates preferrence lists for both species
                 x, y = location
+                print('Location: ', location)
                 cell.herbivore_preferrence[index] = cell_map[x][
-                    y].lucrativeness_herbivores
-                cell.herbivore_preferrence[index] = cell_map[x][
-                    y].lucrativeness_herbivores
+                    y].chance_herbivores
+                #cell.herbivore_preferrence[index] = cell_map[x][
+                #   y].lucrativeness_herbivores
                 index += 1
 
     def move_to_preferred_location(self):
@@ -185,7 +199,7 @@ class Map:
         for cell in self.cell_map:
             for herbivore in cell.population_herbivores:
                 if herbivore.wants_to_migrate():
-                    # Selects coordinates based on 
+                    # Selects coordinates based on
                     x, y = np.random.choice(cell.adjacent_cells,
                                      p=cell.herbivore_preferrence)
                     cell_map.population_herbivores.append(list_one.pop(i))
@@ -208,7 +222,6 @@ class Map:
                 herbivores += cell.number_herbivores()
                 carnivores += cell.number_carnivores()
         total = herbivores + carnivores
-
         return herbivores, carnivores, total
 
     def yearly_stage1(self):

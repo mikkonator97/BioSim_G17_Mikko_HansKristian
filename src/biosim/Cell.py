@@ -28,6 +28,10 @@ class Cell:
         self.population_carnivores = []
         self.gamma_herbivore = 0.2
         self.adjacent_cells = []
+        self.adjacent_cells2 = []
+
+        self.chance_herbivore = 0
+        self.chance_carnivore = 0
 
     def send_adjacent_cells_to_fauna(self):
         Fauna.adjacent_cells = self.adjacent_cells
@@ -198,7 +202,7 @@ class Cell:
         :param f: float
         :return: float
         """
-        return self.fodder / ((self.number_of_herbivores+1) * f)
+        self.chance_herbivore = self.fodder / ((self.number_herbivores()+1) * f)
 
     def attractiveness_carnivore(self, f=50.0):
         """
