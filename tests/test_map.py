@@ -94,6 +94,9 @@ class TestMap:
         """
         pass
 
+    def test_move(self, map=map):
+        map.move()
+
     def test_get_populations(self, map=map, pop=test):
         """
         Will test that once a p

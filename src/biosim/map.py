@@ -161,7 +161,8 @@ class Map:
         """
         # Will update preferred location to each creature.
         self.update_preferred_locations()
-        # self.move_to_preferred_location()
+        self.select_location()
+        self.move()
 
     def update_preferred_locations(self):
         """
@@ -187,6 +188,20 @@ class Map:
                     #probability = 0.25
 
                     self.cell_map[x][y].probability_herbivores[index] = probability
+
+    def move_herbivore(self, move_to, move_from, creature_index):
+        """
+        Moves the herbivore
+        :param move_to: tuple
+        :param move_from: tuple
+        :return:
+        """
+        x_to, y_to = move_to
+        x_from, y_from = move_from
+        herbivore = self.cell_map[x_from][y_from].pop(creature_index)
+        self.cell_map[x_to][x_from].append(herbivore)
+
+
 
 
 
