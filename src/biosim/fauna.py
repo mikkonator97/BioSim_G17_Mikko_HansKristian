@@ -56,16 +56,17 @@ class Fauna:
         self.fitness = self.calculate_fitness()
         # print(self.fitness)
         self.state = False
-        self.have_mated = True
+        self.have_mated = False
         self.desired_location = tuple()
         self.survival_chance = 1
 
     def birth(self, population):
         birth_weight = self.find_birth_weight(population)
         print(birth_weight)
-        if birth_weight > 0:
+        if birth_weight > 0 and not self.have_mated:
             self.weight -= birth_weight
             print('A baby has been born weighs: ', birth_weight)
+            self.have_mated = True
             return self.__class__(weight=birth_weight, age=0)
 
 

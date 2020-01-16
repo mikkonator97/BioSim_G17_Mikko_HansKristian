@@ -164,6 +164,8 @@ class Map:
                 if cell.population_herbivores != []:
                     print('Antall herbivores her: ', len(cell.population_herbivores))
                 for creature in cell.population_herbivores:
+                    # Lets the creature be able to mate as well.
+                    creature.have_mated = False
                     creature.fitness = creature.calculate_fitness()
                 cell.ranked_fitness()
                 cell.add_fodder()

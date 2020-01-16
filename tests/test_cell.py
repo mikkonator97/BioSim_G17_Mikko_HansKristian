@@ -108,9 +108,20 @@ class TestCell:
         Test that population can be added to the cell
         :return:
         """
+        for item in test:
+            cell_pop = item['pop']
         test_cell = Jungle()
         test_cell.add_pop(cell_pop)
         test_cell.mating_season()
-        assert test_cell.number_of_herbivores == 6
+        assert test_cell.number_herbivores() != 6
+        # Now I want to test that the creature only mates once a year.
+        test_cell.mating_season()
+        assert test_cell.number_herbivores() == 10
+        # Now I want to test that they can procreate next year.
+        for creature in test_cell.population_herbivores:
+            creature.have_mated = False
+        test_cell.mating_season()
+        assert test_cell.number_herbivores() != 10
+
 
 
