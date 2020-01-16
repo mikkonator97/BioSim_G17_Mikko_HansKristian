@@ -161,11 +161,25 @@ class Map:
         """
         # Will update preferred location to each creature.
         self.update_preferred_locations()
-        self.select_location()
-        self.move()
+        for cell in self.cell_map:
+            creature_index = 0
+            for herbivore in cell.population_herbivores:
+                creature_index += 1
+                if herbivore.wants_to_migrate():
+                    print('A creature wants to migrate')
+                    # selects a index based on probabilities and possible moves.
+                    move_index = self.select_index_to_move(cell.probability_herbivores, cell.adjacent_cells2)
+                    move_to = cell.adjacent_cells2[move_index]
+                    # Perhaps include cell.location?
+                    move_from = cell.location
+                    # need creature index
+                    move_herbivore(move_to, move_from, creature_index):
+
+
 
     def update_preferred_locations(self):
         """
+        !!! This need some adjustments but works for now.
         Will first update the lucrativeness for each cell.
         This gives the simulated effect that all creatures moves at the same
         time.
@@ -179,21 +193,31 @@ class Map:
         for x in range(self.n_rows):
             for y in range(self.n_cols):
                 highest_relevance = []
+                # Yes this is wrong, need to divide by correct amount, now only correct when propensity is equal on all 4 sides.
                 for index in range(len(self.cell_map[x][y].adjacent_cells2)):
-                    fodder = self.cell_map[x][y].fodder
-                    # lammnda1 = self.cell_map[x][y].population_herbivores[0].lambda1
                     lambda1 = 1
                     propensity = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
                     probability = propensity/(4*propensity)
-                    #probability = 0.25
-
                     self.cell_map[x][y].probability_herbivores[index] = probability
+
+    def select_index_to_move(self, probabilities, destinations):
+        """
+        Uses probabilities to choose from destinations.
+        NB! Requires 4 adjacent cells, and 4 probabilities to work.
+        !! This should work
+        :param probabilities: list
+        :param destinations: list
+        :return: tuple
+        """
+        return np.random.choice(destinations,p=probabilities)
 
     def move_herbivore(self, move_to, move_from, creature_index):
         """
+        !!! This should work
         Moves the herbivore
         :param move_to: tuple
         :param move_from: tuple
+        :param creature_index: int
         :return:
         """
         x_to, y_to = move_to
