@@ -29,6 +29,7 @@ class Cell:
         self.gamma_herbivore = 0.2
         self.adjacent_cells = []
 
+
     # def find_migration(self):
     #     highest_relevance = []
     #     print("adjacent cells", self.adjacent_cells)
@@ -152,7 +153,8 @@ class Cell:
         from the cell, and the creature gets an increase in weight.
         :return:
         """
-        for creature in self.population:
+        for creature in self.population_herbivores:
+            print('Herbivore weighs: ', creature.weight)
             if self.fodder > 10:
                 self.fodder -= 10
                 fodder = 10
@@ -163,7 +165,7 @@ class Cell:
             print('Creature weighing ', creature.weight,' going in for a snack.')
             print('Creatures fitness is ', creature.fitness)
             creature.weight += creature.beta * fodder
-            print('Creature just ate and gained: ', beta * fodder, ' now weighs: ', creature.weight)
+            print('Creature just ate and gained: ', creature.beta * fodder, ' now weighs: ', creature.weight)
 
     def feed_carnivores(self):
         pass
@@ -250,6 +252,7 @@ class Savannah(Cell):
         super().__init__(coordinates=None, landscape=3, fodder=0)
         self.f_max = self.f_max[3]
         self.habitable = habitable
+        self.fodder = self.f_max
 
 
 class Jungle(Cell):
@@ -257,5 +260,6 @@ class Jungle(Cell):
         super().__init__(coordinates=None, landscape=4, fodder=0)
         self.habitable = habitable
         self.f_max = self.f_max[4]
+        self.fodder = self.f_max
 
 

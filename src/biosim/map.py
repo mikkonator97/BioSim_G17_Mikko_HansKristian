@@ -197,6 +197,7 @@ class Map:
                     creature.have_mated = False
                 cell.alter_population()
 
+
     def yearly_cycle(self):
         # OPS! some of these functions can be put together
         self.yearly_stage1()
