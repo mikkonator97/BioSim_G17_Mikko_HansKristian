@@ -29,6 +29,14 @@ class Cell:
         self.gamma_herbivore = 0.2
         self.adjacent_cells = []
 
+    def send_adjacent_cells_to_fauna(self):
+        """
+        Sends the cells adjacent cells to its fauna.
+        :param self:
+        :return:
+        """
+        Fauna.current_adjacent_cells = self.adjacent_cells
+
     # def find_migration(self):
     #     highest_relevance = []
     #     print("adjacent cells", self.adjacent_cells)

@@ -3,9 +3,7 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from math import exp
 import numpy as np
-#import biosim.Cell, biosim.map
 
 
 class Fauna:
@@ -83,8 +81,6 @@ class Fauna:
             if birth_probability > np.random.rand() and self.age > 0:
                 return birth_weight
         return 0
-
-
 
 
     def ageing(self):
