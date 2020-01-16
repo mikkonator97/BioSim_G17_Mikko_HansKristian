@@ -70,7 +70,9 @@ class TestMap:
         :return:
         """
         map.update_preferred_locations()
-        assert map.cell_map[8][6].herbivore_preferrence == [0.25, 0.25, 0.25, 0.25]
+        assert map.cell_map[8][6].probability_herbivores == [0.25, 0.25, 0.25,
+                                                            0.25]
+        # assert map.cell_map[8][6].herbivore_preferrence == [0.25, 0.25, 0.25, 0.25]
 
     def test_doesnt_prefere_unhabitable_cells(self, map=map):
         """

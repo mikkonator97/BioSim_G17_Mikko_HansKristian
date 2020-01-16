@@ -175,20 +175,37 @@ class Map:
         :return:
         """
 
-        for cell in self.cell_map:
-            cell.attractiveness_herbivore()
-            # cell.attractiveness_carnivore()
-        for cell in self.cell_map:
-            index = 0
-            for location in cell.adjacent_cells:
-                # Updates preferrence lists for both species
-                x, y = location
-                print('Location: ', location)
-                cell.herbivore_preferrence[index] = cell_map[x][
-                    y].chance_herbivores
-                #cell.herbivore_preferrence[index] = cell_map[x][
-                #   y].lucrativeness_herbivores
-                index += 1
+        for x in range(self.n_rows):
+            for y in range(self.n_cols):
+                highest_relevance = []
+                for index in range(len(self.cell_map[x][y].adjacent_cells2)):
+                    fodder = self.cell_map[x][y].fodder
+                    # lammnda1 = self.cell_map[x][y].population_herbivores[0].lambda1
+                    lambda1 = 1
+                    propensity = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
+                    probability = propensity/(4*propensity)
+                    #probability = 0.25
+
+                    self.cell_map[x][y].probability_herbivores[index] = probability
+
+
+
+
+
+        #for cell in self.cell_map:
+        #    index = 0
+        #    print('Adjacent cells: ', self.cell_map[10][10].adjacent_cells2)
+        #    print(cell.adjacent_cells2())
+        #    print('Adjecent cells: ', cell.adjacent_cells2)
+        #   for location in cell.adjacent_cells:
+        #        # Updates preferrence lists for both species
+        #        x, y = location
+        #       print('Location: ', location)
+        #        cell.herbivore_preferrence[index] = cell_map[x][
+        #            y].chance_herbivores
+        #       #cell.herbivore_preferrence[index] = cell_map[x][
+        #        #   y].lucrativeness_herbivores
+        #        index += 1
 
     def move_to_preferred_location(self):
         """

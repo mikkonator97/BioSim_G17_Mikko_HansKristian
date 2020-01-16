@@ -315,7 +315,7 @@ class TestCell:
         :return:
         """
         assert cell.get_abundance_herbivore() == 16
-        
+
     def test_get_abundance_carnivore(self, cell=test_cell):
         """
         Will test that the correct amount of abundant fodder is returned.
