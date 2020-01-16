@@ -14,8 +14,6 @@ import numpy as np
 
 class Cell:
 
-
-
     def __init__(self, coordinates=None, landscape=None, fodder=None):
         self.f_max = [0.0, 0.0, 0.0, 300.0, 800.0]
         self.alpha = [None, None, None, 0.3, None]
@@ -88,13 +86,18 @@ class Cell:
 
     def get_adjacent_cells(self):
         """
-        Returns the coordinates of the cell
+        Returns the coordinates of the adjacent cells.
         :return:
         """
         return self.adjacent_cells
 
-
     def add_pop(self, cell_pop):
+        """
+        Adds a herbivore or a carnivore object to a cell.
+        Species, weight and age are supplied from a dictionary.
+        :param cell_pop: dictionary
+        :return:
+        """
         # creatures = cell_pop.get
 
         for creature in cell_pop:
@@ -110,7 +113,6 @@ class Cell:
             #     self.number_of_carnivores += 1
 
         print('Current population: ', self.population)
-
 
     def remove_pop(self):
         """
@@ -146,6 +148,11 @@ class Cell:
             index += 1
 
     def feed_herbivores(self):
+        """
+        For each creature in the population of the cell, fodder is subtracted
+        from the cell, and the creature gets an increase in weight.
+        :return:
+        """
         for creature in self.population:
             if self.fodder > 10:
                 # print('A creature got 10 fodder')
@@ -174,12 +181,29 @@ class Cell:
                 print('New pop: ', len(self.population_herbivores))
 
     def ranked_fitness(self):
+        """
+        Ranks the fitness of creatures from highest to lowest.
+        :return:
+        """
         self.population_herbivores.sort(key=lambda x: x.fitness, reverse=True)
 
     def attractiveness_herbivore(self, f=10.0):
+        """
+        Calculates the relative attractiveness for herbivores based on the
+        amount of fodder, number of herbivores and their relative appetite.
+        :param f: float
+        :return: float
+        """
         return self.fodder / ((self.number_of_herbivores+1) * f)
 
     def attractiveness_carnivore(self, f=50.0):
+        """
+        Calculates the relative attractiveness for carnivores based on the
+        weight of the herbivores, number of carnivores and their
+        relative appetite.
+        :param f: float
+        :return: float
+        """
         food = 0
         for creature in self.population:
             if creature.species == 'herbivore':
@@ -187,11 +211,20 @@ class Cell:
         return food / ((self.number_of_carnivores+1) * f)
 
     def add_age(self):
+        """
+        Increases the age for all the creatures in the population list.
+        :return:
+        """
         # print('All creatures will age')
         for creature in self.population:
             creature.age += 1
 
     def lose_weight(self):
+        """
+        Calls the reduce weight method for each creature in the population
+        list.
+        :return:
+        """
         for creature in self.population:
             creature.reduce_weight()
 

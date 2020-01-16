@@ -1,9 +1,10 @@
-from biosim.fauna import Fauna
+#from biosim.fauna import Fauna
 
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from biosim.Cell import Cell, Ocean, Mountain, Desert, Savannah, Jungle
+#from biosim.Cell import Cell, Ocean, Mountain, Desert, Savannah, Jungle
+import biosim.Cell
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -39,17 +40,17 @@ class Map:
             for col_index in range(self.n_cols):
                 landscape_type = self.map_string_split[row_index][col_index]
                 if landscape_type == 'O':
-                    self.cell_map[row_index][col_index] = Ocean()
+                    self.cell_map[row_index][col_index] = biosim.Cell.Ocean()
                 elif landscape_type == 'M':
-                    self.cell_map[row_index][col_index] = Mountain()
+                    self.cell_map[row_index][col_index] = biosim.Cell.Mountain()
                 elif landscape_type == 'D':
-                    self.cell_map[row_index][col_index] = Desert()
+                    self.cell_map[row_index][col_index] = biosim.Cell.Desert()
                     self.define_adjacent_cells(row_index, col_index)
                 elif landscape_type == 'S':
-                    self.cell_map[row_index][col_index] = Savannah()
+                    self.cell_map[row_index][col_index] = biosim.Cell.Savannah()
                     self.define_adjacent_cells(row_index, col_index)
                 else:
-                    self.cell_map[row_index][col_index] = Jungle()
+                    self.cell_map[row_index][col_index] = biosim.Cell.Jungle()
                     self.define_adjacent_cells(row_index, col_index)
 
     def define_adjacent_cells(self, x_coord, y_coord):
