@@ -60,8 +60,8 @@ class Map:
         :param y_coord:
         :return:
         """
-        self.cell_map[x_coord][y_coord].adjacent_cells = [(x_coord + 1, y_coord), (x_coord, y_coord - 1),
-                                                          (x_coord - 1, y_coord), (x_coord, y_coord + 1)]
+        self.cell_map[x_coord][y_coord].adjacent_cells = [self.cell_map[x_coord + 1][y_coord], self.cell_map[x_coord][y_coord - 1],
+                                                          self.cell_map[x_coord - 1][y_coord], self.cell_map[x_coord][y_coord + 1]]
 
     def find(self, coordinate_to_find):
         for index in range(len(self.cell_map)):

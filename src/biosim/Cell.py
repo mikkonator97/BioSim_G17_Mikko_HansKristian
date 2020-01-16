@@ -29,13 +29,16 @@ class Cell:
         self.gamma_herbivore = 0.2
         self.adjacent_cells = []
 
-    def send_adjacent_cells_to_fauna(self):
+    def send_adjacent_attractiveness_to_fauna(self):
         """
         Sends the cells adjacent cells to its fauna.
         :param self:
         :return:
         """
-        Fauna.current_adjacent_cells = self.adjacent_cells
+        attractiveness = []
+        for cell in self.adjacent_cells:
+            attractiveness.append(self.attractiveness_herbivore())
+        Fauna.adjacent_cell_attractiveness = attractiveness
 
     # def find_migration(self):
     #     highest_relevance = []
@@ -87,10 +90,10 @@ class Cell:
 
         if self.landscape == 3:
             available_fodder = float(self.get_fodder())
-            f_max = self.f_max[3]
-            self.fodder = (available_fodder + self.alpha[3] * (f_max - available_fodder))
+            f_max = self.f_max
+            self.fodder = (available_fodder + self.alpha * (f_max - available_fodder))
         elif self.landscape == 4:
-            self.fodder = int(self.f_max[4])
+            self.fodder = float(self.f_max)
 
     def get_adjacent_cells(self):
         """
