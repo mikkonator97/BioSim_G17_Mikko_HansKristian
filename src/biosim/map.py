@@ -161,7 +161,7 @@ class Map:
         """
         # Will update preferred location to each creature.
         self.update_preferred_locations()
-        self.move_to_preferred_location()
+        # self.move_to_preferred_location()
 
     def update_preferred_locations(self):
         """
@@ -208,6 +208,9 @@ class Map:
                     x, y =np.random.choice(cell.adjacent_cells,
                                      p=cell.herbivore_preferrence)
                     cell_map.population_carnivores.append(list_one.pop(i))
+
+
+
 
 
 

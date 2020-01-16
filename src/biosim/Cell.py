@@ -30,8 +30,10 @@ class Cell:
         self.adjacent_cells = []
         self.adjacent_cells2 = []
 
-        self.chance_herbivore = 0
-        self.chance_carnivore = 0
+        self.F_h = 10
+
+        # self.abundance_herbivore = 0
+        # self.abundance_carnivore = 0
 
     def send_adjacent_cells_to_fauna(self):
         Fauna.adjacent_cells = self.adjacent_cells
@@ -54,6 +56,10 @@ class Cell:
     #     for i in highest_relevance:
     #         probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
     #     return probability_to_move
+
+    def get_abundance_herbivore(self):
+        return self.fodder / ((self.number_herbivores() - 1) * self.F_h)
+
 
     def number_creatures(self):
         """

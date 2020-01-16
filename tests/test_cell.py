@@ -302,6 +302,29 @@ class TestCell:
         for i in range(creature_count):
             assert test_cell.population_herbivores[i].age == age_list[i] + 1
 
+    cell_pop = {}
+    for item in test:
+        cell_pop = item['pop']
+    test_cell = Jungle()
+    test_cell.add_pop(cell_pop)
+
+    def test_get_abundance_herbivore(self, cell=test_cell):
+        """
+        Will test that the correct amount of abundant fodder is returned.
+        :param :
+        :return:
+        """
+        assert cell.get_abundance_herbivore() == 16
+        
+    def test_get_abundance_carnivore(self, cell=test_cell):
+        """
+        Will test that the correct amount of abundant fodder is returned.
+        :param :
+        :return:
+        """
+        pass
+
+
 
 
     def test_migration(self):
