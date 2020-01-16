@@ -154,6 +154,8 @@ class Map:
     def update_preferred_locations(self):
         """
         Will first update the lucrativeness for each cell.
+        This gives the simulated effect that all creatures moves at the same
+        time.
         Will then create a list with chances of moving to each cell.
         - For each species.
         NB! lucrativeness is the chance for a creature to move there if it
@@ -173,6 +175,25 @@ class Map:
                 cell.herbivore_preferrence[index] = cell_map[x][
                     y].lucrativeness_herbivores
                 index += 1
+
+    def move_to_preferred_location(self):
+        """
+        Will extract the creatures that wants to move, and then put them
+        in their new habitat.
+        :return:
+        """
+        for cell in self.cell_map:
+            for herbivore in cell.population_herbivores:
+                if herbivore.wants_to_migrate():
+                    # Selects coordinates based on 
+                    x, y = np.random.choice(cell.adjacent_cells,
+                                     p=cell.herbivore_preferrence)
+                    cell_map.population_herbivores.append(list_one.pop(i))
+            for carnivore in cell.population_carnivores:
+                if carnivore.wants_to_migrate():
+                    x, y =np.random.choice(cell.adjacent_cells,
+                                     p=cell.herbivore_preferrence)
+                    cell_map.population_carnivores.append(list_one.pop(i))
 
 
 
