@@ -176,7 +176,7 @@ class TestCell:
             cell_pop = item['pop']
         test_cell = Jungle()
         test_cell.add_pop(cell_pop)
-        test_cell.ranked_fitness()
+        test_cell.ranked_fitness_herbivores()
         for i in range(test_cell.number_herbivores() - 1):
             fitness1 = test_cell.population_herbivores[i].fitness
             fitness2 = test_cell.population_herbivores[i + 1].fitness

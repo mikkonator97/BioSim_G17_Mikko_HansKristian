@@ -169,7 +169,7 @@ class Map:
                     # Lets the creature be able to mate as well.
                     creature.have_mated = False
                     creature.fitness = creature.calculate_fitness()
-                cell.ranked_fitness()
+                cell.ranked_fitness_herbivores()
                 cell.add_fodder()
                 cell.feed_herbivores()
                 # print('Amount of fodder left this year: ', cell.fodder)
@@ -215,7 +215,7 @@ class Map:
     def yearly_cycle(self):
         # OPS! some of these functions can be put together
         self.yearly_stage1()
-        self.yearly_stage_2()
+        # self.yearly_stage_2()
         # NB! first year none can mate
         self.yearly_stage3()
 

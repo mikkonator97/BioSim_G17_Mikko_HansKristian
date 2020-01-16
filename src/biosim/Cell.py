@@ -110,7 +110,7 @@ class Cell:
             species = creature.get('species')
             weight = creature.get('weight')
             age = creature.get('age')
-            if species == 'Herbivore':
+            if species.lower() == 'herbivore':
                 self.population_herbivores.append(Herbivore(weight=weight, age=age))
             # else:
             #     self.population.append(Carnivore(species, weight, age))
@@ -182,12 +182,14 @@ class Cell:
                 self.population_herbivores.append(new_creature)
                 print('New pop: ', self.number_herbivores())
 
-    def ranked_fitness(self):
-        """
-        Ranks the fitness of creatures from highest to lowest.
-        :return:
-        """
+    def ranked_fitness_herbivores(self):
         self.population_herbivores.sort(key=lambda x: x.fitness, reverse=True)
+
+    def ranked_fitness_herbivores_weakest(self):
+        self.population_herbivores.sort(key=lambda x: x.fitness, reverse=False)
+
+    def ranked_fitness_carnivores(self):
+        self.population_carnivores.sort(key=lambda x: x.fitness, reverse=True)
 
     def attractiveness_herbivore(self, f=10.0):
         """
