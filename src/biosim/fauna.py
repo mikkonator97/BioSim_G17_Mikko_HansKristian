@@ -5,7 +5,6 @@ __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
 from math import exp
 import numpy as np
-import biosim.Cell, biosim.map
 
 
 class Fauna:

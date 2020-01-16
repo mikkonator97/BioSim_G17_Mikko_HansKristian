@@ -103,9 +103,14 @@ class TestCell:
         assert amount_of_fodder is not None
         pass
 
-    def test_mating_season(self):
+    def test_mating_season(self, test=test):
         """
         Test that population can be added to the cell
         :return:
         """
-        pass
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+        test_cell.mating_season()
+        assert test_cell.number_of_herbivores == 6
+
+
