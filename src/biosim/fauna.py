@@ -3,7 +3,6 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from math import exp
 import numpy as np
 
 
@@ -59,7 +58,7 @@ class Fauna:
         self.have_mated = False
         self.desired_location = tuple()
         self.survival_chance = 1
-        self.current_adjacent_cells = None
+        self.adjacent_cell_attractiveness = None
 
     def birth(self, population):
         birth_weight = self.find_birth_weight(population)
@@ -80,8 +79,6 @@ class Fauna:
             if birth_probability > np.random.rand() and self.age > 0:
                 return birth_weight
         return 0
-
-
 
 
     def ageing(self):
@@ -174,13 +171,13 @@ class Fauna:
         return (self.mu * self.fitness) > np.random.random()
 
 
-    def propensity(self, fodder):
+    def propensity(self, relative_abundance_of_fodder):
         """
         Calculates the propensity based on the amount of fodder
         :param fodder:
         :return: float
         """
-        return np.exp(self.lambda1[self.species_id] * fodder)
+        return np.exp(self.lambda1[self.species_id] * relative_abundance_of_fodder)
 
 class Herbivore(Fauna):
 
@@ -221,22 +218,24 @@ class Herbivore(Fauna):
         then returns a list with these probabilities.
         :return: list
         """
-
         highest_relevance = []
-
-        # adjacent_cells =
-        # print("position: ", position)
+        adjacent_cells = self.adjacent_cell_attractiveness
 
         # print('adjacent cells', adjacent_cells)
-        for tup in adjacent_cells:
-            print('tup', tup)
-            new_x_coord, new_y_coord = tup
-            current_cell_map = cell_map
-            if current_cell_map[new_x_coord][new_y_coord].landscape in {3, 4}:
-                relevant_fodder = current_cell_map[new_x_coord][new_y_coord].attractiveness_herbivore()
-                print("Fodder ", relevant_fodder)
-                propensity = propensity(relevant_fodder)
-                highest_relevance.append(propensity)
+        for relative_abundance_of_fodder in adjacent_cells:
+            propensity = self.propensity(relative_abundance_of_fodder)
+            highest_relevance.append(propensity)
+
+            # print('tup', tup)
+            # new_x_coord, new_y_coord = tup
+
+
+            # current_cell_map = cell_map
+            # if current_cell_map[new_x_coord][new_y_coord].landscape in {3, 4}:
+            #     relevant_fodder = current_cell_map[new_x_coord][new_y_coord].attractiveness_herbivore()
+            #     print("Fodder ", relevant_fodder)
+            #     propensity = propensity(relevant_fodder)
+            #     highest_relevance.append(propensity)
 
         probability_to_move = []
         for index in highest_relevance:
