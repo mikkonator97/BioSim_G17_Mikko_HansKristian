@@ -292,15 +292,19 @@ class Carnivore(Fauna):
         self.DeltaPhiMax = 10.0
         super().__init__(weight, age)
 
-    def eat(self, fodder_amount=0):
+    def eat(self, fodder_amount=0, herbivore_already_eaten=0):
         """
-        This function will let the creature eat.
+        This function will increase the creatures weight when it eats.
         """
         if fodder_amount > 50:
             fodder_amount = 50
         else:
             fodder_amount = fodder_amount
+
+        if(fodder_amount + herbivore_already_eaten) > self.F:
+           fodder_amount = self.F - herbivore_already_eaten
         self.weight += self.beta * fodder_amount
+        return fodder_amount
         # print('Creature just ate and gained: ', self.beta * fodder_amount)
 
     def give_birth(self):

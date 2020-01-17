@@ -229,7 +229,7 @@ class Map:
                             carnivore_creature.fitness = carnivore_creature.calculate_fitness()
                             self.cell_map[row_index][col_index].ranked_fitness_carnivores()
                             self.cell_map[row_index][col_index].feed_carnivores()
-                    print("All carnivores have eaten!")
+                        print("All carnivores in this cell have eaten!")
                     self.cell_map[row_index][col_index].mating_season()
                     print("Mating season over")
 

@@ -169,27 +169,20 @@ class Cell:
             print("new carnivore")
             for herbivore in self.population_herbivores:
                 if herbivore_eaten >= 50:
-                    print("herb_eaten", herbivore_eaten)
-                    continue
+                    print("herb_eaten over 50", herbivore_eaten)
+                    break
 
                 probability_of_successful_hunt = self.successful_hunt(carnivore, herbivore)
                 if probability_of_successful_hunt == 0:
-                    break
+                    continue
 
                 kill_probability = np.random.random()
                 if kill_probability < probability_of_successful_hunt:
                     print("A carnivore has killed: ")
-                    old_carnivore_weight = carnivore.weight
-                    print("old_carnivore_weight", old_carnivore_weight)
-                    carnivore.eat(herbivore.weight)
-                    print("new_carnivore_weight", carnivore.weight)
-                    herbivore_eaten += carnivore.weight - old_carnivore_weight
+                    herbivore_eaten += carnivore.eat(herbivore.weight, herbivore_eaten)
+                    print("herb_eaten", herbivore_eaten)
                     carnivore.calculate_fitness()
                     self.population_herbivores.remove(herbivore)
-
-
-                        # prey = self.population_herbivores.pop(i)
-                        # fodder = prey.wheight
 
     def successful_hunt(self, carnivore, herbivore):
         """
