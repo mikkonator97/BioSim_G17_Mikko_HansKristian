@@ -264,13 +264,28 @@ if __name__ == '__main__':
         for j in range(sim.map.n_cols):
             sim.map.define_adjacent_cells(i, j)
 
-    for i in range(sim.map.n_rows):
-        for j in range(sim.map.n_cols):
-            if sim.map.cell_map[i][j].landscape == (0 or 1):
-                sim.map.cell_map[i][j].adjacent_cells_attractiveness = 0
-            else:
-                sim.map.cell_map[i][j].adjacent_cells_attractiveness = sim.map.cell_map[i][j].attractiveness_herbivore()
-            # print(sim.map.cell_map[i][j].attractiveness_herbivore)
+    for row_index in range(sim.map.n_rows):
+        for col_index in range(sim.map.n_cols):
+            for cell in sim.map.cell_map[row_index][col_index].adjacent_cells:
+                # print("this cells adjacent cells: ", sim.map.cell_map[row_index][col_index].adjacent_cells)
+                cell.adjacent_cells_attractiveness = [
+                    sim.map.cell_map[row_index + 1][col_index].attractiveness_herbivore(),
+                    sim.map.cell_map[row_index][col_index - 1].attractiveness_herbivore(),
+                    sim.map.cell_map[row_index - 1][col_index].attractiveness_herbivore(),
+                    sim.map.cell_map[row_index][col_index + 1].attractiveness_herbivore()
+                ]
+            # print("test", cell.adjacent_cells_attractiveness)
+    # for cell in sim.map.cell_map:
+    #     for adj_cell in cell.adjacent_cells:
+    #         if sim.map.cell_map[i][j].landscape == (0 or 1):
+    #             print("landscape", sim.map.cell_map[i][j].landscape)
+                #
+            # if sim.map.cell_map[i][j].landscape == (0 or 1):
+            #     print("landscape", sim.map.cell_map[i][j].landscape)
+            #     sim.map.cell_map[i][j].adjacent_cells_attractiveness.append(0)
+            # else:
+            #     sim.map.cell_map[i][j].adjacent_cells_attractiveness = sim.map.cell_map[i][j].attractiveness_herbivore()
+            # # print(sim.map.cell_map[i][j].attractiveness_herbivore)
 
     for i in range(sim.map.n_rows):
         for j in range(sim.map.n_cols):

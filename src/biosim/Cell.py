@@ -37,10 +37,11 @@ class Cell:
         # self.abundance_carnivore = 0
 
     def send_adjacent_cells_to_fauna(self):
-        Fauna.adjacent_cells = self.adjacent_cells
-        print("cell adjacent cells", self.adjacent_cells)
-        Fauna.adjacent_cell_attractiveness = self.adjacent_cells_attractiveness
-        # print("adjacent_cells_attractiveness", self.adjacent_cells_attractiveness)
+        for creature in self.population_herbivores:
+            creature.adjacent_cells = self.adjacent_cells
+            print("cell adjacent cells", self.adjacent_cells)
+            creature.adjacent_cell_attractiveness_for_fauna = self.adjacent_cells_attractiveness
+            print("adjacent_cells_attractiveness", self.adjacent_cells_attractiveness)
     # def find_migration(self):
     #     highest_relevance = []
     #     print("adjacent cells", self.adjacent_cells)
@@ -120,7 +121,7 @@ class Cell:
         # creatures = cell_pop.get
 
         for creature in cell_pop:
-            print(creature)
+            # print(creature)
             species = creature.get('species')
             weight = creature.get('weight')
             age = creature.get('age')
@@ -212,7 +213,9 @@ class Cell:
         :param f: float
         :return: float
         """
-        self.chance_herbivore = self.fodder / ((self.number_herbivores()+1) * f)
+        # self.chance_herbivore = self.fodder / ((self.number_of_herbivores()+1) * f)
+        attractiveness = self.fodder / ((self.number_of_herbivores()+1) * f)
+        return attractiveness
 
     def attractiveness_carnivore(self, f=50.0):
         """

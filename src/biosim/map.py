@@ -45,15 +45,15 @@ class Map:
                 elif landscape_type == 'D':
                     self.cell_map[row_index][col_index] = Desert()
                     self.define_adjacent_cells(row_index, col_index)
-                    self.define_adjacent_cells2(row_index, col_index)
+                    # self.define_adjacent_cells2(row_index, col_index)
                 elif landscape_type == 'S':
                     self.cell_map[row_index][col_index] = Savannah()
                     self.define_adjacent_cells(row_index, col_index)
-                    self.define_adjacent_cells2(row_index, col_index)
+                    # self.define_adjacent_cells2(row_index, col_index)
                 else:
                     self.cell_map[row_index][col_index] = Jungle()
                     self.define_adjacent_cells(row_index, col_index)
-                    self.define_adjacent_cells2(row_index, col_index)
+                    # self.define_adjacent_cells2(row_index, col_index)
 
     def define_adjacent_cells(self, x_coord, y_coord):
         """
@@ -67,7 +67,6 @@ class Map:
                                                               self.cell_map[x_coord - 1][y_coord], self.cell_map[x_coord][y_coord + 1]]
             # print("adj_Cells: ", self.cell_map[x_coord][y_coord].adjacent_cells)
 
-        """
     def find(self, coordinate_to_find):
         for index in range(len(self.cell_map)):
             if self.cell_map[index].coordinate == coordinate_to_find:
@@ -257,7 +256,16 @@ class Map:
                 # print("herbivore list: ", herbivore_list)
 
                 for herbivore in herbivore_list:
-                    herbivore.migrate()
+                    herbivore_desired_cell = herbivore.migrate()
+                    if herbivore_desired_cell is None:
+                        continue
+                    else:
+                        print("herbivore_desired_cell: ", herbivore_desired_cell)
+                        herbivore_desired_cell.population_herbivores.append(herbivore)
+                        herbivore_list.remove(herbivore)
+                        herbivore.have_migrated = True
+
+
         print("Yearly stage 2 has finished")
 
 
