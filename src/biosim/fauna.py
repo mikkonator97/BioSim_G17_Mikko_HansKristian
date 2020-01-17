@@ -61,7 +61,8 @@ class Fauna:
         self.desired_cell = None
         self.survival_chance = 1
         self.adjacent_cells = None
-        self.adjacent_cell_attractiveness_for_fauna = None
+        self.adjacent_cell_attractiveness_for_herbivores = None
+        self.adjacent_cell_attractiveness_for_carnivores = None
 
     def birth(self, population):
         birth_weight = self.find_birth_weight(population)
@@ -131,7 +132,7 @@ class Fauna:
 
             return 0
         else:
-            q_pos = 1.0 / (1.0 + np.exp(self.phi_age * (10.0 - self.a_half)))
+            q_pos = 1.0 / (1.0 + np.exp(self.phi_age * (self.age - self.a_half)))
             q_neg = 1.0 / (1.0 + np.exp(-self.phi_weight * (self.weight - self.w_half)))
             phi = q_pos * q_neg
             return phi
@@ -217,7 +218,7 @@ class Herbivore(Fauna):
             if self.wants_to_migrate():
                 # print("Creature wants to migrate")
                 destination_probabilities = self.get_destination_probabilities()
-                # print("destination probabilities: ",destination_probabilities)
+                print("destination probabilities: ",destination_probabilities)
                 self.desired_cell = np.random.choice(self.adjacent_cells, p=destination_probabilities)
                 # print("index destination: ", self.desired_cell)
                 return self.desired_cell
@@ -229,12 +230,12 @@ class Herbivore(Fauna):
         :return: list
         """
         highest_relevance = []
-        adjacent_cells = self.adjacent_cell_attractiveness_for_fauna
+        adjacent_cells = self.adjacent_cell_attractiveness_for_herbivores
         # print(adjacent_cells)
         print('adjacent cells', adjacent_cells)
         probability_to_move = []
         if adjacent_cells is None:
-            probability_to_move = [1, 1, 1, 1]
+            probability_to_move = [0.25, 0.25, 0.25, 0.25]
             return probability_to_move
         else:
             for relative_abundance_of_fodder in adjacent_cells:
@@ -266,3 +267,84 @@ class Herbivore(Fauna):
         self.weight += 0.9 * fodder_amount
         # print('Creature just ate and gained: ', 0.9 * fodder_amount)
 
+
+class Carnivore(Fauna):
+    """
+    This class contains all methods which are related to the carnivore objects.
+    """
+    def __init__(self, weight, age=0):
+        self.w_birth = 6.0
+        self.sigma_birth = 1.0
+        self.beta = 0.75
+        self.eta = 0.125
+        self.a_half = 60.0
+        self.phi_age = 0.8
+        self.w_half = 4.0
+        self.phi_weight = 0.4
+        self.mu = 0.4
+        self.lambda1 = 1.0
+        self.gamma = 0.8
+        self.zeta = 3.5
+        self.xi = 1.1
+        self.omega = 0.9
+        self.F = 50.0
+        self.DeltaPhiMax = 10.0
+        super().__init__(weight, age)
+
+    def eat(self, fodder_amount=0):
+        """
+        This function will let the creature eat.
+        """
+        self.weight += self.beta * fodder_amount
+        # print('Creature just ate and gained: ', self.beta * fodder_amount)
+
+    def give_birth(self):
+        """
+        This function will calculate the birth weight of the baby
+         and update the weight of the parent.
+        :return: float
+        """
+        birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
+        self.weight -= birth_weight * self.xi
+        self.have_mated = True
+        # print('A baby has been born')
+        return birth_weight
+
+    def migrate(self):
+        """
+        If the creature has not migrated and wants to migrate,
+        then returns the desired cell.
+        """
+        # print("migrate function called!")
+        if self.have_migrated is False:
+            if self.wants_to_migrate():
+                # print("Creature wants to migrate")
+                destination_probabilities = self.get_destination_probabilities()
+                # print("destination probabilities: ",destination_probabilities)
+                self.desired_cell = np.random.choice(self.adjacent_cells, p=destination_probabilities)
+                # print("index destination: ", self.desired_cell)
+                return self.desired_cell
+
+    def get_destination_probabilities(self):
+        """
+        Calculates the probability of moving to each of the adjacent cells,
+        then returns a list with these probabilities.
+        :return: list
+        """
+        highest_relevance = []
+        adjacent_cells = self.adjacent_cell_attractiveness_for_carnivores
+        # print(adjacent_cells)
+        print('adjacent cells', adjacent_cells)
+        probability_to_move = []
+        if adjacent_cells is None:
+            probability_to_move = [0.25, 0.25, 0.25, 0.25]
+            return probability_to_move
+        else:
+            for relative_abundance_of_fodder in adjacent_cells:
+                propensity = self.propensity(relative_abundance_of_fodder)
+                highest_relevance.append(propensity)
+            print("highest relevance: ", highest_relevance)
+            for value in highest_relevance:
+                probability_to_move.append(value/sum(highest_relevance))
+            print("probabilities to move: ", probability_to_move)
+            return probability_to_move

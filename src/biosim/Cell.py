@@ -49,6 +49,13 @@ class Cell:
     def get_abundance_herbivore(self):
         return self.fodder / ((self.number_herbivores() + 1) * self.F_h)
 
+    def get_abundance_carnivore(self):
+        """
+        Returns the relative abundance of fodder for carnivores.
+        :return:
+        """
+        return sum(self.population_herbivores.weight) / ((self.number_carnivores() + 1) * self.F_h)
+
     def number_creatures(self):
         """
         Returns the total number of creatures in the cell
@@ -151,6 +158,15 @@ class Cell:
             # print('Creature just ate and gained: ', creature.beta * fodder, ' now weighs: ', creature.weight)
 
     def feed_carnivores(self):
+        """
+        This function will feed the carnivores,
+         where each carnivore will feast on the herbivores based on both carnivore and herbivore fitness.
+        :return:
+        """
+        herbivores = self.population_herbivores
+        carnivores = self.population_carnivores
+
+
         pass
 
     def mating_season(self):

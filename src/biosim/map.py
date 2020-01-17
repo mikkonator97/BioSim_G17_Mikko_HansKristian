@@ -210,39 +210,25 @@ class Map:
         Used to have feed_map and procreate_map. But put them together.
         :return:
         """
-        # for list_of_cells in self.cell_map:
-        #     for cell in list_of_cells:
-        #         if cell.population_herbivores != []:
-        #             print('Antall herbivores her: ', len(cell.population_herbivores))
-        #         for creature in cell.population_herbivores:
-        #             # Lets the creature be able to mate as well.
-        #             creature.have_mated = False
-        #             creature.fitness = creature.calculate_fitness()
-        #         cell.ranked_fitness_herbivores()
-        #         cell.add_fodder()
-        #         cell.feed_herbivores()
-        #         # print('Amount of fodder left this year: ', cell.fodder)
-        #         # OPS! Feed carnivores might need some more funcs
-        #         # cell.feed_carnivores()
-        #         cell.mating_season()
-        #
+
         # code for carrying out feeding and procreation for each cell
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
                 if self.cell_map[row_index][col_index].landscape == (0 or 1):
                     continue
                 else:
-                    for creature in self.cell_map[row_index][
-                        col_index].population_herbivores:
+                    for creature in self.cell_map[row_index][col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
                     self.cell_map[row_index][col_index].add_fodder()
-                    self.cell_map[row_index][
-                        col_index].ranked_fitness_herbivores()
+                    self.cell_map[row_index][col_index].ranked_fitness_herbivores()
                     self.cell_map[row_index][col_index].feed_herbivores()
                     # Note to self: re-calculate fitness of hervbivores since weight has been increased?
-                    for creature in self.cell_map[row_index][
-                        col_index].population_herbivores:
+                    for creature in self.cell_map[row_index][col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
+
+                    for creature in self.cell_map[row_index][col_index].population_carnivores:
+                        creature.fitness = creature.calculate_fitness()
+                    self.cell_map[row_index][col_index].ranked_fitness_carnivores()
                     self.cell_map[row_index][col_index].feed_carnivores()
                     self.cell_map[row_index][col_index].mating_season()
 
