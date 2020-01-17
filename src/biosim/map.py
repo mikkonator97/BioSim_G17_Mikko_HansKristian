@@ -163,6 +163,7 @@ class Map:
         self.update_preferred_locations()
         for cell in self.cell_map:
             creature_index = 0
+            print('Population herbivores',cell.population_herbivores)
             for herbivore in cell.population_herbivores:
 
                 if herbivore.wants_to_migrate():
