@@ -232,10 +232,10 @@ if __name__ == '__main__':
         }
     ]
     sim = BioSim(str(island_map), ini_herbs, seed)
-    for i in range(sim.map.n_rows):
-        for j in range(sim.map.n_cols):
-            sim.map.cell_map[i][j].add_fodder()
-    #print("Cell 10,10 amount of food: ", sim.map.cell_map[10][10].fodder)
+    # for i in range(sim.map.n_rows):
+    #     for j in range(sim.map.n_cols):
+    #         sim.map.cell_map[i][j].add_fodder()
+    # #print("Cell 10,10 amount of food: ", sim.map.cell_map[10][10].fodder)
     sim.set_animal_parameters("Herbivore", {"zeta": 3.2, "xi": 1.8})
     sim.set_animal_parameters(
         "Carnivore",
@@ -257,24 +257,28 @@ if __name__ == '__main__':
             "DeltaPhiMax": 9.0,
         },
     )
-
-    sim.add_population(population=ini_herbs)
-
     for i in range(sim.map.n_rows):
         for j in range(sim.map.n_cols):
             sim.map.define_adjacent_cells(i, j)
 
-    for row_index in range(sim.map.n_rows):
-        for col_index in range(sim.map.n_cols):
-            for cell in sim.map.cell_map[row_index][col_index].adjacent_cells:
-                # print("this cells adjacent cells: ", sim.map.cell_map[row_index][col_index].adjacent_cells)
-                cell.adjacent_cells_attractiveness = [
-                    sim.map.cell_map[row_index + 1][col_index].attractiveness_herbivore(),
-                    sim.map.cell_map[row_index][col_index - 1].attractiveness_herbivore(),
-                    sim.map.cell_map[row_index - 1][col_index].attractiveness_herbivore(),
-                    sim.map.cell_map[row_index][col_index + 1].attractiveness_herbivore()
-                ]
-            # print("test", cell.adjacent_cells_attractiveness)
+    sim.add_population(population=ini_herbs)
+    print("Population has been added")
+
+    sim.map.yearly_stage1()
+    print("    sim.map.yearly_stage1() has been compleated")
+
+
+    # for row_index in range(sim.map.n_rows):
+    #     for col_index in range(sim.map.n_cols):
+    #         for cell in sim.map.cell_map[row_index][col_index].adjacent_cells:
+    #             # print("this cells adjacent cells: ", sim.map.cell_map[row_index][col_index].adjacent_cells)
+    #             cell.adjacent_cells_attractiveness = [
+    #                 sim.map.cell_map[row_index + 1][col_index].attractiveness_herbivore(),
+    #                 sim.map.cell_map[row_index][col_index - 1].attractiveness_herbivore(),
+    #                 sim.map.cell_map[row_index - 1][col_index].attractiveness_herbivore(),
+    #                 sim.map.cell_map[row_index][col_index + 1].attractiveness_herbivore()
+    #             ]
+    #         # print("test", cell.adjacent_cells_attractiveness)
     # for cell in sim.map.cell_map:
     #     for adj_cell in cell.adjacent_cells:
     #         if sim.map.cell_map[i][j].landscape == (0 or 1):
@@ -287,10 +291,10 @@ if __name__ == '__main__':
             #     sim.map.cell_map[i][j].adjacent_cells_attractiveness = sim.map.cell_map[i][j].attractiveness_herbivore()
             # # print(sim.map.cell_map[i][j].attractiveness_herbivore)
 
-    for i in range(sim.map.n_rows):
-        for j in range(sim.map.n_cols):
-            sim.map.cell_map[i][j].send_adjacent_cells_to_fauna()
-            # print("adjacent cells were sent to Fauna")
+    # for i in range(sim.map.n_rows):
+    #     for j in range(sim.map.n_cols):
+    #         sim.map.cell_map[i][j].send_adjacent_cells_to_fauna()
+    #         # print("adjacent cells were sent to Fauna")
 
     sim.map.yearly_stage_2()
     # print(sim.map.cell_map[10][10])
@@ -298,4 +302,6 @@ if __name__ == '__main__':
   #  print(dir(sim))
 
 
+    sim.map.yearly_stage3()
+    print("sim.map.yearly_stage3() has finished")
 
