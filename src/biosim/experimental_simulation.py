@@ -1,8 +1,11 @@
 
-
+import pandas as pd
 from map import Map
 from biosim.fauna import Fauna
 from biosim.map import Map
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 __author__ = ""
 __email__ = ""
@@ -101,10 +104,30 @@ class BioSim:
 
         Image files will be numbered consecutively.
         """
+        n = int(num_years / 10)
+        x = np.linspace(10, num_years, n)
+        y_herbivores = [0] * n
+        y_carnivores = [0] * n
+        y_total = [0] * n
         for year in range(num_years):
             print('Year: ', year)
             print('Ingoing population: ', self.map.get_populations())
             self.map.yearly_cycle()
+            if year % 10 == 0:
+                herbs, carns, total = self.map.get_populations()
+                y_herbivores[year] = herbs[0]
+                y_carnivores[year] = carns
+                y_total[year] = total
+                self.illustrate(x, y_herbivores)
+
+
+    def illustrate(self, x, y):
+        plt.plot(x, y)
+        plt.xlabel('Year')
+        plt.ylabel('Population of herbivores')
+        plt.show()
+
+
 
 
     @property
@@ -172,6 +195,6 @@ if __name__ == '__main__':
 
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[1].age)
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
-    BioSim_test.simulate(1000)
+    BioSim_test.simulate(21)
 
     print(BioSim_test.map.cell_map[10][10].adjacent_cells[1])

@@ -6,8 +6,7 @@ __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 from biosim.Cell import Cell, Ocean, Mountain, Desert, Savannah, Jungle
 import biosim.Cell
 import numpy as np
-import matplotlib as mpl
-import matplotlib.pyplot as plt
+
 
 
 class Map:
