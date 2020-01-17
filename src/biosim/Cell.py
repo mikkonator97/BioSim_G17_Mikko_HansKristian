@@ -54,7 +54,7 @@ class Cell:
         Returns the relative abundance of fodder for carnivores.
         :return:
         """
-        return sum(self.population_herbivores.weight) / ((self.number_carnivores() + 1) * self.F_h)
+        return sum(self.population_herbivores.weight) / ((len(self.population_carnivores()) + 1) * self.F_h)
 
     def number_creatures(self):
         """
@@ -163,9 +163,11 @@ class Cell:
          where each carnivore will feast on the herbivores based on both carnivore and herbivore fitness.
         :return:
         """
-        herbivores = self.population_herbivores
-        carnivores = self.population_carnivores
-
+        for carnivore in self.population_carnivores:
+            for herbivore in self.population_herbivores:
+                if carnivore.fitness > herbivore.fitness:
+                    carnivore.eat(herbivore.weight)
+                    carnivore.have_eaten = True
 
         pass
 

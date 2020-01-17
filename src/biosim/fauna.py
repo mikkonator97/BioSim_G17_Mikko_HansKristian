@@ -57,6 +57,7 @@ class Fauna:
         self.state = False
         self.have_mated = False
         self.have_migrated = False
+        self.have_eaten = False
         self.desired_location = tuple()
         self.desired_cell = None
         self.survival_chance = 1
