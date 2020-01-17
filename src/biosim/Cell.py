@@ -173,9 +173,9 @@ class Cell:
         for herbivore in self.population_herbivores:
             new_creature = (herbivore.birth(self.number_herbivores()))
             if new_creature != None:
-                print('---X--------------->', len(self.population_herbivores))
+                # print('---X--------------->', len(self.population_herbivores))
                 self.population_herbivores.append(new_creature)
-                print('New pop: ', self.number_herbivores())
+                # print('New pop: ', self.number_herbivores())
 
     def ranked_fitness_herbivores(self):
         self.population_herbivores.sort(key=lambda x: x.fitness, reverse=True)

@@ -113,7 +113,6 @@ class Fauna:
         """
         reduction = (self.weight * self.eta)
         self.weight -= reduction
-        print('Creature that weighs: ', self.weight, ' lost : ', reduction)
 
     def get_age(self):
         """
@@ -146,23 +145,23 @@ class Fauna:
         fitness = self.get_fitness()
         death_number = np.random.random()
         self.survival_chance = 1 - (self.omega * (1 - fitness))
-        print('Death number: ', death_number)
+        # print('Death number: ', death_number)
         # print('Weight: ', self.weight, 'Fitness: ',fitness)
         if fitness <= 0:
-            print('Dies because of negative fitness.')
+            # print('Dies because of negative fitness.')
             return True
         else:
             if death_number > self.survival_chance:
-                print('-----> New Creature death, fitness: ', fitness)
-                print('Random number: ', death_number)
-                print('The probability: ', self.survival_chance)
-                print('Will die at age: ',self.age,' and fitness: ', fitness)
+                # print('-----> New Creature death, fitness: ', fitness)
+                # print('Random number: ', death_number)
+                # print('The probability: ', self.survival_chance)
+                # print('Will die at age: ',self.age,' and fitness: ', fitness)
                 return True
             elif self.weight < 0:
-                print('Dies because of negative weight.')
+                # print('Dies because of negative weight.')
                 return True
             else:
-                print('Survives and thrives!')
+                # print('Survives and thrives!')
                 return False
 
     def wants_to_migrate(self):
@@ -259,5 +258,5 @@ class Herbivore(Fauna):
         This function will let the creature eat.
         """
         self.weight += 0.9 * fodder_amount
-        print('Creature just ate and gained: ', 0.9 * fodder_amount)
+        # print('Creature just ate and gained: ', 0.9 * fodder_amount)
 

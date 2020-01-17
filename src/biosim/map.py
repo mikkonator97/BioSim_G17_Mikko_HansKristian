@@ -92,7 +92,7 @@ class Map:
                 while index < self.cell_map[x][y].number_herbivores():
                     creature = self.cell_map[x][y].population_herbivores[index]
                     if creature.wants_to_migrate():
-                        print('A creature wants to migrate')
+                        # print('A creature wants to migrate')
                         # selects a index based on probabilities and possible moves.
                         move_index = self.select_index_to_move(self.cell_map[x][y].probability_herbivores)
                         if move_index in [0, 1, 2, 3]:
@@ -128,7 +128,7 @@ class Map:
                 for index in range(len(self.cell_map[x][y].adjacent_cells2)):
                     lambda1 = 1
                     propensities[index] = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
-                    print('Propensity[index]: ', index)
+                    # print('Propensity[index]: ', index)
                     #probability = propensity/(4*propensity)
                     #sum_probabilities += propensity
 
@@ -136,7 +136,7 @@ class Map:
                 if sum(propensities) != 0:
                     for i in range(len(propensities)):
                         probabilities[i] = propensities[i] / sum(propensities)
-                    print('Pobabilities to move: ', probabilities)
+                    # print('Pobabilities to move: ', probabilities)
                     self.cell_map[x][y].probability_herbivores = probabilities
 
     def select_index_to_move(self, probabilities):
@@ -165,27 +165,6 @@ class Map:
         herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(creature_index)
         self.cell_map[x_to][x_from].population_herbivores.append(herbivore)
 
-
-
-
-
-
-
-        #for cell in self.cell_map:
-        #    index = 0
-        #    print('Adjacent cells: ', self.cell_map[10][10].adjacent_cells2)
-        #    print(cell.adjacent_cells2())
-        #    print('Adjecent cells: ', cell.adjacent_cells2)
-        #   for location in cell.adjacent_cells:
-        #        # Updates preferrence lists for both species
-        #        x, y = location
-        #       print('Location: ', location)
-        #        cell.herbivore_preferrence[index] = cell_map[x][
-        #            y].chance_herbivores
-        #       #cell.herbivore_preferrence[index] = cell_map[x][
-        #        #   y].lucrativeness_herbivores
-        #        index += 1
-
     def move_to_preferred_location(self):
         """
         Will extract the creatures that wants to move, and then put them
@@ -204,13 +183,6 @@ class Map:
                     x, y =np.random.choice(cell.adjacent_cells,
                                      p=cell.herbivore_preferrence)
                     cell_map.population_carnivores.append(list_one.pop(i))
-
-
-
-
-
-
-
 
     def get_populations(self):
         herbivores = 0
@@ -253,16 +225,16 @@ class Map:
         :return:
         """
 
-        print("Yearly stage 2 has started")
+        # print("Yearly stage 2 has started")
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
                 herbivore_list = self.cell_map[row_index][col_index].population_herbivores
                 # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
-                print("herbivore list: ", herbivore_list)
+                # print("herbivore list: ", herbivore_list)
 
                 for herbivore in herbivore_list:
                     herbivore.migrate()
-        print("Yearly stage 2 has finished")
+        # print("Yearly stage 2 has finished")
 
 
     def yearly_stage3(self):
@@ -290,45 +262,6 @@ class Map:
 
 
 
-
-
-
-
-
-"""
-dictionary = {}
-antall_rader = len(map_string_split)
-for i in range(antall_rader):
-    old_value = str(map_string_split[i])
-    new_value = old_value.replace(' ','')
-    map_string_split[i] = new_value
-    # print(map_string_split[i])
-    antall_kolonnner = len(str(map_string_split[0]))
-    for j in range(antall_kolonner):
-        dictionary[i, j] = map_string_split[i][j]
-
-print(dictionary)"""
-
-# def population(list_of_dicts):
-#     population_list = []
-#     position = list_of_dicts[0].get('loc')
-#     print(position)
-#     print(list_of_dicts[1].get('pop'))
-#     for i, item in enumerate(list_of_dicts[1].get('pop')):
-#         species = list_of_dicts[i].get('species')
-#         print(species)
-#         age = list_of_dicts[i].get('age')
-#         print(age)
-#
-#         weight = list_of_dicts[i].get('weight')
-#         print(weight)
-#         population_list.append(Fauna(position, species, age, weight))
-#
-# for d in pop:
-#     location = d['loc']
-#     cell_pop = d['pop']
-#     #finn hvilken celle tilhører pop, kall den celle
-#     celle.add_pop(cell_pop)
 
 if __name__ == "__main__":
     map_string = """\
