@@ -39,19 +39,19 @@ class Map:
             for col_index in range(self.n_cols):
                 landscape_type = self.map_string_split[row_index][col_index]
                 if landscape_type == 'O':
-                    self.cell_map[row_index][col_index] = Ocean()
+                    self.cell_map[row_index][col_index] = Ocean((row_index, col_index))
                 elif landscape_type == 'M':
-                    self.cell_map[row_index][col_index] = Mountain()
+                    self.cell_map[row_index][col_index] = Mountain((row_index, col_index))
                 elif landscape_type == 'D':
-                    self.cell_map[row_index][col_index] = Desert()
+                    self.cell_map[row_index][col_index] = Desert((row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
                     self.define_adjacent_cells2(row_index, col_index)
                 elif landscape_type == 'S':
-                    self.cell_map[row_index][col_index] = Savannah()
+                    self.cell_map[row_index][col_index] = Savannah((row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
                     self.define_adjacent_cells2(row_index, col_index)
                 else:
-                    self.cell_map[row_index][col_index] = Jungle()
+                    self.cell_map[row_index][col_index] = Jungle((row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
                     self.define_adjacent_cells2(row_index, col_index)
 
@@ -68,82 +68,14 @@ class Map:
             # print("adj_Cells: ", self.cell_map[x_coord][y_coord].adjacent_cells)
 
         """
-    def find(self, coordinate_to_find):
-        for index in range(len(self.cell_map)):
-            if self.cell_map[index].coordinate == coordinate_to_find:
-                return index
+        Calculates the coordinates of the adjacent cells.
+        :param x_coord:
+        :param y_coord:
+        :return:
+        """
+        self.cell_map[x][y].adjacent_cells2 = [(x+1, y),(x, y+1),
+                                               (x-1, y),(x, y-1)]
 
-    def show_map(self):
-        landscape_matrix = np.zeros((self.n_rows, self.n_cols))
-        for row_index in range(self.n_rows):
-            for col_index in range(self.n_cols):
-                landscape_matrix[row_index][col_index] = self.cell_map[row_index][col_index].landscape
-        cmap = mpl.colors.ListedColormap(['royalblue', 'grey', 'khaki', 'honeydew', 'forestgreen'])
-        plt.imshow(landscape_matrix, cmap=cmap)
-        plt.show()
-
-    # def migrate(self):
-    #     """
-    #     Calculates the migration for each animal on the map,
-    #     then moves them to their new destination.
-    #     :return:
-    #     """
-    #     # Note to self: Må bruke antall dyr før man kjører migrate...
-    #     creatures_to_move = []
-    #
-    #     for x_coord in range(1, self.n_rows):
-    #         for y_coord in range(1, self.n_cols):
-    #             # for cell in self.cell_map:
-    #             current_cell = self.cell_map[x_coord][y_coord]
-    #
-    #             # adj_cells = self.cell_map[i][j].adjacent_cells
-    #             print('current cell', current_cell)
-    #             migrating_probabilities = self.get_destination_probabilities(x_coord, y_coord)
-    #             print('Migration', migrating_probabilities)
-    #
-    #             # migrating_probabilities = cell.find_migration()
-    #             for creature in current_cell.population:
-    #                 if creature.wants_to_migrate():
-    #                     chosen_probabilty = np.random.choice(migrating_probabilities)
-    #                     index = migrating_probabilities.index[chosen_probabilty]
-    #                     current_x_coord, current_y_coord = current_cell.adjecent_cells[index]
-    #                     print('A creature has moved')
-    #                     creature.desired_location(current_x_coord, current_y_coord)
-    #                     creatures_to_move.append(creature)
-    #
-    #     for creature in creatures_to_move:
-    #         for x_coord in self.n_rows:
-    #             for y_coord in self.n_cols:
-    #                 if self.cell_map[x_coord][y_coord] != creature.desired_location:
-    #                     self.cell_map[x_coord][y_coord].population += cell.population.pop(creature)
-    #                     creature.desired_location = (x_coord, y_coord)
-
-    # def get_destination_probabilities(self, x_coord, y_coord):
-    #     """
-    #     Calculates the probability of moving to each of the adjacent cells,
-    #      then returns a list with these probabilities.
-    #     :param x_coords: int
-    #     :param y_coords: int
-    #     :return: list
-    #     """
-    #     highest_relevance = []
-    #     # print("adjacent cells", self.cell_map[i][j].adjacent_cells)
-    #
-    #     # print('adjacent cells', adjecent_cells)
-    #     for tup in self.cell_map[x_coord][y_coord].adjacent_cells:
-    #         print('tup', tup)
-    #         new_x_coord, new_y_coord = tup
-    #         # print("landscape ", self.cell_map[i][j].landscape)
-    #         if self.cell_map[new_x_coord][new_y_coord].landscape in {3, 4}:
-    #             fodder = self.cell_map[new_x_coord][new_y_coord].attractiveness_herbivore()
-    #             print("Fodder ", fodder)
-    #             propensity = np.exp(Fauna.lambda1[0]*fodder)
-    #             highest_relevance.append(propensity)
-    #
-    #     probability_to_move = []
-    #     for index in highest_relevance:
-    #         probability_to_move.append(highest_relevance[index]/sum(highest_relevance))
-    #     return probability_to_move
 
     def migration(self):
         """
@@ -152,10 +84,31 @@ class Map:
         """
         # Will update preferred location to each creature.
         self.update_preferred_locations()
-        # self.move_to_preferred_location()
+        # for cell in self.cell_map:
+        for x in range(self.n_rows):
+            for y in range(self.n_cols):
+                index = 0
+                while index < self.cell_map[x][y].number_herbivores():
+                    creature = self.cell_map[x][y].population_herbivores[index]
+                    if creature.wants_to_migrate():
+                        # print('A creature wants to migrate')
+                        # selects a index based on probabilities and possible moves.
+                        move_index = self.select_index_to_move(self.cell_map[x][y].probability_herbivores)
+                        if move_index in [0, 1, 2, 3]:
+                            move_to = self.cell_map[x][y].adjacent_cells2[move_index]
+                            # Perhaps include cell.location?
+                            move_from = x, y
+                            # need creature index
+                            self.move_herbivore(move_to, move_from, index)
+                        index -=1
+                    index += 1
+
+
+
 
     def update_preferred_locations(self):
         """
+        !!! This need some adjustments but works for now.
         Will first update the lucrativeness for each cell.
         This gives the simulated effect that all creatures moves at the same
         time.
@@ -168,35 +121,48 @@ class Map:
 
         for x in range(self.n_rows):
             for y in range(self.n_cols):
-                highest_relevance = []
+                probabilities = [0, 0, 0, 0]
+                propensities = [0, 0, 0, 0]
+                # Yes this is wrong, need to divide by correct amount, now only correct when propensity is equal on all 4 sides.
                 for index in range(len(self.cell_map[x][y].adjacent_cells2)):
-                    fodder = self.cell_map[x][y].fodder
-                    # lammnda1 = self.cell_map[x][y].population_herbivores[0].lambda1
                     lambda1 = 1
-                    propensity = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
-                    probability = propensity/(4*propensity)
-                    #probability = 0.25
-
-                    self.cell_map[x][y].probability_herbivores[index] = probability
-
+                    propensities[index] = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
+                    # print('Propensity[index]: ', index)
+                    #probability = propensity/(4*propensity)
+                    #sum_probabilities += propensity
 
 
+                if sum(propensities) != 0:
+                    for i in range(len(propensities)):
+                        probabilities[i] = propensities[i] / sum(propensities)
+                    # print('Pobabilities to move: ', probabilities)
+                    self.cell_map[x][y].probability_herbivores = probabilities
 
+    def select_index_to_move(self, probabilities):
+        """
+        Uses probabilities to choose from destinations.
+        NB! Requires 4 adjacent cells, and 4 probabilities to work.
+        !! This should work
+        :param probabilities: list
+        :param destinations: list
+        :return: tuple
+        """
+        if (sum(probabilities)) == 1:
+            return np.random.choice([0, 1, 2, 3], p=probabilities)
 
-        #for cell in self.cell_map:
-        #    index = 0
-        #    print('Adjacent cells: ', self.cell_map[10][10].adjacent_cells2)
-        #    print(cell.adjacent_cells2())
-        #    print('Adjecent cells: ', cell.adjacent_cells2)
-        #   for location in cell.adjacent_cells:
-        #        # Updates preferrence lists for both species
-        #        x, y = location
-        #       print('Location: ', location)
-        #        cell.herbivore_preferrence[index] = cell_map[x][
-        #            y].chance_herbivores
-        #       #cell.herbivore_preferrence[index] = cell_map[x][
-        #        #   y].lucrativeness_herbivores
-        #        index += 1
+    def move_herbivore(self, move_to, move_from, creature_index):
+        """
+        !!! This should work
+        Moves the herbivore
+        :param move_to: tuple
+        :param move_from: tuple
+        :param creature_index: int
+        :return:
+        """
+        x_to, y_to = move_to
+        x_from, y_from = move_from
+        herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(creature_index)
+        self.cell_map[x_to][x_from].population_herbivores.append(herbivore)
 
     def move_to_preferred_location(self):
         """
@@ -217,17 +183,9 @@ class Map:
                                      p=cell.herbivore_preferrence)
                     cell_map.population_carnivores.append(list_one.pop(i))
 
-
-
-
-
-
-
-
     def get_populations(self):
         herbivores = 0
         carnivores = 0
-        total = 0
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
                 herbivores += cell.number_herbivores()
@@ -245,18 +203,18 @@ class Map:
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
                 if cell.population_herbivores != []:
-                    print('Antall herbivores her: ', len(cell.population_herbivores))
-                for creature in cell.population_herbivores:
-                    # Lets the creature be able to mate as well.
-                    creature.have_mated = False
-                    creature.fitness = creature.calculate_fitness()
-                cell.ranked_fitness_herbivores()
-                cell.add_fodder()
-                cell.feed_herbivores()
-                # print('Amount of fodder left this year: ', cell.fodder)
-                # OPS! Feed carnivores might need some more funcs
-                # cell.feed_carnivores()
-                cell.mating_season()
+                    #print('Antall herbivores her: ', len(cell.population_herbivores))
+                    for creature in cell.population_herbivores:
+                        # Lets the creature be able to mate as well.
+                        creature.have_mated = False
+                        creature.fitness = creature.calculate_fitness()
+                    cell.ranked_fitness_herbivores()
+                    cell.add_fodder()
+                    cell.feed_herbivores()
+                    # print('Amount of fodder left this year: ', cell.fodder)
+                    # OPS! Feed carnivores might need some more funcs
+                    # cell.feed_carnivores()
+                    cell.mating_season()
 
 
     def yearly_stage_2(self):
@@ -266,7 +224,7 @@ class Map:
         :return:
         """
 
-        print("Yearly stage 2 has started")
+        # print("Yearly stage 2 has started")
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
                 herbivore_list = self.cell_map[row_index][col_index].population_herbivores
@@ -275,7 +233,7 @@ class Map:
 
                 for herbivore in herbivore_list:
                     herbivore.migrate()
-        print("Yearly stage 2 has finished")
+        # print("Yearly stage 2 has finished")
 
 
     def yearly_stage3(self):
@@ -298,49 +256,11 @@ class Map:
         self.yearly_stage1()
         # self.yearly_stage_2()
         # NB! first year none can mate
+        self.migration()
         self.yearly_stage3()
 
 
 
-
-
-
-
-
-"""
-dictionary = {}
-antall_rader = len(map_string_split)
-for i in range(antall_rader):
-    old_value = str(map_string_split[i])
-    new_value = old_value.replace(' ','')
-    map_string_split[i] = new_value
-    # print(map_string_split[i])
-    antall_kolonnner = len(str(map_string_split[0]))
-    for j in range(antall_kolonner):
-        dictionary[i, j] = map_string_split[i][j]
-
-print(dictionary)"""
-
-# def population(list_of_dicts):
-#     population_list = []
-#     position = list_of_dicts[0].get('loc')
-#     print(position)
-#     print(list_of_dicts[1].get('pop'))
-#     for i, item in enumerate(list_of_dicts[1].get('pop')):
-#         species = list_of_dicts[i].get('species')
-#         print(species)
-#         age = list_of_dicts[i].get('age')
-#         print(age)
-#
-#         weight = list_of_dicts[i].get('weight')
-#         print(weight)
-#         population_list.append(Fauna(position, species, age, weight))
-#
-# for d in pop:
-#     location = d['loc']
-#     cell_pop = d['pop']
-#     #finn hvilken celle tilhører pop, kall den celle
-#     celle.add_pop(cell_pop)
 
 if __name__ == "__main__":
     map_string = """\
@@ -359,9 +279,9 @@ if __name__ == "__main__":
                   OOOOOOOOOOOOOOOOOOOOO"""
 
     test_map = Map(map_string)
-    print('f_max in a jungle cell: ', test_map.cell_map[10][10].f_max)
-    print('the adjecent cells to the same cell ([10][10])', test_map.cell_map[10][10].adjecent_cells)
+    # print('f_max in a jungle cell: ', test_map.cell_map[10][10].f_max)
+    # print('the adjecent cells to the same cell ([10][10])', test_map.cell_map[10][10].adjecent_cells)
     y, x = test_map.cell_map[10][10].adjecent_cells[0]
-    print(y,x)
+    # print(y,x)
     #test_map.show_map()
     #print((test_map.landscape_matrix))

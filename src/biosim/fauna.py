@@ -64,10 +64,8 @@ class Fauna:
 
     def birth(self, population):
         birth_weight = self.find_birth_weight(population)
-        # print(birth_weight)
         if birth_weight > 0 and not self.have_mated:
             self.weight -= self.xi * birth_weight
-            print('A baby has been born weighs: ', birth_weight)
             self.have_mated = True
             return self.__class__(weight=birth_weight, age=0)
 
@@ -76,7 +74,7 @@ class Fauna:
     def find_birth_weight(self, population):
         birth_probability = min(1, 0.2 * self.fitness * (population - 1))
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
-        print(self.weight)
+
 
         if self.weight > self.zeta * (9.5):
             if birth_probability > np.random.rand() and self.age > 0:
@@ -113,7 +111,6 @@ class Fauna:
         """
         reduction = (self.weight * self.eta)
         self.weight -= reduction
-        print('Creature that weighs: ', self.weight, ' lost : ', reduction)
 
     def get_age(self):
         """
@@ -146,23 +143,23 @@ class Fauna:
         fitness = self.get_fitness()
         death_number = np.random.random()
         self.survival_chance = 1 - (self.omega * (1 - fitness))
-        print('Death number: ', death_number)
+        # print('Death number: ', death_number)
         # print('Weight: ', self.weight, 'Fitness: ',fitness)
         if fitness <= 0:
-            print('Dies because of negative fitness.')
+            # print('Dies because of negative fitness.')
             return True
         else:
             if death_number > self.survival_chance:
-                print('-----> New Creature death, fitness: ', fitness)
-                print('Random number: ', death_number)
-                print('The probability: ', self.survival_chance)
-                print('Will die at age: ',self.age,' and fitness: ', fitness)
+                # print('-----> New Creature death, fitness: ', fitness)
+                # print('Random number: ', death_number)
+                # print('The probability: ', self.survival_chance)
+                # print('Will die at age: ',self.age,' and fitness: ', fitness)
                 return True
             elif self.weight < 0:
-                print('Dies because of negative weight.')
+                # print('Dies because of negative weight.')
                 return True
             else:
-                print('Survives and thrives!')
+                # print('Survives and thrives!')
                 return False
 
     def wants_to_migrate(self):
@@ -263,5 +260,5 @@ class Herbivore(Fauna):
         This function will let the creature eat.
         """
         self.weight += 0.9 * fodder_amount
-        print('Creature just ate and gained: ', 0.9 * fodder_amount)
+        # print('Creature just ate and gained: ', 0.9 * fodder_amount)
 

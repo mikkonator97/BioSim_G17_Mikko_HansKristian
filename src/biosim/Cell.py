@@ -69,7 +69,7 @@ class Cell:
     #     return probability_to_move
 
     def get_abundance_herbivore(self):
-        return self.fodder / ((self.number_herbivores() - 1) * self.F_h)
+        return self.fodder / ((self.number_herbivores() + 1) * self.F_h)
 
 
     def number_creatures(self):
@@ -124,10 +124,7 @@ class Cell:
         :param cell_pop: dictionary
         :return:
         """
-        # creatures = cell_pop.get
-
         for creature in cell_pop:
-            print(creature)
             species = creature.get('species')
             weight = creature.get('weight')
             age = creature.get('age')
@@ -137,24 +134,8 @@ class Cell:
             #     self.population.append(Carnivore(species, weight, age))
             #     self.number_of_carnivores += 1
 
-        print('Current population: ', self.population_herbivores)
 
-#    def remove_pop(self):
-#        """"""
-#        Removes an animal from the population list if it is dead.
-#        :return:
-#        """
-#        for creature in self.population:
-#            will_die = creature.death()
-#            print('Død: ', will_die)
-#            if will_die:
-#                creature.state = 'dying'
-#
-#        for index in range(self.number_of_herbivores):
-#            if self.population[index].state == 'dying':
-#                if index != 0:
-#                    self.population.pop(index)
-#                    self.number_of_herbivores = len(self.population)
+
 
     def alter_population(self):
         """
@@ -179,7 +160,7 @@ class Cell:
         :return:
         """
         for creature in self.population_herbivores:
-            print('Herbivore weighs: ', creature.weight)
+            # print('Herbivore weighs: ', creature.weight)
             if self.fodder > 10:
                 self.fodder -= 10
                 fodder = 10
@@ -187,10 +168,10 @@ class Cell:
                 fodder = self.fodder
                 self.fodder = 0
             # beta = 0.9
-            print('Creature weighing ', creature.weight,' going in for a snack.')
-            print('Creatures fitness is ', creature.fitness)
+            # print('Creature weighing ', creature.weight,' going in for a snack.')
+            # print('Creatures fitness is ', creature.fitness)
             creature.weight += creature.beta * fodder
-            print('Creature just ate and gained: ', creature.beta * fodder, ' now weighs: ', creature.weight)
+            # print('Creature just ate and gained: ', creature.beta * fodder, ' now weighs: ', creature.weight)
 
     def feed_carnivores(self):
         pass
@@ -199,9 +180,9 @@ class Cell:
         for herbivore in self.population_herbivores:
             new_creature = (herbivore.birth(self.number_herbivores()))
             if new_creature != None:
-                print('---X--------------->', len(self.population_herbivores))
+                # print('---X--------------->', len(self.population_herbivores))
                 self.population_herbivores.append(new_creature)
-                print('New pop: ', self.number_herbivores())
+                # print('New pop: ', self.number_herbivores())
 
     def ranked_fitness_herbivores(self):
         self.population_herbivores.sort(key=lambda x: x.fitness, reverse=True)
