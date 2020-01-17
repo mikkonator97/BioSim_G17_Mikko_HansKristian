@@ -214,23 +214,24 @@ class Map:
         # code for carrying out feeding and procreation for each cell
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
-                if self.cell_map[row_index][col_index].landscape == (0 or 1):
-                    continue
-                else:
+                if self.cell_map[row_index][col_index].landscape in {2,3,4}:
                     for creature in self.cell_map[row_index][col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
-                    self.cell_map[row_index][col_index].add_fodder()
-                    self.cell_map[row_index][col_index].ranked_fitness_herbivores()
-                    self.cell_map[row_index][col_index].feed_herbivores()
+                        self.cell_map[row_index][col_index].add_fodder()
+                        self.cell_map[row_index][col_index].ranked_fitness_herbivores()
+                        self.cell_map[row_index][col_index].feed_herbivores()
                     # Note to self: re-calculate fitness of hervbivores since weight has been increased?
                     for creature in self.cell_map[row_index][col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
 
-                    for creature in self.cell_map[row_index][col_index].population_carnivores:
-                        creature.fitness = creature.calculate_fitness()
-                    self.cell_map[row_index][col_index].ranked_fitness_carnivores()
-                    self.cell_map[row_index][col_index].feed_carnivores()
+                    if len(self.cell_map[row_index][col_index].population_carnivores) > 0:
+                        for carnivore_creature in self.cell_map[row_index][col_index].population_carnivores:
+                            carnivore_creature.fitness = carnivore_creature.calculate_fitness()
+                            self.cell_map[row_index][col_index].ranked_fitness_carnivores()
+                            self.cell_map[row_index][col_index].feed_carnivores()
+                    print("All carnivores have eaten!")
                     self.cell_map[row_index][col_index].mating_season()
+                    print("Mating season over")
 
     def yearly_stage_2(self):
         """
@@ -268,15 +269,16 @@ class Map:
 
                 for herbivore in herbivore_list:
                     herbivore_desired_cell = herbivore.migrate()
+                    # print("herbivore_desired_cell", herbivore_desired_cell)
                     if herbivore_desired_cell is None:
                         continue
                     else:
-                        print("herbivore_desired_cell: ",
-                              herbivore_desired_cell)
+                        # print("herbivore_desired_cell: ", herbivore_desired_cell)
                         herbivore_desired_cell.population_herbivores.append(
                             herbivore)
                         herbivore_list.remove(herbivore)
                         herbivore.have_migrated = True
+                        print("A creature has migrated")
 
         print("Yearly stage 2 has finished")
 
@@ -286,19 +288,15 @@ class Map:
         :return:
         """
         for row_index in range(self.n_rows):
-            print("row", row_index)
             for col_index in range(self.n_cols):
-                print("col", col_index)
-                print("cell: ", self.cell_map[row_index][col_index])
 
                 cell = self.cell_map[row_index][col_index]
-                print("landscape: ", cell.landscape)
                 if cell.landscape in {2, 3, 4}:
                     cell.add_age()
                     cell.lose_weight()
-                    print("lose weight has been called")
+            #        print("lose weight has been called")
                     for creature in cell.population_herbivores:
-                        print("creature", creature)
+                    #    print("creature", creature)
                         creature.fitness = creature.calculate_fitness
                         creature.have_mated = False
                         creature.have_migrated = False

@@ -220,6 +220,15 @@ class TestCell:
         for i in range(1, len(weight)):
             assert test_cell.population_herbivores[i].weight == weight2[i]
 
+
+    def test_feed_carnivore(self):
+        """
+        This function will test that the carnivore stops eating if it has eaten 50 units of fodder,
+        if there is no herbivores left to eat, or if the carnivore has tried to kill all the herbivores in the cell.
+        :return:
+        """
+        pass
+
     def test_lose_weight(self, test=test):
         """
         Will test that all creatures lose correct amount of weight.
@@ -333,3 +342,5 @@ class TestCell:
         :return:
         """
         pass
+
+

@@ -217,7 +217,7 @@ class Herbivore(Fauna):
         # print("migrate function called!")
         if self.have_migrated is False:
             if self.wants_to_migrate():
-                # print("Creature wants to migrate")
+                print("Creature wants to migrate")
                 destination_probabilities = self.get_destination_probabilities()
                 print("destination probabilities: ",destination_probabilities)
                 self.desired_cell = np.random.choice(self.adjacent_cells, p=destination_probabilities)
@@ -296,6 +296,10 @@ class Carnivore(Fauna):
         """
         This function will let the creature eat.
         """
+        if fodder_amount > 50:
+            fodder_amount = 50
+        else:
+            fodder_amount = fodder_amount
         self.weight += self.beta * fodder_amount
         # print('Creature just ate and gained: ', self.beta * fodder_amount)
 

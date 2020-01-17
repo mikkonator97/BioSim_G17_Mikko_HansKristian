@@ -8,7 +8,7 @@ information out of this cell, and methods for adding fodder to jungel and
 savannah cells.
 """
 
-from biosim.fauna import Fauna, Herbivore
+from biosim.fauna import Fauna, Herbivore, Carnivore
 import numpy as np
 
 
@@ -22,13 +22,11 @@ class Cell:
         self.coordinates = coordinates
         self.landscape = landscape
         self.fodder = fodder
-
         self.population = []
         self.population_herbivores = []
         self.population_carnivores = []
         self.gamma_herbivore = 0.2
         self.adjacent_cells = []
-
         self.adjacent_cells2 = []
         self.probability_herbivores = [0, 0, 0, 0]
         # self.probability_carnivores = [0, 0, 0, 0]
@@ -42,9 +40,9 @@ class Cell:
     def send_adjacent_cells_to_fauna(self):
         for creature in self.population_herbivores:
             creature.adjacent_cells = self.adjacent_cells
-            print("cell adjacent cells", self.adjacent_cells)
-            creature.adjacent_cell_attractiveness_for_fauna = self.adjacent_cells_attractiveness
-            print("adjacent_cells_attractiveness", self.adjacent_cells_attractiveness)
+            # print("cell adjacent cells", self.adjacent_cells)
+            creature.adjacent_cell_attractiveness_for_herbivores = self.adjacent_cells_attractiveness
+            # print("adjacent_cells_attractiveness", self.adjacent_cells_attractiveness)
 
     def get_abundance_herbivore(self):
         return self.fodder / ((self.number_herbivores() + 1) * self.F_h)
@@ -54,7 +52,7 @@ class Cell:
         Returns the relative abundance of fodder for carnivores.
         :return:
         """
-        return sum(self.population_herbivores.weight) / ((len(self.population_carnivores()) + 1) * self.F_h)
+        return sum(self.population_herbivores.weight) / ((len(self.population_carnivores) + 1) * self.F_h)
 
     def number_creatures(self):
         """
@@ -114,9 +112,9 @@ class Cell:
             age = creature.get('age')
             if species.lower() == 'herbivore':
                 self.population_herbivores.append(Herbivore(weight=weight, age=age))
-            # else:
-            #     self.population.append(Carnivore(species, weight, age))
-            #     self.number_of_carnivores += 1
+            else:
+                self.population_carnivores.append(Carnivore(weight=weight, age=age))
+                # self.number_of_carnivores += 1
 
 
 
@@ -163,13 +161,47 @@ class Cell:
          where each carnivore will feast on the herbivores based on both carnivore and herbivore fitness.
         :return:
         """
-        for carnivore in self.population_carnivores:
-            for herbivore in self.population_herbivores:
-                if carnivore.fitness > herbivore.fitness:
-                    carnivore.eat(herbivore.weight)
-                    carnivore.have_eaten = True
 
-        pass
+        self.ranked_fitness_herbivores_weakest()
+        self.ranked_fitness_carnivores()
+        for carnivore in self.population_carnivores:
+            herbivore_eaten = 0
+            print("new carnivore")
+            for herbivore in self.population_herbivores:
+                if herbivore_eaten >= 50:
+                    print("herb_eaten", herbivore_eaten)
+                    continue
+
+                probability_of_successful_hunt = self.successful_hunt(carnivore, herbivore)
+                if probability_of_successful_hunt == 0:
+                    break
+
+                kill_probability = np.random.random()
+                if kill_probability < probability_of_successful_hunt:
+                    print("A carnivore has killed: ")
+                    old_carnivore_weight = carnivore.weight
+                    print("old_carnivore_weight", old_carnivore_weight)
+                    carnivore.eat(herbivore.weight)
+                    print("new_carnivore_weight", carnivore.weight)
+                    herbivore_eaten += carnivore.weight - old_carnivore_weight
+                    carnivore.calculate_fitness()
+                    self.population_herbivores.remove(herbivore)
+
+
+                        # prey = self.population_herbivores.pop(i)
+                        # fodder = prey.wheight
+
+    def successful_hunt(self, carnivore, herbivore):
+        """
+        Function which returns the probability of a successful hunt where the carnivore will pray.
+        :return: float
+        """
+        if herbivore.fitness >= carnivore.fitness:
+            return 0.0
+        elif carnivore.DeltaPhiMax > (carnivore.fitness - herbivore.fitness):
+            return (carnivore.fitness - herbivore.fitness) / carnivore.DeltaPhiMax
+        else:
+            return 1.0
 
     def mating_season(self):
         for herbivore in self.population_herbivores:

@@ -262,6 +262,8 @@ if __name__ == '__main__':
             sim.map.define_adjacent_cells(i, j)
 
     sim.add_population(population=ini_herbs)
+    sim.add_population(population=ini_carns)
+
     print("Population has been added")
 
     sim.map.yearly_stage1()
@@ -296,12 +298,8 @@ if __name__ == '__main__':
     #         sim.map.cell_map[i][j].send_adjacent_cells_to_fauna()
     #         # print("adjacent cells were sent to Fauna")
 
-    sim.map.yearly_stage_2()
+
     # print(sim.map.cell_map[10][10])
     # print(sim.map.cell_map[10][10].adjacent_cells)
   #  print(dir(sim))
-
-
-    sim.map.yearly_stage3()
-    print("sim.map.yearly_stage3() has finished")
 
