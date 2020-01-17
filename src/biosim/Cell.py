@@ -42,29 +42,9 @@ class Cell:
             print("cell adjacent cells", self.adjacent_cells)
             creature.adjacent_cell_attractiveness_for_fauna = self.adjacent_cells_attractiveness
             print("adjacent_cells_attractiveness", self.adjacent_cells_attractiveness)
-    # def find_migration(self):
-    #     highest_relevance = []
-    #     print("adjacent cells", self.adjacent_cells)
-    #
-    #     # print('adjacent cells', adjecent_cells)
-    #     for tup in self.adjacent_cells:
-    #         print('tup', tup)
-    #         i, j = tup
-    #         if Map.cell_map[i][j].landscape == 'M' or 'O':
-    #             break
-    #         else:
-    #             fodder = self.cell_map[i][j].attractiveness_herbivore()
-    #             propensity = np.exp(Fauna.lambda1[0]*fodder)
-    #             highest_relevance.append(propensity)
-    #
-    #     probability_to_move = []
-    #     for i in highest_relevance:
-    #         probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
-    #     return probability_to_move
 
     def get_abundance_herbivore(self):
         return self.fodder / ((self.number_herbivores() - 1) * self.F_h)
-
 
     def number_creatures(self):
         """
@@ -133,22 +113,6 @@ class Cell:
 
         print('Current population: ', self.population_herbivores)
 
-#    def remove_pop(self):
-#        """"""
-#        Removes an animal from the population list if it is dead.
-#        :return:
-#        """
-#        for creature in self.population:
-#            will_die = creature.death()
-#            print('Død: ', will_die)
-#            if will_die:
-#                creature.state = 'dying'
-#
-#        for index in range(self.number_of_herbivores):
-#            if self.population[index].state == 'dying':
-#                if index != 0:
-#                    self.population.pop(index)
-#                    self.number_of_herbivores = len(self.population)
 
     def alter_population(self):
         """
