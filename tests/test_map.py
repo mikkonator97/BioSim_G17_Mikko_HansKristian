@@ -112,8 +112,9 @@ class TestMap:
             i, j = item['loc']
             cell_pop = item['pop']
             map1.cell_map[i][j].add_pop(cell_pop)
-
+        assert map1.cell_map[10][10].number_herbivores() == 6
         map1.migration()
+        assert map1.cell_map[10][10].number_herbivores() != 6
 
 
     def test_get_populations(self, map_string=map_string, pop=test):
