@@ -98,28 +98,37 @@ class TestMap:
         # map.move()
         pass
 
-    def test_migration(self, map=map, pop=test):
-        for d in pop:
-            location = d['loc']
-            cell_pop = d['pop']
-            cell_index = map.find(location)
-            for _ in range(len(cell_pop)):
-                map.cell_map[cell_index].add_pop(cell_pop)
+    def test_migration(self, map=map_string, pop=test):
+        """
+        Will test that herbivores are removed from old cell, and that there
+        are more in another cell.
+        :param map:
+        :param pop:
+        :return:
+        """
 
-    def test_get_populations(self, map=map, pop=test):
+        map1 = Map(map)
+        for item in pop:
+            i, j = item['loc']
+            cell_pop = item['pop']
+            map1.cell_map[i][j].add_pop(cell_pop)
+
+        map1.migration()
+
+
+    def test_get_populations(self, map_string=map_string, pop=test):
         """
         Will test that once a p
         :param map:
         :param pop:
         :return:
         """
-        for d in pop:
-            location = d['loc']
-            cell_pop = d['pop']
-            cell_index = map.find(location)
-            for _ in range(len(cell_pop)):
-                map.cell_map[cell_index].add_pop(cell_pop)
-        assert map.get_populations() == (6, 0, 6)
+        map2 = Map(map_string)
+        for item in pop:
+            i, j = item['loc']
+            cell_pop = item['pop']
+            map2.cell_map[i][j].add_pop(cell_pop)
+        assert map2.get_populations() == (6, 0, 6)
 
         # insert_population(ini_pop)
 

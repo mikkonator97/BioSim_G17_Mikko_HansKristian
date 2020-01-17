@@ -107,25 +107,6 @@ class BioSim:
             self.map.yearly_cycle()
 
 
-
-    def add_population(self, population):
-        """
-        Add a population to the island
-
-        :param population: List of dictionaries specifying population
-        """
-
-        cell.add_pop(start_population)
-
-        dicts = population
-        for d in dicts:
-            location = d['loc']
-            cell_pop = d['pop']
-            cell_index = Map.find(location)
-            for _ in range(len(cell_pop)):
-                Map.cell_map[cell_index].add_pop(cell_pop)
-
-
     @property
     def year(self):
         """Last year simulated."""

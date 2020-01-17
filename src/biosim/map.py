@@ -164,7 +164,7 @@ class Map:
         for cell in self.cell_map:
             creature_index = 0
             for herbivore in cell.population_herbivores:
-                creature_index += 1
+
                 if herbivore.wants_to_migrate():
                     print('A creature wants to migrate')
                     # selects a index based on probabilities and possible moves.
@@ -174,6 +174,7 @@ class Map:
                     move_from = cell.location
                     # need creature index
                     self.move_herbivore(move_to, move_from, creature_index)
+                creature_index += 1
 
 
 
@@ -275,7 +276,6 @@ class Map:
     def get_populations(self):
         herbivores = 0
         carnivores = 0
-        total = 0
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
                 herbivores += cell.number_herbivores()
