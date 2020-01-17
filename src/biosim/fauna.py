@@ -58,9 +58,10 @@ class Fauna:
         self.have_mated = False
         self.have_migrated = False
         self.desired_location = tuple()
+        self.desired_cell = None
         self.survival_chance = 1
         self.adjacent_cells = None
-        self.adjacent_cell_attractiveness = None
+        self.adjacent_cell_attractiveness_for_fauna = None
 
     def birth(self, population):
         birth_weight = self.find_birth_weight(population)
@@ -177,7 +178,9 @@ class Fauna:
         :param relative_abundance_of_fodder:
         :return: float
         """
-        return np.exp(self.lambda1[self.species_id] * relative_abundance_of_fodder)
+        propensity = np.exp(self.lambda1 * relative_abundance_of_fodder)
+        print("prop", propensity)
+        return propensity
 
 class Herbivore(Fauna):
 
@@ -206,18 +209,18 @@ class Herbivore(Fauna):
 
     def migrate(self):
         """
-        Moves the creature to the most eligible adjacent cell on the map.
+        If the creature has not migrated and wants to migrate,
+        then returns the desired cell.
         """
         # print("migrate function called!")
         if self.have_migrated is False:
             if self.wants_to_migrate():
-                print("Creature wants to migrate")
+                # print("Creature wants to migrate")
                 destination_probabilities = self.get_destination_probabilities()
-                chosen_destination = np.random.choice(destination_probabilities)
-                print("chosen destination: ", chosen_destination)
-
-
-
+                # print("destination probabilities: ",destination_probabilities)
+                self.desired_cell = np.random.choice(self.adjacent_cells, p=destination_probabilities)
+                # print("index destination: ", self.desired_cell)
+                return self.desired_cell
 
     def get_destination_probabilities(self):
         """
@@ -226,7 +229,7 @@ class Herbivore(Fauna):
         :return: list
         """
         highest_relevance = []
-        adjacent_cells = self.adjacent_cell_attractiveness
+        adjacent_cells = self.adjacent_cell_attractiveness_for_fauna
         # print(adjacent_cells)
         print('adjacent cells', adjacent_cells)
         probability_to_move = []
@@ -237,9 +240,10 @@ class Herbivore(Fauna):
             for relative_abundance_of_fodder in adjacent_cells:
                 propensity = self.propensity(relative_abundance_of_fodder)
                 highest_relevance.append(propensity)
-
-            for index in highest_relevance:
-                probability_to_move.append(highest_relevance[index]/sum(highest_relevance))
+            print("highest relevance: ", highest_relevance)
+            for value in highest_relevance:
+                probability_to_move.append(value/sum(highest_relevance))
+            print("probabilities to move: ", probability_to_move)
             return probability_to_move
 
     def give_birth(self):

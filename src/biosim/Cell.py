@@ -44,33 +44,14 @@ class Cell:
         # self.abundance_carnivore = 0
 
     def send_adjacent_cells_to_fauna(self):
-        Fauna.adjacent_cells = self.adjacent_cells
-        print("cell adjacent cells", self.adjacent_cells)
-        Fauna.adjacent_cell_attractiveness = self.adjacent_cells_attractiveness
-        # print("adjacent_cells_attractiveness", self.adjacent_cells_attractiveness)
-    # def find_migration(self):
-    #     highest_relevance = []
-    #     print("adjacent cells", self.adjacent_cells)
-    #
-    #     # print('adjacent cells', adjecent_cells)
-    #     for tup in self.adjacent_cells:
-    #         print('tup', tup)
-    #         i, j = tup
-    #         if Map.cell_map[i][j].landscape == 'M' or 'O':
-    #             break
-    #         else:
-    #             fodder = self.cell_map[i][j].attractiveness_herbivore()
-    #             propensity = np.exp(Fauna.lambda1[0]*fodder)
-    #             highest_relevance.append(propensity)
-    #
-    #     probability_to_move = []
-    #     for i in highest_relevance:
-    #         probability_to_move.append(highest_relevance[i]/sum(highest_relevance))
-    #     return probability_to_move
+        for creature in self.population_herbivores:
+            creature.adjacent_cells = self.adjacent_cells
+            print("cell adjacent cells", self.adjacent_cells)
+            creature.adjacent_cell_attractiveness_for_fauna = self.adjacent_cells_attractiveness
+            print("adjacent_cells_attractiveness", self.adjacent_cells_attractiveness)
 
     def get_abundance_herbivore(self):
         return self.fodder / ((self.number_herbivores() + 1) * self.F_h)
-
 
     def number_creatures(self):
         """
@@ -144,7 +125,7 @@ class Cell:
         """
 
         index = 0
-        number_of_herbivores = self.number_herbivores()
+        number_of_herbivores = len(self.population_herbivores)
         while index < number_of_herbivores:
             self.population_herbivores[index].state = self.population_herbivores[index].death()
             if self.population_herbivores[index].state:
@@ -178,7 +159,7 @@ class Cell:
 
     def mating_season(self):
         for herbivore in self.population_herbivores:
-            new_creature = (herbivore.birth(self.number_herbivores()))
+            new_creature = (herbivore.birth(self.number_of_herbivores()))
             if new_creature != None:
                 # print('---X--------------->', len(self.population_herbivores))
                 self.population_herbivores.append(new_creature)
@@ -200,7 +181,9 @@ class Cell:
         :param f: float
         :return: float
         """
-        self.chance_herbivore = self.fodder / ((self.number_herbivores()+1) * f)
+        # self.chance_herbivore = self.fodder / ((self.number_of_herbivores()+1) * f)
+        attractiveness = self.fodder / ((self.number_of_herbivores()+1) * f)
+        return attractiveness
 
     def attractiveness_carnivore(self, f=50.0):
         """

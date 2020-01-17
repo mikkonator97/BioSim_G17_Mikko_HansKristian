@@ -45,15 +45,15 @@ class Map:
                 elif landscape_type == 'D':
                     self.cell_map[row_index][col_index] = Desert((row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
-                    self.define_adjacent_cells2(row_index, col_index)
+                    # self.define_adjacent_cells2(row_index, col_index)
                 elif landscape_type == 'S':
                     self.cell_map[row_index][col_index] = Savannah((row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
-                    self.define_adjacent_cells2(row_index, col_index)
+                    # self.define_adjacent_cells2(row_index, col_index)
                 else:
                     self.cell_map[row_index][col_index] = Jungle((row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
-                    self.define_adjacent_cells2(row_index, col_index)
+                    # self.define_adjacent_cells2(row_index, col_index)
 
     def define_adjacent_cells(self, x_coord, y_coord):
         """
@@ -200,21 +200,38 @@ class Map:
         Used to have feed_map and procreate_map. But put them together.
         :return:
         """
-        for list_of_cells in self.cell_map:
-            for cell in list_of_cells:
-                if cell.population_herbivores != []:
-                    #print('Antall herbivores her: ', len(cell.population_herbivores))
-                    for creature in cell.population_herbivores:
-                        # Lets the creature be able to mate as well.
-                        creature.have_mated = False
+        # for list_of_cells in self.cell_map:
+        #     for cell in list_of_cells:
+        #         if cell.population_herbivores != []:
+        #             print('Antall herbivores her: ', len(cell.population_herbivores))
+        #         for creature in cell.population_herbivores:
+        #             # Lets the creature be able to mate as well.
+        #             creature.have_mated = False
+        #             creature.fitness = creature.calculate_fitness()
+        #         cell.ranked_fitness_herbivores()
+        #         cell.add_fodder()
+        #         cell.feed_herbivores()
+        #         # print('Amount of fodder left this year: ', cell.fodder)
+        #         # OPS! Feed carnivores might need some more funcs
+        #         # cell.feed_carnivores()
+        #         cell.mating_season()
+        #
+        # code for carrying out feeding and procreation for each cell
+        for row_index in range(self.n_rows):
+            for col_index in range(self.n_cols):
+                if self.cell_map[row_index][col_index].landscape == (0 or 1):
+                    continue
+                else:
+                    for creature in self.cell_map[row_index][col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
-                    cell.ranked_fitness_herbivores()
-                    cell.add_fodder()
-                    cell.feed_herbivores()
-                    # print('Amount of fodder left this year: ', cell.fodder)
-                    # OPS! Feed carnivores might need some more funcs
-                    # cell.feed_carnivores()
-                    cell.mating_season()
+                    self.cell_map[row_index][col_index].add_fodder()
+                    self.cell_map[row_index][col_index].ranked_fitness_herbivores()
+                    self.cell_map[row_index][col_index].feed_herbivores()
+                    # Note to self: re-calculate fitness of hervbivores since weight has been increased?
+                    for creature in self.cell_map[row_index][col_index].population_herbivores:
+                        creature.fitness = creature.calculate_fitness()
+                    self.cell_map[row_index][col_index].feed_carnivores()
+                    self.cell_map[row_index][col_index].mating_season()
 
 
     def yearly_stage_2(self):
@@ -227,13 +244,40 @@ class Map:
         # print("Yearly stage 2 has started")
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
+                for cell in self.cell_map[row_index][col_index].adjacent_cells:
+                    cell.adjacent_cells_attractiveness = [
+                        self.cell_map[row_index + 1][
+                            col_index].attractiveness_herbivore(),
+                        self.cell_map[row_index][
+                            col_index - 1].attractiveness_herbivore(),
+                        self.cell_map[row_index - 1][
+                            col_index].attractiveness_herbivore(),
+                        self.cell_map[row_index][
+                            col_index + 1].attractiveness_herbivore()
+                    ]
+
+        for row_index in range(self.n_rows):
+            for col_index in range(self.n_cols):
+                self.cell_map[row_index][col_index].send_adjacent_cells_to_fauna()
+
+        for row_index in range(self.n_rows):
+            for col_index in range(self.n_cols):
                 herbivore_list = self.cell_map[row_index][col_index].population_herbivores
                 # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
                 # print("herbivore list: ", herbivore_list)
 
                 for herbivore in herbivore_list:
-                    herbivore.migrate()
-        # print("Yearly stage 2 has finished")
+                    herbivore_desired_cell = herbivore.migrate()
+                    if herbivore_desired_cell is None:
+                        continue
+                    else:
+                        print("herbivore_desired_cell: ", herbivore_desired_cell)
+                        herbivore_desired_cell.population_herbivores.append(herbivore)
+                        herbivore_list.remove(herbivore)
+                        herbivore.have_migrated = True
+
+
+        print("Yearly stage 2 has finished")
 
 
     def yearly_stage3(self):
@@ -241,15 +285,25 @@ class Map:
         4. aging, 5. Loss of weight and 6. Death.
         :return:
         """
-        for list_of_cells in self.cell_map:
-            for cell in list_of_cells:
-                cell.add_age()
-                cell.lose_weight()
-                for creature in cell.population_herbivores:
-                    creature.fitness = creature.calculate_fitness
-                    creature.have_mated = False
-                cell.alter_population()
+        for row_index in range(self.n_rows):
+            print("row", row_index)
+            for col_index in range(self.n_cols):
+                print("col", col_index)
+                print("cell: ", self.cell_map[row_index][col_index])
 
+                cell = self.cell_map[row_index][col_index]
+                print("landscape: ", cell.landscape)
+                if cell.landscape in {2, 3, 4}:
+                    cell.add_age()
+                    cell.lose_weight()
+                    print("lose weight has been called")
+                    for creature in cell.population_herbivores:
+                        print("creature", creature)
+                        creature.fitness = creature.calculate_fitness
+                        creature.have_mated = False
+                        creature.have_migrated = False
+                    cell.alter_population()
+    print("yearly_stage3() has finished")
 
     def yearly_cycle(self):
         # OPS! some of these functions can be put together
