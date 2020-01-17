@@ -146,6 +146,22 @@ class TestHerbivores:
         test_herbivore = Herbivore(weight=10, age=40)
         assert test_herbivore.get_fitness() == 0.25
 
+    def test_migrate(self):
+        """
+        Test that a creature stays in place if it does not want to migrate.
+        Test that a creature will migrate if it wants to
+        :return:
+        """
+        test_herbivore = Herbivore(age=10, weight=30)
+        test_herbivore.have_migrated = True
+        desired_cell_pre_migration = test_herbivore.desired_cell
+        test_herbivore.migrate()
+        assert desired_cell_pre_migration == test_herbivore.desired_cell
+        # """Needs a test object with adjacent cells to make this work"""
+        # test_herbivore.have_migrated = False
+        # desired_cell_pre_migration = test_herbivore.desired_cell
+        # test_herbivore.migrate()
+        # assert desired_cell_pre_migration != test_herbivore.desired_cell
 
 class TestCarnivores:
     """

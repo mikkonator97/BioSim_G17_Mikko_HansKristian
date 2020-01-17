@@ -212,7 +212,8 @@ class Herbivore(Fauna):
 
     def migrate(self):
         """
-        Moves the creature to the most eligible adjacent cell on the map.
+        If the creature has not migrated and wants to migrate,
+        then returns the desired cell.
         """
         # print("migrate function called!")
         if self.have_migrated is False:
@@ -220,13 +221,9 @@ class Herbivore(Fauna):
                 # print("Creature wants to migrate")
                 destination_probabilities = self.get_destination_probabilities()
                 # print("destination probabilities: ",destination_probabilities)
-
                 self.desired_cell = np.random.choice(self.adjacent_cells, p=destination_probabilities)
                 # print("index destination: ", self.desired_cell)
                 return self.desired_cell
-
-
-
 
     def get_destination_probabilities(self):
         """
