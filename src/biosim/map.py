@@ -1,4 +1,4 @@
-#from biosim.fauna import Fauna
+# from biosim.fauna import Fauna
 
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
@@ -26,7 +26,7 @@ class Map:
         self.map_string_split = map_string.split()
         self.n_rows = len(self.map_string_split)
         self.n_cols = len(str(self.map_string_split[0]))
-        self.cell_map = np.empty((self.n_rows, self.n_cols),dtype=object)
+        self.cell_map = np.empty((self.n_rows, self.n_cols), dtype=object)
         self.create_map()
 
     def create_map(self):
@@ -39,19 +39,24 @@ class Map:
             for col_index in range(self.n_cols):
                 landscape_type = self.map_string_split[row_index][col_index]
                 if landscape_type == 'O':
-                    self.cell_map[row_index][col_index] = Ocean((row_index, col_index))
+                    self.cell_map[row_index][col_index] = Ocean(
+                        (row_index, col_index))
                 elif landscape_type == 'M':
-                    self.cell_map[row_index][col_index] = Mountain((row_index, col_index))
+                    self.cell_map[row_index][col_index] = Mountain(
+                        (row_index, col_index))
                 elif landscape_type == 'D':
-                    self.cell_map[row_index][col_index] = Desert((row_index, col_index))
+                    self.cell_map[row_index][col_index] = Desert(
+                        (row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
                     # self.define_adjacent_cells2(row_index, col_index)
                 elif landscape_type == 'S':
-                    self.cell_map[row_index][col_index] = Savannah((row_index, col_index))
+                    self.cell_map[row_index][col_index] = Savannah(
+                        (row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
                     # self.define_adjacent_cells2(row_index, col_index)
                 else:
-                    self.cell_map[row_index][col_index] = Jungle((row_index, col_index))
+                    self.cell_map[row_index][col_index] = Jungle(
+                        (row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
                     # self.define_adjacent_cells2(row_index, col_index)
 
@@ -62,9 +67,13 @@ class Map:
         :param y_coord:
         :return:
         """
-        if (x_coord != (0 or self.n_rows-1)) and (y_coord != (0 or self.n_cols-1)):
-            self.cell_map[x_coord][y_coord].adjacent_cells = [self.cell_map[x_coord + 1][y_coord], self.cell_map[x_coord][y_coord - 1],
-                                                              self.cell_map[x_coord - 1][y_coord], self.cell_map[x_coord][y_coord + 1]]
+        if (x_coord != (0 or self.n_rows - 1)) and (
+                y_coord != (0 or self.n_cols - 1)):
+            self.cell_map[x_coord][y_coord].adjacent_cells = [
+                self.cell_map[x_coord + 1][y_coord],
+                self.cell_map[x_coord][y_coord - 1],
+                self.cell_map[x_coord - 1][y_coord],
+                self.cell_map[x_coord][y_coord + 1]]
             # print("adj_Cells: ", self.cell_map[x_coord][y_coord].adjacent_cells)
 
         """
@@ -73,9 +82,10 @@ class Map:
         :param y_coord:
         :return:
         """
-        self.cell_map[x][y].adjacent_cells2 = [(x+1, y),(x, y+1),
-                                               (x-1, y),(x, y-1)]
-
+        self.cell_map[x_coord][y_coord].adjacent_cells2 = [
+            (x_coord + 1, y_coord), (x_coord, y_coord + 1),
+            (x_coord - 1, y_coord), (x_coord, y_coord - 1)
+        ]
 
     def migration(self):
         """
@@ -93,18 +103,17 @@ class Map:
                     if creature.wants_to_migrate():
                         # print('A creature wants to migrate')
                         # selects a index based on probabilities and possible moves.
-                        move_index = self.select_index_to_move(self.cell_map[x][y].probability_herbivores)
+                        move_index = self.select_index_to_move(
+                            self.cell_map[x][y].probability_herbivores)
                         if move_index in [0, 1, 2, 3]:
-                            move_to = self.cell_map[x][y].adjacent_cells2[move_index]
+                            move_to = self.cell_map[x][y].adjacent_cells2[
+                                move_index]
                             # Perhaps include cell.location?
                             move_from = x, y
                             # need creature index
                             self.move_herbivore(move_to, move_from, index)
-                        index -=1
+                        index -= 1
                     index += 1
-
-
-
 
     def update_preferred_locations(self):
         """
@@ -126,11 +135,11 @@ class Map:
                 # Yes this is wrong, need to divide by correct amount, now only correct when propensity is equal on all 4 sides.
                 for index in range(len(self.cell_map[x][y].adjacent_cells2)):
                     lambda1 = 1
-                    propensities[index] = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
+                    propensities[index] = np.exp(lambda1 * self.cell_map[x][
+                        y].get_abundance_herbivore())
                     # print('Propensity[index]: ', index)
-                    #probability = propensity/(4*propensity)
-                    #sum_probabilities += propensity
-
+                    # probability = propensity/(4*propensity)
+                    # sum_probabilities += propensity
 
                 if sum(propensities) != 0:
                     for i in range(len(propensities)):
@@ -161,7 +170,8 @@ class Map:
         """
         x_to, y_to = move_to
         x_from, y_from = move_from
-        herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(creature_index)
+        herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(
+            creature_index)
         self.cell_map[x_to][x_from].population_herbivores.append(herbivore)
 
     def move_to_preferred_location(self):
@@ -175,12 +185,12 @@ class Map:
                 if herbivore.wants_to_migrate():
                     # Selects coordinates based on
                     x, y = np.random.choice(cell.adjacent_cells,
-                                     p=cell.herbivore_preferrence)
+                                            p=cell.herbivore_preferrence)
                     cell_map.population_herbivores.append(list_one.pop(i))
             for carnivore in cell.population_carnivores:
                 if carnivore.wants_to_migrate():
-                    x, y =np.random.choice(cell.adjacent_cells,
-                                     p=cell.herbivore_preferrence)
+                    x, y = np.random.choice(cell.adjacent_cells,
+                                            p=cell.herbivore_preferrence)
                     cell_map.population_carnivores.append(list_one.pop(i))
 
     def get_populations(self):
@@ -222,17 +232,19 @@ class Map:
                 if self.cell_map[row_index][col_index].landscape == (0 or 1):
                     continue
                 else:
-                    for creature in self.cell_map[row_index][col_index].population_herbivores:
+                    for creature in self.cell_map[row_index][
+                        col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
                     self.cell_map[row_index][col_index].add_fodder()
-                    self.cell_map[row_index][col_index].ranked_fitness_herbivores()
+                    self.cell_map[row_index][
+                        col_index].ranked_fitness_herbivores()
                     self.cell_map[row_index][col_index].feed_herbivores()
                     # Note to self: re-calculate fitness of hervbivores since weight has been increased?
-                    for creature in self.cell_map[row_index][col_index].population_herbivores:
+                    for creature in self.cell_map[row_index][
+                        col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
                     self.cell_map[row_index][col_index].feed_carnivores()
                     self.cell_map[row_index][col_index].mating_season()
-
 
     def yearly_stage_2(self):
         """
@@ -258,11 +270,13 @@ class Map:
 
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
-                self.cell_map[row_index][col_index].send_adjacent_cells_to_fauna()
+                self.cell_map[row_index][
+                    col_index].send_adjacent_cells_to_fauna()
 
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
-                herbivore_list = self.cell_map[row_index][col_index].population_herbivores
+                herbivore_list = self.cell_map[row_index][
+                    col_index].population_herbivores
                 # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
                 # print("herbivore list: ", herbivore_list)
 
@@ -271,14 +285,14 @@ class Map:
                     if herbivore_desired_cell is None:
                         continue
                     else:
-                        print("herbivore_desired_cell: ", herbivore_desired_cell)
-                        herbivore_desired_cell.population_herbivores.append(herbivore)
+                        print("herbivore_desired_cell: ",
+                              herbivore_desired_cell)
+                        herbivore_desired_cell.population_herbivores.append(
+                            herbivore)
                         herbivore_list.remove(herbivore)
                         herbivore.have_migrated = True
 
-
         print("Yearly stage 2 has finished")
-
 
     def yearly_stage3(self):
         """
@@ -303,6 +317,7 @@ class Map:
                         creature.have_mated = False
                         creature.have_migrated = False
                     cell.alter_population()
+
     print("yearly_stage3() has finished")
 
     def yearly_cycle(self):
@@ -312,8 +327,6 @@ class Map:
         # NB! first year none can mate
         self.migration()
         self.yearly_stage3()
-
-
 
 
 if __name__ == "__main__":
@@ -337,5 +350,5 @@ if __name__ == "__main__":
     # print('the adjecent cells to the same cell ([10][10])', test_map.cell_map[10][10].adjecent_cells)
     y, x = test_map.cell_map[10][10].adjecent_cells[0]
     # print(y,x)
-    #test_map.show_map()
-    #print((test_map.landscape_matrix))
+    # test_map.show_map()
+    # print((test_map.landscape_matrix))

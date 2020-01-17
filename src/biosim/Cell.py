@@ -30,14 +30,10 @@ class Cell:
         self.adjacent_cells = []
 
         self.adjacent_cells2 = []
-<<<<<<< HEAD
         self.probability_herbivores = [0, 0, 0, 0]
         # self.probability_carnivores = [0, 0, 0, 0]
 
-=======
         self.adjacent_cells_attractiveness = []
->>>>>>> master
-
         self.F_h = 10
 
         # self.abundance_herbivore = 0
