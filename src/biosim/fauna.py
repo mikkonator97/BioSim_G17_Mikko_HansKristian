@@ -211,7 +211,7 @@ class Herbivore(Fauna):
         """
         Moves the creature to the most eligible adjacent cell on the map.
         """
-        print("migrate function called!")
+        # print("migrate function called!")
         if self.have_migrated is False:
             if self.wants_to_migrate():
                 destination_probabilities = self.get_destination_probabilities()

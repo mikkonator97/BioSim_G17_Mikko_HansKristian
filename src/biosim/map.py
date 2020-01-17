@@ -77,10 +77,7 @@ class Map:
         self.cell_map[x][y].adjacent_cells2 = [(x+1, y),(x, y+1),
                                                (x-1, y),(x, y-1)]
 
-    #def find(self, coordinate_to_find):
-    #    for index in range(len(self.cell_map)):
-    #        if self.cell_map[index].coordinates == coordinate_to_find:
-    #            return index
+
 
     #def show_map(self):
     #    landscape_matrix = np.zeros((self.n_rows, self.n_cols))
@@ -201,13 +198,20 @@ class Map:
 
         for x in range(self.n_rows):
             for y in range(self.n_cols):
-                highest_relevance = []
+                probabilities = [0, 0, 0, 0]
+                propensities = [0, 0, 0, 0]
                 # Yes this is wrong, need to divide by correct amount, now only correct when propensity is equal on all 4 sides.
                 for index in range(len(self.cell_map[x][y].adjacent_cells2)):
                     lambda1 = 1
-                    propensity = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
-                    probability = propensity/(4*propensity)
-                    self.cell_map[x][y].probability_herbivores[index] = probability
+                    propensities[index] = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
+                    print('Propensity[index]: ', index)
+                    #probability = propensity/(4*propensity)
+                    #sum_probabilities += propensity
+
+                if sum(propensities) != 0:
+                    for i in range(3):
+                        probabilities[i] = propensities[i] / sum(propensities)
+                    self.cell_map[x][y].probability_herbivores = probabilities
 
     def select_index_to_move(self, probabilities):
         """
@@ -218,6 +222,7 @@ class Map:
         :param destinations: list
         :return: tuple
         """
+        print(sum(probabilities))
         return np.random.choice([0, 1, 2, 3], p=probabilities)
 
     def move_herbivore(self, move_to, move_from, creature_index):
@@ -301,18 +306,18 @@ class Map:
         for list_of_cells in self.cell_map:
             for cell in list_of_cells:
                 if cell.population_herbivores != []:
-                    print('Antall herbivores her: ', len(cell.population_herbivores))
-                for creature in cell.population_herbivores:
-                    # Lets the creature be able to mate as well.
-                    creature.have_mated = False
-                    creature.fitness = creature.calculate_fitness()
-                cell.ranked_fitness_herbivores()
-                cell.add_fodder()
-                cell.feed_herbivores()
-                # print('Amount of fodder left this year: ', cell.fodder)
-                # OPS! Feed carnivores might need some more funcs
-                # cell.feed_carnivores()
-                cell.mating_season()
+                    #print('Antall herbivores her: ', len(cell.population_herbivores))
+                    for creature in cell.population_herbivores:
+                        # Lets the creature be able to mate as well.
+                        creature.have_mated = False
+                        creature.fitness = creature.calculate_fitness()
+                    cell.ranked_fitness_herbivores()
+                    cell.add_fodder()
+                    cell.feed_herbivores()
+                    # print('Amount of fodder left this year: ', cell.fodder)
+                    # OPS! Feed carnivores might need some more funcs
+                    # cell.feed_carnivores()
+                    cell.mating_season()
 
 
     def yearly_stage_2(self):
@@ -354,6 +359,7 @@ class Map:
         self.yearly_stage1()
         # self.yearly_stage_2()
         # NB! first year none can mate
+        self.migration()
         self.yearly_stage3()
 
 
@@ -415,9 +421,9 @@ if __name__ == "__main__":
                   OOOOOOOOOOOOOOOOOOOOO"""
 
     test_map = Map(map_string)
-    print('f_max in a jungle cell: ', test_map.cell_map[10][10].f_max)
-    print('the adjecent cells to the same cell ([10][10])', test_map.cell_map[10][10].adjecent_cells)
+    # print('f_max in a jungle cell: ', test_map.cell_map[10][10].f_max)
+    # print('the adjecent cells to the same cell ([10][10])', test_map.cell_map[10][10].adjecent_cells)
     y, x = test_map.cell_map[10][10].adjecent_cells[0]
-    print(y,x)
+    # print(y,x)
     #test_map.show_map()
     #print((test_map.landscape_matrix))
