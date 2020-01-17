@@ -95,7 +95,16 @@ class TestMap:
         pass
 
     def test_move(self, map=map):
-        map.move()
+        # map.move()
+        pass
+
+    def test_migration(self, map=map, pop=test):
+        for d in pop:
+            location = d['loc']
+            cell_pop = d['pop']
+            cell_index = map.find(location)
+            for _ in range(len(cell_pop)):
+                map.cell_map[cell_index].add_pop(cell_pop)
 
     def test_get_populations(self, map=map, pop=test):
         """

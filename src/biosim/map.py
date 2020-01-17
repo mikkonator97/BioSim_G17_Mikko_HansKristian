@@ -39,19 +39,19 @@ class Map:
             for col_index in range(self.n_cols):
                 landscape_type = self.map_string_split[row_index][col_index]
                 if landscape_type == 'O':
-                    self.cell_map[row_index][col_index] = Ocean()
+                    self.cell_map[row_index][col_index] = Ocean((row_index, col_index))
                 elif landscape_type == 'M':
-                    self.cell_map[row_index][col_index] = Mountain()
+                    self.cell_map[row_index][col_index] = Mountain((row_index, col_index))
                 elif landscape_type == 'D':
-                    self.cell_map[row_index][col_index] = Desert()
+                    self.cell_map[row_index][col_index] = Desert((row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
                     self.define_adjacent_cells2(row_index, col_index)
                 elif landscape_type == 'S':
-                    self.cell_map[row_index][col_index] = Savannah()
+                    self.cell_map[row_index][col_index] = Savannah((row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
                     self.define_adjacent_cells2(row_index, col_index)
                 else:
-                    self.cell_map[row_index][col_index] = Jungle()
+                    self.cell_map[row_index][col_index] = Jungle((row_index, col_index))
                     self.define_adjacent_cells(row_index, col_index)
                     self.define_adjacent_cells2(row_index, col_index)
 
@@ -77,19 +77,19 @@ class Map:
         self.cell_map[x][y].adjacent_cells2 = [(x+1, y),(x, y+1),
                                                (x-1, y),(x, y-1)]
 
-    def find(self, coordinate_to_find):
-        for index in range(len(self.cell_map)):
-            if self.cell_map[index].coordinate == coordinate_to_find:
-                return index
+    #def find(self, coordinate_to_find):
+    #    for index in range(len(self.cell_map)):
+    #        if self.cell_map[index].coordinates == coordinate_to_find:
+    #            return index
 
-    def show_map(self):
-        landscape_matrix = np.zeros((self.n_rows, self.n_cols))
-        for row_index in range(self.n_rows):
-            for col_index in range(self.n_cols):
-                landscape_matrix[row_index][col_index] = self.cell_map[row_index][col_index].landscape
-        cmap = mpl.colors.ListedColormap(['royalblue', 'grey', 'khaki', 'honeydew', 'forestgreen'])
-        plt.imshow(landscape_matrix, cmap=cmap)
-        plt.show()
+    #def show_map(self):
+    #    landscape_matrix = np.zeros((self.n_rows, self.n_cols))
+    #    for row_index in range(self.n_rows):
+    #        for col_index in range(self.n_cols):
+    #            landscape_matrix[row_index][col_index] = self.cell_map[row_index][col_index].landscape
+    #    cmap = mpl.colors.ListedColormap(['royalblue', 'grey', 'khaki', 'honeydew', 'forestgreen'])
+    #    plt.imshow(landscape_matrix, cmap=cmap)
+    #    plt.show()
 
     # def migrate(self):
     #     """
@@ -173,7 +173,7 @@ class Map:
                     # Perhaps include cell.location?
                     move_from = cell.location
                     # need creature index
-                    move_herbivore(move_to, move_from, creature_index):
+                    self.move_herbivore(move_to, move_from, creature_index)
 
 
 
