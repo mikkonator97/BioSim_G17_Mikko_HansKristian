@@ -160,11 +160,7 @@ class Map:
         self.update_preferred_locations()
         # for cell in self.cell_map:
         for x in range(self.n_rows):
-
-            #for herbivore in cell.population_herbivores:
             for y in range(self.n_cols):
-
-                # for index in range(self.cell_map[x][y].number_herbivores()):
                 index = 0
                 while index < self.cell_map[x][y].number_herbivores():
                     creature = self.cell_map[x][y].population_herbivores[index]
@@ -172,11 +168,12 @@ class Map:
                         print('A creature wants to migrate')
                         # selects a index based on probabilities and possible moves.
                         move_index = self.select_index_to_move(self.cell_map[x][y].probability_herbivores)
-                        move_to = self.cell_map[x][y].adjacent_cells2[move_index]
-                        # Perhaps include cell.location?
-                        move_from = x, y
-                        # need creature index
-                        self.move_herbivore(move_to, move_from, index)
+                        if move_index in [0, 1, 2, 3]:
+                            move_to = self.cell_map[x][y].adjacent_cells2[move_index]
+                            # Perhaps include cell.location?
+                            move_from = x, y
+                            # need creature index
+                            self.move_herbivore(move_to, move_from, index)
                         index -=1
                     index += 1
 
@@ -208,9 +205,11 @@ class Map:
                     #probability = propensity/(4*propensity)
                     #sum_probabilities += propensity
 
+
                 if sum(propensities) != 0:
-                    for i in range(3):
+                    for i in range(len(propensities)):
                         probabilities[i] = propensities[i] / sum(propensities)
+                    print('Pobabilities to move: ', probabilities)
                     self.cell_map[x][y].probability_herbivores = probabilities
 
     def select_index_to_move(self, probabilities):
@@ -222,8 +221,8 @@ class Map:
         :param destinations: list
         :return: tuple
         """
-        print(sum(probabilities))
-        return np.random.choice([0, 1, 2, 3], p=probabilities)
+        if (sum(probabilities)) == 1:
+            return np.random.choice([0, 1, 2, 3], p=probabilities)
 
     def move_herbivore(self, move_to, move_from, creature_index):
         """
