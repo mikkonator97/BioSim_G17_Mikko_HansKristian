@@ -86,8 +86,9 @@ class Map:
         # Will update preferred location to each creature.
         self.update_preferred_locations()
         # for cell in self.cell_map:
-        for x in range(self.n_rows):
-            for y in range(self.n_cols):
+        for y in range(self.n_cols):
+            for x in range(self.n_rows):
+
                 index = 0
                 while index < self.cell_map[x][y].number_herbivores():
                     creature = self.cell_map[x][y].population_herbivores[index]
@@ -97,8 +98,11 @@ class Map:
                         move_index = self.select_index_to_move(self.cell_map[x][y].probability_herbivores)
                         if move_index in [0, 1, 2, 3]:
                             move_to = self.cell_map[x][y].adjacent_cells2[move_index]
+
                             # Perhaps include cell.location?
                             move_from = x, y
+                            print('Moving creature from: ', move_from, ' to: ',
+                                  move_to)
                             # need creature index
                             self.move_herbivore(move_to, move_from, index)
                         index -=1
@@ -234,9 +238,9 @@ class Map:
         """
 
         # print("Yearly stage 2 has started")
-        for row_index in range(self.n_rows):
-            for col_index in range(self.n_cols):
-                herbivore_list = self.cell_map[row_index][col_index].population_herbivores
+        for y in range(self.n_cols):
+            for x in range(self.n_rows):
+                herbivore_list = self.cell_map[x][y].population_herbivores
                 # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
                 # print("herbivore list: ", herbivore_list)
 
