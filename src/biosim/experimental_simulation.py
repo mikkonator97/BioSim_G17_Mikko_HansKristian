@@ -6,6 +6,7 @@ from biosim.map import Map
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import seaborn as sb
 
 __author__ = ""
 __email__ = ""
@@ -120,8 +121,16 @@ class BioSim:
                 x.append(year)
                 #y_carnivores[year] = carns
                 #y_total[year] = total
+        pop_map = np.zeros((self.map.n_rows, self.map.n_cols))
+        map_matrix = np.zeros((self.map.n_rows, self.map.n_cols))
+        for x_cords in range(self.map.n_rows):
+            for y_cords in range(self.map.n_cols):
+                pop_map[x_cords][y_cords] = self.map.cell_map[x_cords][y_cords].number_herbivores()
+                map_matrix[x_cords][y_cords] = self.map.cell_map[x_cords][y_cords].landscape
         self.illustrate(x, y_herbivores)
-
+        island = sb.heatmap(map_matrix)
+        heat_map = sb.heatmap(pop_map)
+        plt.show()
 
     def illustrate(self, x, y):
         plt.plot(x, y)
@@ -197,6 +206,7 @@ if __name__ == '__main__':
 
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[1].age)
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
-    BioSim_test.simulate(400)
+    BioSim_test.simulate(10)
 
     print(BioSim_test.map.cell_map[10][10].adjacent_cells[1])
+a
