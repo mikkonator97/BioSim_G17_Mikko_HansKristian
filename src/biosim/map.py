@@ -6,6 +6,7 @@ __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 from biosim.Cell import Cell, Ocean, Mountain, Desert, Savannah, Jungle
 import biosim.Cell
 import numpy as np
+import math
 
 
 
@@ -123,10 +124,16 @@ class Map:
             for y in range(self.n_cols):
                 probabilities = [0, 0, 0, 0]
                 propensities = [0, 0, 0, 0]
-                # Yes this is wrong, need to divide by correct amount, now only correct when propensity is equal on all 4 sides.
-                for index in range(len(self.cell_map[x][y].adjacent_cells2)):
+                index = 0
+                for adjacent_cell in self.cell_map[x][y].adjacent_cells2:
+                    x_adjacent, y_adjacent = adjacent_cell
                     lambda1 = 1
-                    propensities[index] = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
+                    herbivore_abundance = self.cell_map[x_adjacent][y_adjacent].get_abundance_herbivore()
+                    propensities[index] = math.exp(lambda1 * herbivore_abundance)
+                    index += 1
+                #for index in range(len(self.cell_map[x][y].adjacent_cells2)):
+                #    lambda1 = 1
+                #    propensities[index] = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
                     # print('Propensity[index]: ', index)
                     #probability = propensity/(4*propensity)
                     #sum_probabilities += propensity
