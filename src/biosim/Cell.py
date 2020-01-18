@@ -178,9 +178,9 @@ class Cell:
 
                 kill_probability = np.random.random()
                 if kill_probability < probability_of_successful_hunt:
-                    print("A carnivore has killed: ")
+                    # print("A carnivore has killed: ")
                     herbivore_eaten += carnivore.eat(herbivore.weight, herbivore_eaten)
-                    print("herb_eaten", herbivore_eaten)
+                    # print("herb_eaten", herbivore_eaten)
                     carnivore.calculate_fitness()
                     self.population_herbivores.remove(herbivore)
 

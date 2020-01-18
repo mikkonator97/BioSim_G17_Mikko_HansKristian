@@ -96,7 +96,7 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
-        if species == 'herbivore':
+        if species.lower() == 'herbivore':
             for key in params.keys():
                 getattr(Fauna, key)[0] = params[key]
 
@@ -113,11 +113,14 @@ class BioSim:
         """
         if landscape == 'J':
             for key in params.keys():
-                getattr(Cell.Cell, key)[0] = params[key]
-
-        else:
+                print("key", key)
+                setattr(Cell.Cell, key[4], params[key])
+                print("key has been set")
+        elif landscape == 'S':
             for key in params.keys():
-                getattr(Cell.Cell, key)[1] = params[key]
+                print("key", key)
+                setattr(Cell.Cell, key[3], params[key])
+                print("key has been set")
 
     def simulate(self, num_years, vis_years=1, img_years=None):
         """
@@ -129,6 +132,16 @@ class BioSim:
 
         Image files will be numbered consecutively.
         """
+        current_simulation_year = 0
+        while current_simulation_year < num_years:
+            sim.map.yearly_stage1()
+            # print("    sim.map.yearly_stage1() has been compleated")
+            sim.map.yearly_stage2()
+            # print("    sim.map.yearly_stage2() has been compleated")
+            sim.map.yearly_stage3()
+            # print("    sim.map.yearly_stage3() has been compleated")
+            print("A year has passed")
+            current_simulation_year += 1
 
     def add_population(self, population):
         """
@@ -263,12 +276,11 @@ if __name__ == '__main__':
 
     sim.add_population(population=ini_herbs)
     sim.add_population(population=ini_carns)
+    sim.set_landscape_parameters("J", {"f_max": 700})
+
 
     print("Population has been added")
-
-    sim.map.yearly_stage1()
-    print("    sim.map.yearly_stage1() has been compleated")
-
+    sim.simulate(5)
 
     # for row_index in range(sim.map.n_rows):
     #     for col_index in range(sim.map.n_cols):
@@ -292,14 +304,4 @@ if __name__ == '__main__':
             # else:
             #     sim.map.cell_map[i][j].adjacent_cells_attractiveness = sim.map.cell_map[i][j].attractiveness_herbivore()
             # # print(sim.map.cell_map[i][j].attractiveness_herbivore)
-
-    # for i in range(sim.map.n_rows):
-    #     for j in range(sim.map.n_cols):
-    #         sim.map.cell_map[i][j].send_adjacent_cells_to_fauna()
-    #         # print("adjacent cells were sent to Fauna")
-
-
-    # print(sim.map.cell_map[10][10])
-    # print(sim.map.cell_map[10][10].adjacent_cells)
-  #  print(dir(sim))
 

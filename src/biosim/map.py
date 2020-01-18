@@ -231,9 +231,9 @@ class Map:
                             self.cell_map[row_index][col_index].feed_carnivores()
                         print("All carnivores in this cell have eaten!")
                     self.cell_map[row_index][col_index].mating_season()
-                    print("Mating season over")
+                    # print("Mating season over")
 
-    def yearly_stage_2(self):
+    def yearly_stage2(self):
         """
         Here we will just summon the migration function when its redo.
         The function loops through the map and calls migrate for all the herbivores.
@@ -280,7 +280,7 @@ class Map:
                         herbivore.have_migrated = True
                         print("A creature has migrated")
 
-        print("Yearly stage 2 has finished")
+        # print("Yearly stage 2 has finished")
 
     def yearly_stage3(self):
         """
@@ -302,14 +302,15 @@ class Map:
                         creature.have_migrated = False
                     cell.alter_population()
 
-    print("yearly_stage3() has finished")
+    # print("yearly_stage3() has finished")
 
     def yearly_cycle(self):
         # OPS! some of these functions can be put together
         self.yearly_stage1()
         # self.yearly_stage_2()
         # NB! first year none can mate
-        self.migration()
+        # self.migration()
+        self.yearly_stage2()
         self.yearly_stage3()
 
 
