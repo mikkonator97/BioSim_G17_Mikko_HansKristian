@@ -4,6 +4,7 @@ __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
 import numpy as np
+import math
 
 
 class Fauna:
@@ -316,7 +317,7 @@ class Carnivore(Fauna):
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
         self.weight -= birth_weight * self.xi
         self.have_mated = True
-        # print('A baby has been born')
+        print('A baby carnivore has been born')
         return birth_weight
 
     def migrate(self):

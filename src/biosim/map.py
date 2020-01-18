@@ -235,7 +235,6 @@ class Map:
 
     def yearly_stage2(self):
         """
-        Here we will just summon the migration function when its redo.
         The function loops through the map and calls migrate for all the herbivores.
         :return:
         """
@@ -244,7 +243,7 @@ class Map:
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
                 for cell in self.cell_map[row_index][col_index].adjacent_cells:
-                    cell.adjacent_cells_attractiveness = [
+                    cell.adjacent_cells_herbivore_attractiveness = [
                         self.cell_map[row_index + 1][
                             col_index].attractiveness_herbivore(),
                         self.cell_map[row_index][
@@ -254,16 +253,30 @@ class Map:
                         self.cell_map[row_index][
                             col_index + 1].attractiveness_herbivore()
                     ]
+                    cell.adjacent_cells_carnivore_attractiveness = [
+                        self.cell_map[row_index + 1][
+                            col_index].attractiveness_carnivore(),
+                        self.cell_map[row_index][
+                            col_index - 1].attractiveness_carnivore(),
+                        self.cell_map[row_index - 1][
+                            col_index].attractiveness_carnivore(),
+                        self.cell_map[row_index][
+                            col_index + 1].attractiveness_carnivore()
+                    ]
 
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
                 self.cell_map[row_index][
                     col_index].send_adjacent_cells_to_fauna()
 
+
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
                 herbivore_list = self.cell_map[row_index][
                     col_index].population_herbivores
+                carnivore_list = self.cell_map[row_index][
+                    col_index].population_carnivores
+
                 # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
                 # print("herbivore list: ", herbivore_list)
 
@@ -278,7 +291,22 @@ class Map:
                             herbivore)
                         herbivore_list.remove(herbivore)
                         herbivore.have_migrated = True
-                        print("A creature has migrated")
+                        print("A herbivore has migrated")
+
+                for carnivore in carnivore_list:
+                    carnivore_desired_cell = carnivore.migrate()
+                    # print("herbivore_desired_cell", herbivore_desired_cell)
+                    if carnivore_desired_cell is None:
+                        continue
+                    else:
+                        # print("herbivore_desired_cell: ", herbivore_desired_cell)
+                        carnivore_desired_cell.population_carnivores.append(
+                            carnivore)
+                        carnivore_list.remove(carnivore)
+                        carnivore.have_migrated = True
+                        print("A carnivore has migrated")
+
+
 
         # print("Yearly stage 2 has finished")
 

@@ -113,14 +113,10 @@ class BioSim:
         """
         if landscape == 'J':
             for key in params.keys():
-                print("key", key)
                 setattr(Cell.Cell, key[4], params[key])
-                print("key has been set")
         elif landscape == 'S':
             for key in params.keys():
-                print("key", key)
                 setattr(Cell.Cell, key[3], params[key])
-                print("key has been set")
 
     def simulate(self, num_years, vis_years=1, img_years=None):
         """
@@ -279,8 +275,10 @@ if __name__ == '__main__':
     sim.set_landscape_parameters("J", {"f_max": 700})
 
 
+    sim.simulate(1)
     print("Population has been added")
-    sim.simulate(5)
+    # sim.simulate(5)
+
 
     # for row_index in range(sim.map.n_rows):
     #     for col_index in range(sim.map.n_cols):

@@ -31,7 +31,8 @@ class Cell:
         self.probability_herbivores = [0, 0, 0, 0]
         # self.probability_carnivores = [0, 0, 0, 0]
 
-        self.adjacent_cells_attractiveness = []
+        self.adjacent_cells_herbivore_attractiveness = []
+        self.adjacent_cells_carnivore_attractiveness = []
         self.F_h = 10
 
         # self.abundance_herbivore = 0
@@ -40,32 +41,33 @@ class Cell:
     def send_adjacent_cells_to_fauna(self):
         for creature in self.population_herbivores:
             creature.adjacent_cells = self.adjacent_cells
-            # print("cell adjacent cells", self.adjacent_cells)
-            creature.adjacent_cell_attractiveness_for_herbivores = self.adjacent_cells_attractiveness
-            # print("adjacent_cells_attractiveness", self.adjacent_cells_attractiveness)
+            creature.adjacent_cell_attractiveness_for_herbivores = self.adjacent_cells_herbivore_attractiveness
+        for creature in self.population_carnivores:
+            creature.adjacent_cells = self.adjacent_cells
+            creature.adjacent_cell_attractiveness_for_carnivores = self.adjacent_cells_carnivore_attractiveness
 
-    def get_abundance_herbivore(self):
-        return self.fodder / ((self.number_herbivores() + 1) * self.F_h)
+    # def get_abundance_herbivore(self):
+    #     return self.fodder / ((self.number_herbivores() + 1) * self.F_h)
+    #
+    # def get_abundance_carnivore(self):
+    #     """
+    #     Returns the relative abundance of fodder for carnivores.
+    #     :return:
+    #     """
+    #     return sum(self.population_herbivores.weight) / ((len(self.population_carnivores) + 1) * self.F_h)
 
-    def get_abundance_carnivore(self):
-        """
-        Returns the relative abundance of fodder for carnivores.
-        :return:
-        """
-        return sum(self.population_herbivores.weight) / ((len(self.population_carnivores) + 1) * self.F_h)
-
-    def number_creatures(self):
-        """
-        Returns the total number of creatures in the cell
-        :return: int
-        """
-        return self.number_herbivores() + self.number_carnivores()
+    # def number_creatures(self):
+    #     """
+    #     Returns the total number of creatures in the cell
+    #     :return: int
+    #     """
+    #     return self.number_herbivores() + self.number_carnivores()
 
     def number_of_herbivores(self):
         return len(self.population_herbivores)
 
-    def get_herbivores(self):
-        return self.population_herbivores
+    # def get_herbivores(self):
+    #     return self.population_herbivores
 
     def number_carnivores(self):
         return len(self.population_carnivores)
@@ -92,12 +94,12 @@ class Cell:
         elif self.landscape == 4:
             self.fodder = self.f_max
 
-    def get_adjacent_cells(self):
-        """
-        Returns the coordinates of the adjacent cells.
-        :return:
-        """
-        return self.adjacent_cells
+    # def get_adjacent_cells(self):
+    #     """
+    #     Returns the coordinates of the adjacent cells.
+    #     :return:
+    #     """
+    #     return self.adjacent_cells
 
     def add_pop(self, cell_pop):
         """
@@ -166,7 +168,7 @@ class Cell:
         self.ranked_fitness_carnivores()
         for carnivore in self.population_carnivores:
             herbivore_eaten = 0
-            print("new carnivore")
+            # print("new carnivore")
             for herbivore in self.population_herbivores:
                 if herbivore_eaten >= 50:
                     print("herb_eaten over 50", herbivore_eaten)
@@ -203,6 +205,11 @@ class Cell:
                 # print('---X--------------->', len(self.population_herbivores))
                 self.population_herbivores.append(new_creature)
                 # print('New pop: ', self.number_herbivores())
+        for carnivore in self.population_carnivores:
+            new_creature = (carnivore.birth(self.number_carnivores()))
+            if new_creature != None:
+                # print('---X--------------->', len(self.population_herbivores))
+                self.population_carnivores.append(new_creature)
 
     def ranked_fitness_herbivores(self):
         self.population_herbivores.sort(key=lambda x: x.fitness, reverse=True)
@@ -233,10 +240,10 @@ class Cell:
         :return: float
         """
         food = 0
-        for creature in self.population:
-            if creature.species == 'herbivore':
-                food += creature.weight
-        return food / ((self.number_of_carnivores+1) * f)
+        for creature in self.population_herbivores:
+            food += creature.weight
+        attractiveness = food / ((self.number_carnivores() + 1) * f)
+        return attractiveness
 
     def add_age(self):
         """
