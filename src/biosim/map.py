@@ -175,7 +175,7 @@ class Map:
         x_to, y_to = move_to
         x_from, y_from = move_from
         herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(creature_index)
-        self.cell_map[x_to][x_from].population_herbivores.append(herbivore)
+        self.cell_map[x_to][y_to].population_herbivores.append(herbivore)
 
     def move_to_preferred_location(self):
         """
