@@ -120,8 +120,8 @@ class Map:
         :return:
         """
 
-        for x in range(self.n_rows):
-            for y in range(self.n_cols):
+        for y in range(self.n_cols):
+            for x in range(self.n_rows):
                 probabilities = [0, 0, 0, 0]
                 propensities = [0, 0, 0, 0]
                 index = 0
@@ -144,6 +144,8 @@ class Map:
                         probabilities[i] = propensities[i] / sum(propensities)
                     # print('Pobabilities to move: ', probabilities)
                     self.cell_map[x][y].probability_herbivores = probabilities
+                print('Position: ', x, y)
+                print('Probabilities:', probabilities)
 
     def select_index_to_move(self, probabilities):
         """
