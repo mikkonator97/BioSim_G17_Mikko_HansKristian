@@ -23,6 +23,10 @@ class TestCell:
                    'pop': [{'species': 'Carnivore', 'age': 3, 'weight': 35},
                            {'species': 'Carnivore', 'age': 5, 'weight': 20},
                            {'species': 'Carnivore', 'age': 8, 'weight': 5}]}]
+    carn_list = [{'loc': (4, 4),
+                   'pop': [{'species': 'Carnivore', 'age': 3, 'weight': 35},
+                           {'species': 'Carnivore', 'age': 5, 'weight': 20},
+                           {'species': 'Carnivore', 'age': 8, 'weight': 5}]}]
 
     test = [{'loc': (10, 10),
              'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
@@ -67,7 +71,7 @@ class TestCell:
 
         test_cell = Jungle()
         test_cell.add_pop(cell_pop)
-        assert test_cell.number_creatures() == 6
+        assert test_cell.number_herbivores() == 6
 
     def test_get_number_of_carnivores(self):
         """
@@ -76,7 +80,7 @@ class TestCell:
         :return:
         """
         test_cell = Jungle()
-        num_carnivores = test_cell.number_creatures()
+        num_carnivores = test_cell.number_carnivores()
 
         assert num_carnivores == 0
 
@@ -201,7 +205,7 @@ class TestCell:
         weight2 = []
         for creature in test_cell.population_herbivores:
             weight.append(creature.weight)
-        test_cell.feed_herbivores()
+            test_cell.feed_herbivores(creature)
         assert 24 == test_cell.population_herbivores[0].weight
         for i in range(len(weight)):
             assert weight[i] + 9 == test_cell.population_herbivores[i].weight
@@ -213,8 +217,9 @@ class TestCell:
 
         # Will now test that a creature gets the correct amount of food if
         # Fodder is < 10 also that the rest does not get food.
+        test_creature = test_cell.population_herbivores[0]
         test_cell.fodder = 7
-        test_cell.feed_herbivores()
+        test_cell.feed_herbivores(test_creature)
         assert test_cell.population_herbivores[0].weight == 24 + (7 * 0.9)
         # Will test that the weight on the other creatures is unaltered.
         for i in range(1, len(weight)):
@@ -323,15 +328,33 @@ class TestCell:
         :param :
         :return:
         """
-        assert cell.get_abundance_herbivore() == 16
+        cell.fodder = 800
+        population = 6
+        f = 10
+        test_abundance = cell.fodder / ((population + 1) * f)
+        assert cell.get_abundance_herbivore() == test_abundance
 
-    def test_get_abundance_carnivore(self, cell=test_cell):
+    def test_get_abundance_carnivore(self, cell=test):
         """
         Will test that the correct amount of abundant fodder is returned.
+        Will also test that it is zero if there are no herbivores in the cell.
         :param :
         :return:
         """
-        pass
+        cell_pop = {}
+        test_cell = Jungle()
+        for item in cell:
+            cell_pop = item['pop']
+            test_cell.add_pop(cell_pop)
+
+        assert test_cell.get_abundance_carnivore() == 4
+        test_cell = Jungle()
+        cell = self.carn_list
+        for item in cell:
+            cell_pop = item['pop']
+            test_cell.add_pop(cell_pop)
+        assert test_cell.get_abundance_carnivore() == 0
+
 
 
 
