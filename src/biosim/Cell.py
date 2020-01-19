@@ -63,7 +63,7 @@ class Cell:
     #     """
     #     return self.number_herbivores() + self.number_carnivores()
 
-    def number_of_herbivores(self):
+    def number_herbivores(self):
         return len(self.population_herbivores)
 
     # def get_herbivores(self):
@@ -200,7 +200,7 @@ class Cell:
 
     def mating_season(self):
         for herbivore in self.population_herbivores:
-            new_creature = (herbivore.birth(self.number_of_herbivores()))
+            new_creature = (herbivore.birth(self.number_herbivores()))
             if new_creature != None:
                 # print('---X--------------->', len(self.population_herbivores))
                 self.population_herbivores.append(new_creature)
@@ -228,7 +228,7 @@ class Cell:
         :return: float
         """
         # self.chance_herbivore = self.fodder / ((self.number_of_herbivores()+1) * f)
-        attractiveness = self.fodder / ((self.number_of_herbivores()+1) * f)
+        attractiveness = self.fodder / ((self.number_herbivores() + 1) * f)
         return attractiveness
 
     def attractiveness_carnivore(self, f=50.0):
@@ -300,5 +300,7 @@ class Jungle(Cell):
     def __init__(self):
         super().__init__(coordinates=None, landscape=4, fodder=0)
         self.habitable = True
+        self.coordinates = None
+        self.habitable = habitable
         self.f_max = self.f_max[4]
         self.fodder = self.f_max

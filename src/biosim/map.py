@@ -203,7 +203,7 @@ class Map:
         # code for carrying out feeding and procreation for each cell
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
-                if self.cell_map[row_index][col_index].landscape in {2,3,4}:
+                if self.cell_map[row_index][col_index].landscape in {2, 3, 4}:
                     for creature in self.cell_map[row_index][col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
                         self.cell_map[row_index][col_index].add_fodder()
@@ -218,7 +218,7 @@ class Map:
                             carnivore_creature.fitness = carnivore_creature.calculate_fitness()
                             self.cell_map[row_index][col_index].ranked_fitness_carnivores()
                             self.cell_map[row_index][col_index].feed_carnivores()
-                        print("All carnivores in this cell have eaten!")
+                        # print("All carnivores in this cell have eaten!")
                     self.cell_map[row_index][col_index].mating_season()
                     # print("Mating season over")
 
@@ -246,7 +246,7 @@ class Map:
                             herbivore)
                         herbivore_list.remove(herbivore)
                         herbivore.have_migrated = True
-                        print("A herbivore has migrated")
+                        # print("A herbivore has migrated")
 
                 for carnivore in carnivore_list:
                     carnivore_desired_cell = carnivore.migrate()
@@ -280,7 +280,7 @@ class Map:
             #        print("lose weight has been called")
                     for creature in cell.population_herbivores:
                     #    print("creature", creature)
-                        creature.fitness = creature.calculate_fitness
+                        creature.fitness = creature.calculate_fitness()
                         creature.have_mated = False
                         creature.have_migrated = False
                     cell.alter_population()
