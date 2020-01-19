@@ -161,9 +161,10 @@ class Cell:
         for carnivore in self.population_carnivores:
             herbivore_eaten = 0
             # print("new carnivore")
+
             for herbivore in self.population_herbivores:
                 if herbivore_eaten >= 50:
-                    print("herb_eaten over 50", herbivore_eaten)
+                    # print("herb_eaten over 50", herbivore_eaten)
                     break
 
                 probability_of_successful_hunt = self.successful_hunt(carnivore, herbivore)
