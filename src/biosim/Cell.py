@@ -23,8 +23,10 @@ class Cell:
         self.landscape = landscape
         self.fodder = fodder
         self.population = []
+
         self.population_herbivores = []
         self.population_carnivores = []
+
         self.gamma_herbivore = 0.2
         self.adjacent_cells = []
         self.adjacent_cells2 = []
@@ -94,12 +96,6 @@ class Cell:
         elif self.landscape == 4:
             self.fodder = self.f_max
 
-    # def get_adjacent_cells(self):
-    #     """
-    #     Returns the coordinates of the adjacent cells.
-    #     :return:
-    #     """
-    #     return self.adjacent_cells
 
     def add_pop(self, cell_pop):
         """
@@ -151,11 +147,7 @@ class Cell:
             else:
                 fodder = self.fodder
                 self.fodder = 0
-            # beta = 0.9
-            # print('Creature weighing ', creature.weight,' going in for a snack.')
-            # print('Creatures fitness is ', creature.fitness)
             creature.weight += creature.beta * fodder
-            # print('Creature just ate and gained: ', creature.beta * fodder, ' now weighs: ', creature.weight)
 
     def feed_carnivores(self):
         """
@@ -220,16 +212,15 @@ class Cell:
     def ranked_fitness_carnivores(self):
         self.population_carnivores.sort(key=lambda x: x.fitness, reverse=True)
 
-    def attractiveness_herbivore(self, f=10.0):
+    def get_abundance_herbivore(self, f=10.0):
         """
         Calculates the relative attractiveness for herbivores based on the
         amount of fodder, number of herbivores and their relative appetite.
         :param f: float
         :return: float
         """
-        # self.chance_herbivore = self.fodder / ((self.number_of_herbivores()+1) * f)
-        attractiveness = self.fodder / ((self.number_herbivores() + 1) * f)
-        return attractiveness
+        abundance = self.fodder / ((self.number_herbivores() + 1) * f)
+        return abundance
 
     def attractiveness_carnivore(self, f=50.0):
         """
@@ -301,6 +292,5 @@ class Jungle(Cell):
         super().__init__(coordinates=None, landscape=4, fodder=0)
         self.habitable = True
         self.coordinates = None
-        self.habitable = habitable
         self.f_max = self.f_max[4]
         self.fodder = self.f_max
