@@ -181,8 +181,8 @@ class Fauna:
         :param relative_abundance_of_fodder:
         :return: float
         """
-        propensity = np.exp(self.lambda1 * relative_abundance_of_fodder)
-        print("prop", propensity)
+        propensity = math.exp(self.lambda1 * relative_abundance_of_fodder)
+        # print("prop", propensity)
         return propensity
 
 class Herbivore(Fauna):
@@ -218,9 +218,9 @@ class Herbivore(Fauna):
         # print("migrate function called!")
         if self.have_migrated is False:
             if self.wants_to_migrate():
-                print("Creature wants to migrate")
+                # print("Creature wants to migrate")
                 destination_probabilities = self.get_destination_probabilities()
-                print("destination probabilities: ",destination_probabilities)
+                # print("destination probabilities: ",destination_probabilities)
                 self.desired_cell = np.random.choice(self.adjacent_cells, p=destination_probabilities)
                 # print("index destination: ", self.desired_cell)
                 return self.desired_cell
@@ -232,21 +232,21 @@ class Herbivore(Fauna):
         :return: list
         """
         highest_relevance = []
-        adjacent_cells = self.adjacent_cell_attractiveness_for_herbivores
-        # print(adjacent_cells)
-        print('adjacent cells', adjacent_cells)
         probability_to_move = []
-        if adjacent_cells is None:
+        herb_adjacent_cells = self.adjacent_cell_attractiveness_for_herbivores
+        # print(adjacent_cells)
+        # print('adjacent cells', herb_adjacent_cells)
+        if herb_adjacent_cells is None:
             probability_to_move = [0.25, 0.25, 0.25, 0.25]
             return probability_to_move
         else:
-            for relative_abundance_of_fodder in adjacent_cells:
+            for relative_abundance_of_fodder in herb_adjacent_cells:
                 propensity = self.propensity(relative_abundance_of_fodder)
                 highest_relevance.append(propensity)
-            print("highest relevance: ", highest_relevance)
+            # print("highest relevance: ", highest_relevance)
             for value in highest_relevance:
                 probability_to_move.append(value/sum(highest_relevance))
-            print("probabilities to move: ", probability_to_move)
+            # print("probabilities to move: ", probability_to_move)
             return probability_to_move
 
     def give_birth(self):
@@ -266,8 +266,8 @@ class Herbivore(Fauna):
         """
         This function will let the creature eat.
         """
-        self.weight += 0.9 * fodder_amount
-        # print('Creature just ate and gained: ', 0.9 * fodder_amount)
+        self.weight += self.beta * fodder_amount
+        # print('Creature just ate and gained: ', self.beta * fodder_amount)
 
 
 class Carnivore(Fauna):
@@ -317,7 +317,7 @@ class Carnivore(Fauna):
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
         self.weight -= birth_weight * self.xi
         self.have_mated = True
-        print('A baby carnivore has been born')
+        # print('A baby carnivore has been born')
         return birth_weight
 
     def migrate(self):
@@ -344,7 +344,7 @@ class Carnivore(Fauna):
         highest_relevance = []
         adjacent_cells = self.adjacent_cell_attractiveness_for_carnivores
         # print(adjacent_cells)
-        print('adjacent cells', adjacent_cells)
+        # print('adjacent cells', adjacent_cells)
         probability_to_move = []
         if adjacent_cells is None:
             probability_to_move = [0.25, 0.25, 0.25, 0.25]
@@ -353,8 +353,19 @@ class Carnivore(Fauna):
             for relative_abundance_of_fodder in adjacent_cells:
                 propensity = self.propensity(relative_abundance_of_fodder)
                 highest_relevance.append(propensity)
-            print("highest relevance: ", highest_relevance)
+            # print("highest relevance: ", highest_relevance)
+            """
+            If there are many herbivores in a cell, it might cause infinite 
+            propensity, which gives inf as a value. np.random.choice will
+            then get NaN as a probability which causes error.
+            """
+            for index in range(len(highest_relevance)):
+                if math.isinf(highest_relevance[index]):
+                    highest_relevance[index] = 1000
+            # print("highest relevance: ", highest_relevance)
+
             for value in highest_relevance:
                 probability_to_move.append(value/sum(highest_relevance))
-            print("probabilities to move: ", probability_to_move)
+            # print("probabilities to move: ", probability_to_move)
+            # print("probabilities to move: ", probability_to_move)
             return probability_to_move

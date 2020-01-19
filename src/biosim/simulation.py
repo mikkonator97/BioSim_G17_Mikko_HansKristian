@@ -2,11 +2,12 @@
 
 """
 """
-# from Cell import Cell
 from biosim import Cell
-from biosim.map import Map
 from biosim.fauna import Fauna
 from biosim.map import Map
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sb
 
 __author__ = ""
 __email__ = ""
@@ -75,17 +76,17 @@ class BioSim:
             raise ValueError("Invalid multiline mapstring!")
         else:
             self.island_map = island_map
-            self.ini_pop = ini_pop
             self.seed = seed
             self.ymax_animals = ymax_animals
             self.cmax_animals = cmax_animals
             self.img_base = img_base
             self.img_fmt = img_fmt
             self.map = Map(self.island_map)
+            self.ini_pop = self.add_population(ini_pop)
 
     def initialize(self):
 
-        self.map = Map(self.island_map)
+        # self.map = Map(self.island_map)
         self.map.show_map()
 
 
@@ -129,6 +130,8 @@ class BioSim:
         Image files will be numbered consecutively.
         """
         current_simulation_year = 0
+        x = []
+        y_herbivores = []
         while current_simulation_year < num_years:
             sim.map.yearly_stage1()
             # print("    sim.map.yearly_stage1() has been compleated")
@@ -136,8 +139,29 @@ class BioSim:
             # print("    sim.map.yearly_stage2() has been compleated")
             sim.map.yearly_stage3()
             # print("    sim.map.yearly_stage3() has been compleated")
-            print("A year has passed")
+            print("current_simulation_year", current_simulation_year, " out of ", num_years)
             current_simulation_year += 1
+            herbs, carns, total = self.map.get_populations()
+            y_herbivores.append(herbs)
+            x.append(current_simulation_year)
+            pop_map = np.zeros((self.map.n_rows, self.map.n_cols))
+            map_matrix = np.zeros((self.map.n_rows, self.map.n_cols))
+            for x_cords in range(self.map.n_rows):
+                for y_cords in range(self.map.n_cols):
+                    pop_map[x_cords][y_cords] = self.map.cell_map[x_cords][
+                        y_cords].number_herbivores()
+                    map_matrix[x_cords][y_cords] = self.map.cell_map[x_cords][
+                        y_cords].landscape
+            # self.illustrate(x, y_herbivores)
+            # island = sb.heatmap(map_matrix)
+            heat_map = sb.heatmap(pop_map)
+            plt.show()
+
+    def illustrate(self, x, y):
+        plt.plot(x, y)
+        plt.xlabel('Year')
+        plt.ylabel('Population of herbivores')
+        plt.show()
 
     def add_population(self, population):
         """
@@ -172,7 +196,8 @@ class BioSim:
     @property
     def animal_distribution(self):
         """Pandas DataFrame with animal count per species for each cell on island."""
-        pass
+        df = pd.DataFrame(sim.map.cell_map)
+        pd.DataFrame.plot(df)
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""
@@ -201,7 +226,7 @@ if __name__ == '__main__':
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
 
-    seed = 1
+
 
 
     #
@@ -223,7 +248,7 @@ if __name__ == '__main__':
 
     ini_herbs = [
         {
-            "loc": (10, 10),
+            "loc": (4, 6),
             "pop": [
                 {"species": "Herbivore", "age": 5, "weight": 20}
                 for _ in range(150)
@@ -240,6 +265,7 @@ if __name__ == '__main__':
             ],
         }
     ]
+    seed = 18
     sim = BioSim(str(island_map), ini_herbs, seed)
     # for i in range(sim.map.n_rows):
     #     for j in range(sim.map.n_cols):
@@ -270,16 +296,20 @@ if __name__ == '__main__':
         for j in range(sim.map.n_cols):
             sim.map.define_adjacent_cells(i, j)
 
-    sim.add_population(population=ini_herbs)
-    sim.add_population(population=ini_carns)
-    sim.set_landscape_parameters("J", {"f_max": 700})
+    # sim.add_population(population=ini_herbs)
+    # sim.add_population(population=ini_carns)
+    sim.set_landscape_parameters("J", {"f_max": 800})
 
+    sim.simulate(10)
+    # sim.simulate(100)
+    # sim.add_population(population=ini_carns)
+    # sim.simulate(100)
 
-    sim.simulate(1)
-    print("Population has been added")
-    # sim.simulate(5)
+    # sim.simulate(10)
 
-
+    # for row_index in sim.map.n_rows:
+    #     for col_index in sim.map.n_cols:
+    #
     # for row_index in range(sim.map.n_rows):
     #     for col_index in range(sim.map.n_cols):
     #         for cell in sim.map.cell_map[row_index][col_index].adjacent_cells:
