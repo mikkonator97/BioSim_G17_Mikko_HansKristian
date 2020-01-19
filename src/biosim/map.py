@@ -62,14 +62,6 @@ class Map:
         :param y_coord:
         :return:
         """
-
-
-        """
-        Calculates the coordinates of the adjacent cells.
-        :param x_coord:
-        :param y_coord:
-        :return:
-        """
         self.cell_map[x_coord][y_coord].adjacent_cells2 = [
             (x_coord + 1, y_coord), (x_coord, y_coord + 1),
             (x_coord - 1, y_coord), (x_coord, y_coord - 1)
@@ -168,24 +160,7 @@ class Map:
         herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(creature_index)
         self.cell_map[x_to][y_to].population_herbivores.append(herbivore)
 
-    def move_to_preferred_location(self):
-        """
-        Will extract the creatures that wants to move, and then put them
-        in their new habitat.
-        :return:
-        """
-        for cell in self.cell_map:
-            for herbivore in cell.population_herbivores:
-                if herbivore.wants_to_migrate():
-                    # Selects coordinates based on
-                    x, y = np.random.choice(cell.adjacent_cells,
-                                            p=cell.herbivore_preferrence)
-                    cell_map.population_herbivores.append(list_one.pop(i))
-            for carnivore in cell.population_carnivores:
-                if carnivore.wants_to_migrate():
-                    x, y = np.random.choice(cell.adjacent_cells,
-                                            p=cell.herbivore_preferrence)
-                    cell_map.population_carnivores.append(list_one.pop(i))
+
 
     def get_populations(self):
         herbivores = 0
