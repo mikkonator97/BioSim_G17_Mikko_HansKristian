@@ -258,7 +258,7 @@ if __name__ == '__main__':
 
     ini_carns = [
         {
-            "loc": (10, 10),
+            "loc": (4, 6),
             "pop": [
                 {"species": "Carnivore", "age": 5, "weight": 20}
                 for _ in range(40)
@@ -296,8 +296,8 @@ if __name__ == '__main__':
         for j in range(sim.map.n_cols):
             sim.map.define_adjacent_cells(i, j)
 
-    # sim.add_population(population=ini_herbs)
-    # sim.add_population(population=ini_carns)
+    sim.add_population(population=ini_herbs)
+    sim.add_population(population=ini_carns)
     sim.set_landscape_parameters("J", {"f_max": 800})
 
     sim.simulate(10)

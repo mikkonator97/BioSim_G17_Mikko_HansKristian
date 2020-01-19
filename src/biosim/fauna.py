@@ -181,8 +181,12 @@ class Fauna:
         :param relative_abundance_of_fodder:
         :return: float
         """
-        propensity = math.exp(self.lambda1 * relative_abundance_of_fodder)
-        # print("prop", propensity)
+        try:
+            propensity = math.exp(self.lambda1 * relative_abundance_of_fodder)
+        except OverflowError:
+            print("        except OverflowError")
+            propensity = 1000
+
         return propensity
 
 class Herbivore(Fauna):
