@@ -7,10 +7,6 @@ from biosim.Cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
 from biosim.map import Map
 
 
-
-
-
-
 class TestMap:
     map_string = """\
                   OOOOOOOOOOOOOOOOOOOOO

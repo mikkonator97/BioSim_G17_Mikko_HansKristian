@@ -88,23 +88,15 @@ class Map:
         # for cell in self.cell_map:
         for y in range(self.n_cols):
             for x in range(self.n_rows):
-
                 index = 0
                 while index < self.cell_map[x][y].number_herbivores():
                     creature = self.cell_map[x][y].population_herbivores[index]
                     if creature.wants_to_migrate():
-                        # print('A creature wants to migrate')
-                        # selects a index based on probabilities and possible moves.
                         move_index = self.select_index_to_move(self.cell_map[x][y].probability_herbivores)
                         if move_index in [0, 1, 2, 3]:
                             move_to = self.cell_map[x][y].adjacent_cells2[move_index]
                             move_from = x, y
-
-                            # need creature index
                             if self.cell_map[move_to[0]][move_to[1]].habitable:
-                                print('Moving creature from: ', move_from,
-                                      ' to: ', move_to)
-                                print('Habitable: ', self.cell_map[move_to[0]][move_to[1]].habitable)
                                 self.move_herbivore(move_to, move_from, index)
                         index -=1
                     index += 1
@@ -114,7 +106,6 @@ class Map:
 
     def update_preferred_locations(self):
         """
-        !!! This need some adjustments but works for now.
         Will first update the lucrativeness for each cell.
         This gives the simulated effect that all creatures moves at the same
         time.
@@ -136,21 +127,14 @@ class Map:
                     herbivore_abundance = self.cell_map[x_adjacent][y_adjacent].get_abundance_herbivore()
                     propensities[index] = math.exp(lambda1 * herbivore_abundance)
                     index += 1
-                #for index in range(len(self.cell_map[x][y].adjacent_cells2)):
-                #    lambda1 = 1
-                #    propensities[index] = np.exp(lambda1 * self.cell_map[x][y].get_abundance_herbivore())
-                    # print('Propensity[index]: ', index)
-                    #probability = propensity/(4*propensity)
-                    #sum_probabilities += propensity
-
 
                 if sum(propensities) != 0:
                     for i in range(len(propensities)):
                         probabilities[i] = propensities[i] / sum(propensities)
                     # print('Pobabilities to move: ', probabilities)
                     self.cell_map[x][y].probability_herbivores = probabilities
-                print('Position: ', x, y)
-                print('Probabilities:', probabilities)
+                # print('Position: ', x, y)
+                # print('Probabilities:', probabilities)
 
     def select_index_to_move(self, probabilities):
         """
