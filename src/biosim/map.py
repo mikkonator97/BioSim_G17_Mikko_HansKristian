@@ -248,18 +248,18 @@ class Map:
                         herbivore.have_migrated = True
                         # print("A herbivore has migrated")
 
-                for carnivore in carnivore_list:
-                    carnivore_desired_cell = carnivore.migrate()
-                    # print("herbivore_desired_cell", herbivore_desired_cell)
-                    if carnivore_desired_cell is None:
-                        continue
-                    else:
-                        # print("herbivore_desired_cell: ", herbivore_desired_cell)
-                        carnivore_desired_cell.population_carnivores.append(
-                            carnivore)
-                        carnivore_list.remove(carnivore)
-                        carnivore.have_migrated = True
-                        print("A carnivore has migrated")
+                # for carnivore in carnivore_list:
+                #     carnivore_desired_cell = carnivore.migrate()
+                #     # print("herbivore_desired_cell", herbivore_desired_cell)
+                #     if carnivore_desired_cell is None:
+                #         continue
+                #     else:
+                #         # print("herbivore_desired_cell: ", herbivore_desired_cell)
+                #         carnivore_desired_cell.population_carnivores.append(
+                #             carnivore)
+                #         carnivore_list.remove(carnivore)
+                #         carnivore.have_migrated = True
+                #         print("A carnivore has migrated")
 
 
 
@@ -280,7 +280,7 @@ class Map:
             #        print("lose weight has been called")
                     for creature in cell.population_herbivores:
                     #    print("creature", creature)
-                        creature.fitness = creature.calculate_fitness()
+                    #     creature.fitness = creature.calculate_fitness()
                         creature.have_mated = False
                         creature.have_migrated = False
                     cell.alter_population()

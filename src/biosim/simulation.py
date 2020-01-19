@@ -101,17 +101,17 @@ class BioSim:
         valid_parameters = ['w_birth', 'sigma_birth', 'beta', 'eta', 'a_half'
                             , 'phi_age', 'w_half', 'phi_weigh', 'mu', 'lambda1'
                             , 'gamma', 'zeta', 'xi', 'omega', 'F', 'DeltaPhiMax']
-
-        if (species in valid_species) and (params in valid_parameters):
-            if species.lower() == 'herbivore':
-                for key in params.keys():
-                    getattr(Fauna, key)[0] = params[key]
-
+        species = species.lower()
+        for key in params:
+            if (species.lower() in valid_species) and (key in valid_parameters):
+                if species == 'herbivore':
+                    for key in params.keys():
+                        getattr(Fauna, key)[0] = params[key]
+                else:
+                    for key in params.keys():
+                        getattr(Fauna, key)[1] = params[key]
             else:
-                for key in params.keys():
-                    getattr(Fauna, key)[1] = params[key]
-        raise ValueError
-        print("Illegal animal parameter(s)")
+                raise ValueError("Illegal animal parameter(s)")
 
     def set_landscape_parameters(self, landscape, params):
         """
@@ -120,16 +120,16 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
-
-        if (landscape in {'J', 'S'}) and (params in ['f_max', 'alpha']):
-            if landscape == 'J':
-                for key in params.keys():
-                    setattr(Cell.Cell, key[4], params[key])
+        for key in params:
+            if (landscape in {'J', 'S'}) and (key in ['f_max', 'alpha']):
+                if landscape == 'J':
+                    for key in params.keys():
+                        setattr(Cell.Cell, key[4], params[key])
+                else:
+                    for key in params.keys():
+                        setattr(Cell.Cell, key[3], params[key])
             else:
-                for key in params.keys():
-                    setattr(Cell.Cell, key[3], params[key])
-        raise ValueError
-        print("Illegal landscape parameter(s)")
+                raise ValueError("Illegal landscape parameter(s)")
 
     def simulate(self, num_years, vis_years=1, img_years=None):
         """
