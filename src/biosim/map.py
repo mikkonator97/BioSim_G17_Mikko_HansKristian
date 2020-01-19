@@ -141,7 +141,6 @@ class Map:
         """
         Uses probabilities to choose from destinations.
         NB! Requires 4 adjacent cells, and 4 probabilities to work.
-        !! This should work
         :param probabilities: list
         :param destinations: list
         :return: tuple
@@ -284,7 +283,12 @@ class Map:
                         creature.have_mated = False
                         creature.have_migrated = False
                     cell.alter_population()
-                    print('Average age: ', )
+                    sum_age = 0
+                    for herbivore in cell.population_herbivores:
+                        sum_age += herbivore.age
+                    if len(cell.population_herbivores) != 0:
+                        g = sum_age / len(cell.population_herbivores)
+                        print('Average age: ', g)
 
     # print("yearly_stage3() has finished")
 
