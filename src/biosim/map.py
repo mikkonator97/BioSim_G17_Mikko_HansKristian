@@ -284,6 +284,7 @@ class Map:
                         creature.have_mated = False
                         creature.have_migrated = False
                     cell.alter_population()
+                    print('Average age: ', )
 
     # print("yearly_stage3() has finished")
 
@@ -293,7 +294,7 @@ class Map:
         # self.yearly_stage_2()
         # NB! first year none can mate
         # self.migration()
-        self.yearly_stage2()
+        # self.yearly_stage2()
         self.yearly_stage3()
 
 
