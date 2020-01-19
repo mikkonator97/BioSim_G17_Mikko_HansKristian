@@ -28,10 +28,9 @@ class Cell:
         self.population_carnivores = []
 
         self.gamma_herbivore = 0.2
-        self.adjacent_cells = []
         self.adjacent_cells2 = []
         self.probability_herbivores = [0, 0, 0, 0]
-        # self.probability_carnivores = [0, 0, 0, 0]
+        self.probability_carnivores = [0, 0, 0, 0]
 
         self.adjacent_cells_herbivore_attractiveness = []
         self.adjacent_cells_carnivore_attractiveness = []

@@ -175,19 +175,19 @@ class Fauna:
         return (self.mu * self.fitness) > np.random.random()
 
 
-    def propensity(self, relative_abundance_of_fodder):
-        """
-        Calculates the propensity based on the amount of fodder
-        :param relative_abundance_of_fodder:
-        :return: float
-        """
-        try:
-            propensity = math.exp(self.lambda1 * relative_abundance_of_fodder)
-        except OverflowError:
-            print("        except OverflowError")
-            propensity = 1000
+    #def propensity(self, relative_abundance_of_fodder):
+    #    """
+    #    Calculates the propensity based on the amount of fodder
+    #    :param relative_abundance_of_fodder:
+    #    :return: float
+    #    """
+    #    try:
+    #        propensity = math.exp(self.lambda1 * relative_abundance_of_fodder)
+    #    except OverflowError:
+    #        print("        except OverflowError")
+    #        propensity = 1000
 
-        return propensity
+     #   return propensity
 
 class Herbivore(Fauna):
 

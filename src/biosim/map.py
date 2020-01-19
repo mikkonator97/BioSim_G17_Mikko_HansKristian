@@ -62,14 +62,7 @@ class Map:
         :param y_coord:
         :return:
         """
-        if (x_coord != (0 or self.n_rows - 1)) and (
-                y_coord != (0 or self.n_cols - 1)):
-            self.cell_map[x_coord][y_coord].adjacent_cells = [
-                self.cell_map[x_coord + 1][y_coord],
-                self.cell_map[x_coord][y_coord - 1],
-                self.cell_map[x_coord - 1][y_coord],
-                self.cell_map[x_coord][y_coord + 1]]
-            # print("adj_Cells: ", self.cell_map[x_coord][y_coord].adjacent_cells)
+
 
         """
         Calculates the coordinates of the adjacent cells.
@@ -119,23 +112,36 @@ class Map:
 
         for y in range(self.n_cols-1):
             for x in range(self.n_rows-1):
-                probabilities = [0, 0, 0, 0]
-                propensities = [0, 0, 0, 0]
+                # Setting default values to 0
+                probabilities_herbivores = [0, 0, 0, 0]
+                propensities_herbivores = [0, 0, 0, 0]
+                probabilities_carnivores = [0, 0, 0, 0]
+                propensities_carnivores = [0, 0, 0, 0]
                 index = 0
                 for adjacent_cell in self.cell_map[x][y].adjacent_cells2:
                     x_adjacent, y_adjacent = adjacent_cell
                     lambda1 = 1
+
+                    # Inserting propensity into lists
                     herbivore_abundance = self.cell_map[x_adjacent][y_adjacent].get_abundance_herbivore()
-                    propensities[index] = math.exp(lambda1 * herbivore_abundance)
+                    propensities_herbivores[index] = math.exp(lambda1 * herbivore_abundance)
+
+                    carnivore_abundance = self.cell_map[x_adjacent][y_adjacent].get_abundance_carnivore()
+                    propensities_carnivore[index] = math.exp(lambda1 * carnivore_abundance)
+
                     index += 1
 
-                if sum(propensities) != 0:
-                    for i in range(len(propensities)):
-                        probabilities[i] = propensities[i] / sum(propensities)
-                    # print('Pobabilities to move: ', probabilities)
-                    self.cell_map[x][y].probability_herbivores = probabilities
-                # print('Position: ', x, y)
-                # print('Probabilities:', probabilities)
+                # Turning the propensities into probability
+                if sum(propensities_herbivores) != 0:
+                    for i in range(len(propensities_herbivores)):
+                        probabilities_herbivores[i] = propensities_herbivores[i] / sum(propensities_herbivores)
+                    self.cell_map[x][y].probability_herbivores = probabilities_herbivores
+
+                if sum(propensities_carnivores) != 0:
+                    for i in range(len(propensities_carnivores)):
+                        probabilities_carnivores[i] = propensities_carnivores[i] / sum(propensities_carnivores)
+                    self.cell_map[x][y].probability_carnuvires = probabilities_carnivores
+
 
     def select_index_to_move(self, probabilities):
         """
@@ -295,9 +301,8 @@ class Map:
     def yearly_cycle(self):
         # OPS! some of these functions can be put together
         self.yearly_stage1()
-        # self.yearly_stage_2()
         # NB! first year none can mate
-        # self.migration()
+        self.migration()
         # self.yearly_stage2()
         self.yearly_stage3()
 
