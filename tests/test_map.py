@@ -5,6 +5,7 @@ __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 from biosim.fauna import Fauna
 from biosim.Cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
 from biosim.map import Map
+from biosim.simulation import BioSim
 
 
 class TestMap:
@@ -72,12 +73,16 @@ class TestMap:
 
     def test_doesnt_prefere_unhabitable_cells(self, map=map):
         """
-        Will test that the probability for moving to a unhabitable cell is
-        zero.
+        Will test that a creature will not move to an unhabitable cell.
         :param map: object
         :return:
         """
-        pass
+        test_herb = [{'loc': (1, 1),
+                 'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15}]}]
+
+        sim = BioSim(island_map="OOO\nOJO\nOOO", ini_pop=test_herb, seed=1)
+        sim.map.migration()
+        assert sim.map.cell_map[1][1].number_herbivores() == 1
 
     def test_creature_moves_to_preferred(self, map=map, pop=test):
         """
