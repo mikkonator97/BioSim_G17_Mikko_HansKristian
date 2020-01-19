@@ -39,19 +39,19 @@ class Map:
             for col_index in range(self.n_cols):
                 landscape_type = self.map_string_split[row_index][col_index]
                 if landscape_type == 'O':
-                    self.cell_map[row_index][col_index] = Ocean((row_index, col_index))
+                    self.cell_map[row_index][col_index] = Ocean()
                 elif landscape_type == 'M':
-                    self.cell_map[row_index][col_index] = Mountain((row_index, col_index))
+                    self.cell_map[row_index][col_index] = Mountain()
                 elif landscape_type == 'D':
-                    self.cell_map[row_index][col_index] = Desert((row_index, col_index))
+                    self.cell_map[row_index][col_index] = Desert()
                     self.define_adjacent_cells(row_index, col_index)
                     self.define_adjacent_cells2(row_index, col_index)
                 elif landscape_type == 'S':
-                    self.cell_map[row_index][col_index] = Savannah((row_index, col_index))
+                    self.cell_map[row_index][col_index] = Savannah()
                     self.define_adjacent_cells(row_index, col_index)
                     self.define_adjacent_cells2(row_index, col_index)
                 else:
-                    self.cell_map[row_index][col_index] = Jungle((row_index, col_index))
+                    self.cell_map[row_index][col_index] = Jungle()
                     self.define_adjacent_cells(row_index, col_index)
                     self.define_adjacent_cells2(row_index, col_index)
 
@@ -98,13 +98,14 @@ class Map:
                         move_index = self.select_index_to_move(self.cell_map[x][y].probability_herbivores)
                         if move_index in [0, 1, 2, 3]:
                             move_to = self.cell_map[x][y].adjacent_cells2[move_index]
-
-                            # Perhaps include cell.location?
                             move_from = x, y
-                            print('Moving creature from: ', move_from, ' to: ',
-                                  move_to)
+
                             # need creature index
-                            self.move_herbivore(move_to, move_from, index)
+                            if self.cell_map[move_to[0]][move_to[1]].habitable:
+                                print('Moving creature from: ', move_from,
+                                      ' to: ', move_to)
+                                print('Habitable: ', self.cell_map[move_to[0]][move_to[1]].habitable)
+                                self.move_herbivore(move_to, move_from, index)
                         index -=1
                     index += 1
 
