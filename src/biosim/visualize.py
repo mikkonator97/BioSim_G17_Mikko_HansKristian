@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sb
 import pandas as pd
 
@@ -20,8 +21,11 @@ class Visualize:
         #self.df = pd.DataFrame({'Herbivores': {0: 100},
         #                        'Carnivores': {0: carni}, 'Total': {0: total}})
 
-        self.df = pd.DataFrame({
-        'Herbivore': [herbi], 'Carnivore': [carni]}, index = [0])
+        self.df = pd.DataFrame({'Herbivore': [herbi], 'Carnivore': [carni],
+                               'Total': [total]}, index=[0])
+        # self.df = pd.DataFrame([herbi], columns=['Herbivores', 'Carnivores', 'Total'])
+
+
 
         # self.fig = plt.figure()
 
@@ -38,6 +42,7 @@ class Visualize:
         sb.lineplot(data=self.df, ax=self.axes[0][1])
         # sb.lineplot(x="year", y="population", data=self.df)
         #self.axes[0][1] = df.plot.line()
+        # print(self.df)
         plt.show()
         # sb.boxplot(y="b", x="a", data=df, orient='v', ax=axes[1])
         # sb.boxplot(y="b", x="a", data=df, orient='v', ax=axes[2])
@@ -72,7 +77,10 @@ class Visualize:
     def update(self, herbs, carnis, year):
         self.update_population_statistics(herbs, carnis, year)
         #s elf.axes[0][1].sns(data=self.data)
+        # sb.lineplot(data=self.df, ax=self.axes[0][1])
         sb.lineplot(data=self.df, ax=self.axes[0][1])
+        print(self.df)
+        plt.show()
         print('hei')
         #sb.lineplot(x="year", y="population", data=self.df)
         #plt.show()
@@ -89,7 +97,16 @@ class Visualize:
         :param year: int
         :return:
         """
-        self.df.append({'Herbivore': [herbs], 'Carnivore': [carnis]}, index: year)
+        #row = pd.Series(
+        #    {'Herbivores': herbi, 'Carnivores': carni, 'Total': total}, name=year)
+        total = herbs + carnis
+        row = pd.DataFrame({'Herbivore': [herbs], 'Carnivore': [carnis],
+                               'Total': [total]}, index=[year])
+
+        self.df.append(row)
+        print(row)
+        print(self.df)
+        # self.df.append({'Herbivore': [herbs], 'Carnivore': [carnis]}, index = year)
         # self.year.append(year)
         # self.herbs.append(herbs)
         # self.carnis.append(carnis)
