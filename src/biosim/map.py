@@ -207,6 +207,13 @@ class Map:
                 carnivores += cell.number_carnivores()
         total = herbivores + carnivores
         return herbivores, carnivores, total
+    def reset_mated_migration(self, cell):
+        for creature in cell.population_herbivores:
+            creature.have_mated = False
+            creature.have_migrated = False
+        for creature in cell.population_carnivores:
+            creature.have_mated = False
+            creature.have_migrated = False
 
     def yearly_stage1(self):
         """
@@ -264,9 +271,8 @@ class Map:
                 if cell.landscape in {2, 3, 4}:
                     cell.add_age()
                     cell.lose_weight()
-                    for creature in cell.population_herbivores:
-                        creature.have_mated = False
-                        creature.have_migrated = False
+                    self.reset_mated_migration(cell)
+
                     cell.alter_population()
                     sum_age = 0
                     for herbivore in cell.population_herbivores:
@@ -275,13 +281,13 @@ class Map:
                         g = sum_age / len(cell.population_herbivores)
                         # print('Average age: ', g)
 
-    # def yearly_cycle(self):
+    def yearly_cycle(self):
     #     # OPS! some of these functions can be put together
-    #     self.yearly_stage1()
+        self.yearly_stage1()
     #     # NB! first year none can mate
-    #     self.migration()
+        self.migration()
     #     # self.yearly_stage2()
-    #     self.yearly_stage3()
+        self.yearly_stage3()
 
 
 if __name__ == "__main__":

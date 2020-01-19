@@ -188,6 +188,12 @@ if __name__ == '__main__':
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'carnivore', 'age': 5, 'weight': 40},
+                     {'species': 'carnivore', 'age': 5, 'weight': 40},
+                     {'species': 'carnivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 15, 'weight': 25}]}
             ]
     """
