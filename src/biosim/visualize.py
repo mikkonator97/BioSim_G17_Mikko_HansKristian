@@ -1,14 +1,15 @@
 import matplotlib.pyplot as plt
 import seaborn as sb
 
-class Visulualize:
+class Visualize:
     """
     This class will create the visual aids, then help us updating them.
     """
 
-    def __init__(self, cell_map):
+    def __init__(self, map_matrix):
         plt.subplot(2, 2, 1)
         plt.title('Map of Rossumøya')
+        island = sb.heatmap(map_matrix)
         plt.subplot(2, 2, 2)
         plt.title('Total amount of creatures')
         plt.subplot(2, 2, 3)

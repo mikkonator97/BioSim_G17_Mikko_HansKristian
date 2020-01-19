@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import seaborn as sb
+from visualize import Visualize
 
 __author__ = ""
 __email__ = ""
@@ -57,6 +58,7 @@ class BioSim:
         # Cool stuff
         self.map = Map(self.island_map)
         self.insert_population(ini_pop)
+        self.visualize = Visualize(self.map.map_matrix)
 
     def insert_population(self, population):
         for item in population:
@@ -128,9 +130,9 @@ class BioSim:
                 pop_map[x_cords][y_cords] = self.map.cell_map[x_cords][y_cords].number_herbivores()
                 map_matrix[x_cords][y_cords] = self.map.cell_map[x_cords][y_cords].landscape
         self.illustrate(x, y_herbivores)
-        island = sb.heatmap(map_matrix)
-        heat_map = sb.heatmap(pop_map)
-        plt.show()
+        # island = sb.heatmap(map_matrix)
+        # heat_map = sb.heatmap(pop_map)
+        # plt.show()
 
     def illustrate(self, x, y):
         plt.plot(x, y)

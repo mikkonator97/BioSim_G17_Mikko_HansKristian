@@ -27,6 +27,7 @@ class Map:
         self.n_rows = len(self.map_string_split)
         self.n_cols = len(str(self.map_string_split[0]))
         self.cell_map = np.empty((self.n_rows, self.n_cols), dtype=object)
+        self.map_matrix = np.zeros((self.n_rows, self.n_cols))
         self.create_map()
 
     def create_map(self):
@@ -40,20 +41,22 @@ class Map:
                 landscape_type = self.map_string_split[row_index][col_index]
                 if landscape_type == 'O':
                     self.cell_map[row_index][col_index] = Ocean()
+                    self.map_matrix[row_index][col_index] = 0
                 elif landscape_type == 'M':
                     self.cell_map[row_index][col_index] = Mountain()
+                    self.map_matrix[row_index][col_index] = 1
                 elif landscape_type == 'D':
                     self.cell_map[row_index][col_index] = Desert()
                     self.define_adjacent_cells(row_index, col_index)
-                    # self.define_adjacent_cells2(row_index, col_index)
+                    self.map_matrix[row_index][col_index] = 2
                 elif landscape_type == 'S':
                     self.cell_map[row_index][col_index] = Savannah()
                     self.define_adjacent_cells(row_index, col_index)
-                    # self.define_adjacent_cells2(row_index, col_index)
+                    self.map_matrix[row_index][col_index] = 3
                 else:
                     self.cell_map[row_index][col_index] = Jungle()
                     self.define_adjacent_cells(row_index, col_index)
-                    # self.define_adjacent_cells2(row_index, col_index)
+                    self.map_matrix[row_index][col_index] = 4
 
     def define_adjacent_cells(self, x_coord, y_coord):
         """
