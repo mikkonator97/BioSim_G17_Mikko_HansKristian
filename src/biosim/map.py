@@ -77,18 +77,40 @@ class Map:
         # for cell in self.cell_map:
         for y in range(self.n_cols):
             for x in range(self.n_rows):
-                index = 0
-                while index < self.cell_map[x][y].number_herbivores():
-                    creature = self.cell_map[x][y].population_herbivores[index]
-                    if creature.wants_to_migrate():
-                        move_index = self.select_index_to_move(self.cell_map[x][y].probability_herbivores)
-                        if move_index in [0, 1, 2, 3]:
-                            move_to = self.cell_map[x][y].adjacent_cells2[move_index]
-                            move_from = x, y
-                            if self.cell_map[move_to[0]][move_to[1]].habitable:
-                                self.move_herbivore(move_to, move_from, index)
-                        index -=1
-                    index += 1
+                self.migrate_herbivores(self.cell_map[x][y], x, y)
+                self.migrate_carnivores(self.cell_map[x][y], x, y)
+
+    def migrate_herbivores(self, cell, x, y):
+        index = 0
+        while index < cell.number_herbivores():
+            creature = self.cell_map[x][y].population_herbivores[index]
+            if creature.wants_to_migrate():
+                move_index = self.select_index_to_move(
+                    cell.probability_herbivores)
+                if move_index in [0, 1, 2, 3]:
+                    move_to = cell.adjacent_cells2[move_index]
+                    move_from = x, y
+                    if self.cell_map[move_to[0]][move_to[1]].habitable:
+                        self.move_herbivore(move_to, move_from, index)
+                index -= 1
+            index += 1
+
+    def migrate_carnivores(self, cell, x, y):
+        index = 0
+        while index < cell.number_carnivores():
+            creature = self.cell_map[x][y].population_carnivores[index]
+            if creature.wants_to_migrate():
+                move_index = self.select_index_to_move(
+                    cell.probability_carnivores)
+                if move_index in [0, 1, 2, 3]:
+                    move_to = cell.adjacent_cells2[move_index]
+                    move_from = x, y
+                    if self.cell_map[move_to[0]][move_to[1]].habitable:
+                        self.move_carnivore(move_to, move_from, index)
+                index -= 1
+            index += 1
+
+
 
     def update_preferred_locations(self):
         """
@@ -148,7 +170,6 @@ class Map:
 
     def move_herbivore(self, move_to, move_from, creature_index):
         """
-        !!! This should work
         Moves the herbivore
         :param move_to: tuple
         :param move_from: tuple
@@ -159,6 +180,21 @@ class Map:
         x_from, y_from = move_from
         herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(creature_index)
         self.cell_map[x_to][y_to].population_herbivores.append(herbivore)
+
+    def move_carnivore(self, move_to, move_from, creature_index):
+        """
+        Moves the carnivore
+        :param move_to: tuple
+        :param move_from: tuple
+        :param creature_index: int
+        :return:
+        """
+        x_to, y_to = move_to
+        x_from, y_from = move_from
+        carnivore = self.cell_map[x_from][y_from].population_carnivores.pop(creature_index)
+        self.cell_map[x_to][y_to].population_carnivores.append(carnivore)
+
+
 
 
 
