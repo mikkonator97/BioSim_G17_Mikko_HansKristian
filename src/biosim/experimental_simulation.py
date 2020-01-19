@@ -58,7 +58,9 @@ class BioSim:
         # Cool stuff
         self.map = Map(self.island_map)
         self.insert_population(ini_pop)
-        self.visualize = Visualize(self.map.map_matrix)
+
+        herbi, carni, total = self.map.get_populations()
+        self.visualize = Visualize(self.map.map_matrix, herbi, carni, total)
 
     def insert_population(self, population):
         for item in population:
@@ -121,6 +123,8 @@ class BioSim:
                 herbs, carns, total = self.map.get_populations()
                 y_herbivores.append(herbs)
                 x.append(year)
+                self.visualize.update(herbs, carns, year)
+                print('HALLO')
                 #y_carnivores[year] = carns
                 #y_total[year] = total
         pop_map = np.zeros((self.map.n_rows, self.map.n_cols))
@@ -129,7 +133,8 @@ class BioSim:
             for y_cords in range(self.map.n_cols):
                 pop_map[x_cords][y_cords] = self.map.cell_map[x_cords][y_cords].number_herbivores()
                 map_matrix[x_cords][y_cords] = self.map.cell_map[x_cords][y_cords].landscape
-        self.illustrate(x, y_herbivores)
+
+        # self.illustrate(x, y_herbivores)
         # island = sb.heatmap(map_matrix)
         # heat_map = sb.heatmap(pop_map)
         # plt.show()
@@ -263,6 +268,6 @@ if __name__ == '__main__':
 
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[1].age)
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
-    BioSim_test.simulate(50)
+    BioSim_test.simulate(22)
 
     print(BioSim_test.map.cell_map[10][10].adjacent_cells2[1])
