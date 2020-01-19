@@ -1,8 +1,12 @@
 
-
+import pandas as pd
 from map import Map
 from biosim.fauna import Fauna
 from biosim.map import Map
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import seaborn as sb
 
 __author__ = ""
 __email__ = ""
@@ -101,10 +105,40 @@ class BioSim:
 
         Image files will be numbered consecutively.
         """
+        n = int(num_years / 10)
+        #x = np.linspace(10, num_years, n)
+        x = []
+        y_herbivores = []
+        #y_carnivores = [0] * n
+        #y_total = [0] * n
         for year in range(num_years):
             print('Year: ', year)
             print('Ingoing population: ', self.map.get_populations())
             self.map.yearly_cycle()
+            if year % 10 == 0:
+                herbs, carns, total = self.map.get_populations()
+                y_herbivores.append(herbs)
+                x.append(year)
+                #y_carnivores[year] = carns
+                #y_total[year] = total
+        pop_map = np.zeros((self.map.n_rows, self.map.n_cols))
+        map_matrix = np.zeros((self.map.n_rows, self.map.n_cols))
+        for x_cords in range(self.map.n_rows):
+            for y_cords in range(self.map.n_cols):
+                pop_map[x_cords][y_cords] = self.map.cell_map[x_cords][y_cords].number_herbivores()
+                map_matrix[x_cords][y_cords] = self.map.cell_map[x_cords][y_cords].landscape
+        self.illustrate(x, y_herbivores)
+        island = sb.heatmap(map_matrix)
+        heat_map = sb.heatmap(pop_map)
+        plt.show()
+
+    def illustrate(self, x, y):
+        plt.plot(x, y)
+        plt.xlabel('Year')
+        plt.ylabel('Population of herbivores')
+        plt.show()
+
+
 
 
     @property
@@ -172,6 +206,6 @@ if __name__ == '__main__':
 
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[1].age)
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
-    BioSim_test.simulate(1000)
+    BioSim_test.simulate(100)
 
-    print(BioSim_test.map.cell_map[10][10].adjacent_cells[1])
+    print(BioSim_test.map.cell_map[10][10].adjacent_cells2[1])

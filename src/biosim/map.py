@@ -6,8 +6,8 @@ __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 from biosim.Cell import Cell, Ocean, Mountain, Desert, Savannah, Jungle
 import biosim.Cell
 import numpy as np
-import matplotlib as mpl
-import matplotlib.pyplot as plt
+import math
+
 
 
 class Map:
@@ -39,24 +39,19 @@ class Map:
             for col_index in range(self.n_cols):
                 landscape_type = self.map_string_split[row_index][col_index]
                 if landscape_type == 'O':
-                    self.cell_map[row_index][col_index] = Ocean(
-                        (row_index, col_index))
+                    self.cell_map[row_index][col_index] = Ocean()
                 elif landscape_type == 'M':
-                    self.cell_map[row_index][col_index] = Mountain(
-                        (row_index, col_index))
+                    self.cell_map[row_index][col_index] = Mountain()
                 elif landscape_type == 'D':
-                    self.cell_map[row_index][col_index] = Desert(
-                        (row_index, col_index))
+                    self.cell_map[row_index][col_index] = Desert()
                     self.define_adjacent_cells(row_index, col_index)
                     # self.define_adjacent_cells2(row_index, col_index)
                 elif landscape_type == 'S':
-                    self.cell_map[row_index][col_index] = Savannah(
-                        (row_index, col_index))
+                    self.cell_map[row_index][col_index] = Savannah()
                     self.define_adjacent_cells(row_index, col_index)
                     # self.define_adjacent_cells2(row_index, col_index)
                 else:
-                    self.cell_map[row_index][col_index] = Jungle(
-                        (row_index, col_index))
+                    self.cell_map[row_index][col_index] = Jungle()
                     self.define_adjacent_cells(row_index, col_index)
                     # self.define_adjacent_cells2(row_index, col_index)
 
@@ -95,29 +90,23 @@ class Map:
         # Will update preferred location to each creature.
         self.update_preferred_locations()
         # for cell in self.cell_map:
-        for x in range(self.n_rows):
-            for y in range(self.n_cols):
+        for y in range(self.n_cols):
+            for x in range(self.n_rows):
                 index = 0
                 while index < self.cell_map[x][y].number_herbivores():
                     creature = self.cell_map[x][y].population_herbivores[index]
                     if creature.wants_to_migrate():
-                        # print('A creature wants to migrate')
-                        # selects a index based on probabilities and possible moves.
-                        move_index = self.select_index_to_move(
-                            self.cell_map[x][y].probability_herbivores)
+                        move_index = self.select_index_to_move(self.cell_map[x][y].probability_herbivores)
                         if move_index in [0, 1, 2, 3]:
-                            move_to = self.cell_map[x][y].adjacent_cells2[
-                                move_index]
-                            # Perhaps include cell.location?
+                            move_to = self.cell_map[x][y].adjacent_cells2[move_index]
                             move_from = x, y
-                            # need creature index
-                            self.move_herbivore(move_to, move_from, index)
-                        index -= 1
+                            if self.cell_map[move_to[0]][move_to[1]].habitable:
+                                self.move_herbivore(move_to, move_from, index)
+                        index -=1
                     index += 1
 
     def update_preferred_locations(self):
         """
-        !!! This need some adjustments but works for now.
         Will first update the lucrativeness for each cell.
         This gives the simulated effect that all creatures moves at the same
         time.
@@ -128,24 +117,25 @@ class Map:
         :return:
         """
 
-        for x in range(self.n_rows):
-            for y in range(self.n_cols):
+        for y in range(self.n_cols):
+            for x in range(self.n_rows):
                 probabilities = [0, 0, 0, 0]
                 propensities = [0, 0, 0, 0]
-                # Yes this is wrong, need to divide by correct amount, now only correct when propensity is equal on all 4 sides.
-                for index in range(len(self.cell_map[x][y].adjacent_cells2)):
+                index = 0
+                for adjacent_cell in self.cell_map[x][y].adjacent_cells2:
+                    x_adjacent, y_adjacent = adjacent_cell
                     lambda1 = 1
-                    propensities[index] = np.exp(lambda1 * self.cell_map[x][
-                        y].get_abundance_herbivore())
-                    # print('Propensity[index]: ', index)
-                    # probability = propensity/(4*propensity)
-                    # sum_probabilities += propensity
+                    herbivore_abundance = self.cell_map[x_adjacent][y_adjacent].get_abundance_herbivore()
+                    propensities[index] = math.exp(lambda1 * herbivore_abundance)
+                    index += 1
 
                 if sum(propensities) != 0:
                     for i in range(len(propensities)):
                         probabilities[i] = propensities[i] / sum(propensities)
                     # print('Pobabilities to move: ', probabilities)
                     self.cell_map[x][y].probability_herbivores = probabilities
+                # print('Position: ', x, y)
+                # print('Probabilities:', probabilities)
 
     def select_index_to_move(self, probabilities):
         """
@@ -170,9 +160,8 @@ class Map:
         """
         x_to, y_to = move_to
         x_from, y_from = move_from
-        herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(
-            creature_index)
-        self.cell_map[x_to][x_from].population_herbivores.append(herbivore)
+        herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(creature_index)
+        self.cell_map[x_to][y_to].population_herbivores.append(herbivore)
 
     def move_to_preferred_location(self):
         """
@@ -240,43 +229,9 @@ class Map:
         """
 
         # print("Yearly stage 2 has started")
-        for row_index in range(self.n_rows):
-            for col_index in range(self.n_cols):
-                for cell in self.cell_map[row_index][col_index].adjacent_cells:
-                    cell.adjacent_cells_herbivore_attractiveness = [
-                        self.cell_map[row_index + 1][
-                            col_index].attractiveness_herbivore(),
-                        self.cell_map[row_index][
-                            col_index - 1].attractiveness_herbivore(),
-                        self.cell_map[row_index - 1][
-                            col_index].attractiveness_herbivore(),
-                        self.cell_map[row_index][
-                            col_index + 1].attractiveness_herbivore()
-                    ]
-                    cell.adjacent_cells_carnivore_attractiveness = [
-                        self.cell_map[row_index + 1][
-                            col_index].attractiveness_carnivore(),
-                        self.cell_map[row_index][
-                            col_index - 1].attractiveness_carnivore(),
-                        self.cell_map[row_index - 1][
-                            col_index].attractiveness_carnivore(),
-                        self.cell_map[row_index][
-                            col_index + 1].attractiveness_carnivore()
-                    ]
-
-        for row_index in range(self.n_rows):
-            for col_index in range(self.n_cols):
-                self.cell_map[row_index][
-                    col_index].send_adjacent_cells_to_fauna()
-
-
-        for row_index in range(self.n_rows):
-            for col_index in range(self.n_cols):
-                herbivore_list = self.cell_map[row_index][
-                    col_index].population_herbivores
-                carnivore_list = self.cell_map[row_index][
-                    col_index].population_carnivores
-
+        for y in range(self.n_cols):
+            for x in range(self.n_rows):
+                herbivore_list = self.cell_map[x][y].population_herbivores
                 # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
                 # print("herbivore list: ", herbivore_list)
 
