@@ -124,15 +124,15 @@ class Map:
         :return:
         """
 
-        for y in range(self.n_cols-1):
-            for x in range(self.n_rows-1):
+        for y_coordinate in range(self.n_cols-1):
+            for x_coordinate in range(self.n_rows-1):
                 # Setting default values to 0
                 probabilities_herbivores = [0, 0, 0, 0]
                 propensities_herbivores = [0, 0, 0, 0]
                 probabilities_carnivores = [0, 0, 0, 0]
                 propensities_carnivores = [0, 0, 0, 0]
                 index = 0
-                for adjacent_cell in self.cell_map[x][y].adjacent_cells2:
+                for adjacent_cell in self.cell_map[x_coordinate][y_coordinate].adjacent_cells2:
                     x_adjacent, y_adjacent = adjacent_cell
                     lambda1 = 1
 
@@ -149,12 +149,12 @@ class Map:
                 if sum(propensities_herbivores) != 0:
                     for i in range(len(propensities_herbivores)):
                         probabilities_herbivores[i] = propensities_herbivores[i] / sum(propensities_herbivores)
-                    self.cell_map[x][y].probability_herbivores = probabilities_herbivores
+                    self.cell_map[x_coordinate][y_coordinate].probability_herbivores = probabilities_herbivores
 
                 if sum(propensities_carnivores) != 0:
                     for i in range(len(propensities_carnivores)):
                         probabilities_carnivores[i] = propensities_carnivores[i] / sum(propensities_carnivores)
-                    self.cell_map[x][y].probability_carnuvires = probabilities_carnivores
+                    self.cell_map[x_coordinate][y_coordinate].probability_carnuvires = probabilities_carnivores
 
 
     def select_index_to_move(self, probabilities):
@@ -194,11 +194,11 @@ class Map:
         carnivore = self.cell_map[x_from][y_from].population_carnivores.pop(creature_index)
         self.cell_map[x_to][y_to].population_carnivores.append(carnivore)
 
-
-
-
-
     def get_populations(self):
+        """
+        Returns the number of herbivores, carnivores and the sum of these two.
+        :return: int
+        """
         herbivores = 0
         carnivores = 0
         for list_of_cells in self.cell_map:
@@ -210,6 +210,8 @@ class Map:
 
     def yearly_stage1(self):
         """
+        Yearly stage 1 handles the addition of fodder to each cell, feeding for both species,
+        and procreation of both species.
         Here we wil feed and procreate. Names up for change.
         NB! The order is important. Fodder grows first.
         Used to have feed_map and procreate_map. But put them together.
@@ -240,50 +242,19 @@ class Map:
 
     def yearly_stage2(self):
         """
-        The function loops through the map and calls migrate for all the herbivores.
+        This function calls the migration function which handles the migration for both species.
         :return:
         """
         self.migration()
-        # print("Yearly stage 2 has started")
-        # for y in range(self.n_cols):
-        #     for x in range(self.n_rows):
-        #         herbivore_list = self.cell_map[x][y].population_herbivores
-        #         # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
-        #         # print("herbivore list: ", herbivore_list)
-        #
-        #         for herbivore in herbivore_list:
-        #             herbivore_desired_cell = herbivore.migrate()
-        #             # print("herbivore_desired_cell", herbivore_desired_cell)
-        #             if herbivore_desired_cell is None:
-        #                 continue
-        #             else:
-        #                 # print("herbivore_desired_cell: ", herbivore_desired_cell)
-        #                 herbivore_desired_cell.population_herbivores.append(
-        #                     herbivore)
-        #                 herbivore_list.remove(herbivore)
-        #                 herbivore.have_migrated = True
-        #                 # print("A herbivore has migrated")
 
-                # for carnivore in carnivore_list:
-                #     carnivore_desired_cell = carnivore.migrate()
-                #     # print("herbivore_desired_cell", herbivore_desired_cell)
-                #     if carnivore_desired_cell is None:
-                #         continue
-                #     else:
-                #         # print("herbivore_desired_cell: ", herbivore_desired_cell)
-                #         carnivore_desired_cell.population_carnivores.append(
-                #             carnivore)
-                #         carnivore_list.remove(carnivore)
-                #         carnivore.have_migrated = True
-                #         print("A carnivore has migrated")
-
-
-
-        # print("Yearly stage 2 has finished")
 
     def yearly_stage3(self):
         """
-        4. aging, 5. Loss of weight and 6. Death.
+        This function makes the creatures one year older, causes them to
+        lose weight according to some beta and their current weight,
+        then calculate their fitness before altering the population.
+        Altering population checks if the creature dies based and removes it
+        from the population if that is the case.
         :return:
         """
         for row_index in range(self.n_rows):
@@ -293,10 +264,7 @@ class Map:
                 if cell.landscape in {2, 3, 4}:
                     cell.add_age()
                     cell.lose_weight()
-            #        print("lose weight has been called")
                     for creature in cell.population_herbivores:
-                    #    print("creature", creature)
-                    #     creature.fitness = creature.calculate_fitness()
                         creature.have_mated = False
                         creature.have_migrated = False
                     cell.alter_population()
@@ -305,17 +273,15 @@ class Map:
                         sum_age += herbivore.age
                     if len(cell.population_herbivores) != 0:
                         g = sum_age / len(cell.population_herbivores)
-                        print('Average age: ', g)
+                        # print('Average age: ', g)
 
-    # print("yearly_stage3() has finished")
-
-    def yearly_cycle(self):
-        # OPS! some of these functions can be put together
-        self.yearly_stage1()
-        # NB! first year none can mate
-        self.migration()
-        # self.yearly_stage2()
-        self.yearly_stage3()
+    # def yearly_cycle(self):
+    #     # OPS! some of these functions can be put together
+    #     self.yearly_stage1()
+    #     # NB! first year none can mate
+    #     self.migration()
+    #     # self.yearly_stage2()
+    #     self.yearly_stage3()
 
 
 if __name__ == "__main__":

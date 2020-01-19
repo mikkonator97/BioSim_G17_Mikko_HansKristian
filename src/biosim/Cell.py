@@ -139,7 +139,9 @@ class Cell:
         :return:
         """
         # print('Herbivore weighs: ', creature.weight)
-        if self.fodder > 10:
+        if self.fodder == 0:
+            return
+        elif self.fodder > 10:
             self.fodder -= 10
             fodder = 10
         else:

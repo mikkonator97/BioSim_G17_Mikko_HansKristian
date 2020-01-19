@@ -97,10 +97,10 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
-        valid_species = ['herbivore', 'carnivore']
-        valid_parameters = ['w_birth', 'sigma_birth', 'beta', 'eta', 'a_half'
+        valid_species = {'herbivore', 'carnivore'}
+        valid_parameters = {'w_birth', 'sigma_birth', 'beta', 'eta', 'a_half'
                             , 'phi_age', 'w_half', 'phi_weigh', 'mu', 'lambda1'
-                            , 'gamma', 'zeta', 'xi', 'omega', 'F', 'DeltaPhiMax']
+                            , 'gamma', 'zeta', 'xi', 'omega', 'F', 'DeltaPhiMax'}
         species = species.lower()
         for key in params:
             if (species.lower() in valid_species) and (key in valid_parameters):
@@ -121,7 +121,7 @@ class BioSim:
         :param params: Dict with valid parameter specification for landscape
         """
         for key in params:
-            if (landscape in {'J', 'S'}) and (key in ['f_max', 'alpha']):
+            if (landscape in {'J', 'S'}) and (key in {'f_max', 'alpha'}):
                 if landscape == 'J':
                     for key in params.keys():
                         setattr(Cell.Cell, key[4], params[key])
@@ -147,7 +147,6 @@ class BioSim:
         died_last_year = 0
         while current_simulation_year < num_years:
             print('Ingoing population: ', self.map.get_populations())
-            print("Died last year: ")
             sim.map.yearly_stage1()
             # print("    sim.map.yearly_stage1() has been compleated")
             sim.map.yearly_stage2()
@@ -316,7 +315,7 @@ if __name__ == '__main__':
     # sim.add_population(population=ini_carns)
     sim.set_landscape_parameters("J", {"f_max": 800})
 
-    sim.simulate(100)
+    sim.simulate(2)
     # sim.simulate(100)
     # sim.add_population(population=ini_carns)
     # sim.simulate(100)

@@ -131,7 +131,6 @@ class Fauna:
         """
 
         if self.weight <= 0:
-
             return 0
         else:
             q_pos = 1.0 / (1.0 + math.exp(self.phi_age * (self.age - self.a_half)))
