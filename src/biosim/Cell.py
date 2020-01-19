@@ -133,21 +133,20 @@ class Cell:
                 index -= 1
             index += 1
 
-    def feed_herbivores(self):
+    def feed_herbivores(self, creature):
         """
         For each creature in the population of the cell, fodder is subtracted
         from the cell, and the creature gets an increase in weight.
         :return:
         """
-        for creature in self.population_herbivores:
-            # print('Herbivore weighs: ', creature.weight)
-            if self.fodder > 10:
-                self.fodder -= 10
-                fodder = 10
-            else:
-                fodder = self.fodder
-                self.fodder = 0
-            creature.weight += creature.beta * fodder
+        # print('Herbivore weighs: ', creature.weight)
+        if self.fodder > 10:
+            self.fodder -= 10
+            fodder = 10
+        else:
+            fodder = self.fodder
+            self.fodder = 0
+        creature.weight += creature.beta * fodder
 
     def feed_carnivores(self):
         """

@@ -144,7 +144,10 @@ class BioSim:
         current_simulation_year = 0
         x = []
         y_herbivores = []
+        died_last_year = 0
         while current_simulation_year < num_years:
+            print('Ingoing population: ', self.map.get_populations())
+            print("Died last year: ")
             sim.map.yearly_stage1()
             # print("    sim.map.yearly_stage1() has been compleated")
             sim.map.yearly_stage2()
@@ -153,6 +156,7 @@ class BioSim:
             # print("    sim.map.yearly_stage3() has been compleated")
             print("current_simulation_year", current_simulation_year, " out of ", num_years)
             current_simulation_year += 1
+
             herbs, carns, total = self.map.get_populations()
             y_herbivores.append(herbs)
             x.append(current_simulation_year)
@@ -312,7 +316,7 @@ if __name__ == '__main__':
     # sim.add_population(population=ini_carns)
     sim.set_landscape_parameters("J", {"f_max": 800})
 
-    sim.simulate(50)
+    sim.simulate(100)
     # sim.simulate(100)
     # sim.add_population(population=ini_carns)
     # sim.simulate(100)

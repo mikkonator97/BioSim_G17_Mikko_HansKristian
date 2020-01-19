@@ -117,8 +117,8 @@ class Map:
         :return:
         """
 
-        for y in range(self.n_cols):
-            for x in range(self.n_rows):
+        for y in range(self.n_cols-1):
+            for x in range(self.n_rows-1):
                 probabilities = [0, 0, 0, 0]
                 propensities = [0, 0, 0, 0]
                 index = 0
@@ -204,11 +204,11 @@ class Map:
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
                 if self.cell_map[row_index][col_index].landscape in {2, 3, 4}:
+                    self.cell_map[row_index][col_index].add_fodder()
                     for creature in self.cell_map[row_index][col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
-                        self.cell_map[row_index][col_index].add_fodder()
                         self.cell_map[row_index][col_index].ranked_fitness_herbivores()
-                        self.cell_map[row_index][col_index].feed_herbivores()
+                        self.cell_map[row_index][col_index].feed_herbivores(creature)
                     # Note to self: re-calculate fitness of hervbivores since weight has been increased?
                     for creature in self.cell_map[row_index][col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
@@ -227,26 +227,26 @@ class Map:
         The function loops through the map and calls migrate for all the herbivores.
         :return:
         """
-
+        self.migration()
         # print("Yearly stage 2 has started")
-        for y in range(self.n_cols):
-            for x in range(self.n_rows):
-                herbivore_list = self.cell_map[x][y].population_herbivores
-                # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
-                # print("herbivore list: ", herbivore_list)
-
-                for herbivore in herbivore_list:
-                    herbivore_desired_cell = herbivore.migrate()
-                    # print("herbivore_desired_cell", herbivore_desired_cell)
-                    if herbivore_desired_cell is None:
-                        continue
-                    else:
-                        # print("herbivore_desired_cell: ", herbivore_desired_cell)
-                        herbivore_desired_cell.population_herbivores.append(
-                            herbivore)
-                        herbivore_list.remove(herbivore)
-                        herbivore.have_migrated = True
-                        # print("A herbivore has migrated")
+        # for y in range(self.n_cols):
+        #     for x in range(self.n_rows):
+        #         herbivore_list = self.cell_map[x][y].population_herbivores
+        #         # herbivore_list = self.cell_map[row_index][col_index].get_herbivores()
+        #         # print("herbivore list: ", herbivore_list)
+        #
+        #         for herbivore in herbivore_list:
+        #             herbivore_desired_cell = herbivore.migrate()
+        #             # print("herbivore_desired_cell", herbivore_desired_cell)
+        #             if herbivore_desired_cell is None:
+        #                 continue
+        #             else:
+        #                 # print("herbivore_desired_cell: ", herbivore_desired_cell)
+        #                 herbivore_desired_cell.population_herbivores.append(
+        #                     herbivore)
+        #                 herbivore_list.remove(herbivore)
+        #                 herbivore.have_migrated = True
+        #                 # print("A herbivore has migrated")
 
                 # for carnivore in carnivore_list:
                 #     carnivore_desired_cell = carnivore.migrate()
@@ -284,7 +284,7 @@ class Map:
                         creature.have_mated = False
                         creature.have_migrated = False
                     cell.alter_population()
-                    print('Average age: ', )
+                    # print('Average age: ', )
 
     # print("yearly_stage3() has finished")
 
