@@ -47,9 +47,28 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
+        if self.check_validity_of_string(island_map) is False:
+            raise ValueError("Invalid multiline mapstring!")
+        else:
+            self.island_map = island_map
+            self.seed = seed
+            self.ymax_animals = ymax_animals
+            self.cmax_animals = cmax_animals
+            self.img_base = img_base
+            self.img_fmt = img_fmt
+            self.map = Map(self.island_map)
+            # self.ini_pop = self.add_population(ini_pop)
+            self.add_population(ini_pop)
 
+    def check_validity_of_string(self, map_string):
+        """
+        This function checks if the mapstring is valid according to
+        the project specifications, and returns a boolean.
+        :param map_string: multiline-string
+        :return: boolean
+        """
         valid_landscape = ['O', 'J', 'S', 'D', 'M']
-        temp_lines = island_map.split()
+        temp_lines = map_string.split()
 
         for i in temp_lines[1:]:
             if len(i) != len(temp_lines[0]):
@@ -63,26 +82,14 @@ class BioSim:
             if valid_string is False:
                 break
             else:
-
                 if (line[0] and line[-1]) != 'O':
                     valid_string = False
                     break
                 else:
                     for letter in line:
                         if letter not in valid_landscape:
-                            raise ValueError
-
-        if valid_string is False:
-            raise ValueError("Invalid multiline mapstring!")
-        else:
-            self.island_map = island_map
-            self.seed = seed
-            self.ymax_animals = ymax_animals
-            self.cmax_animals = cmax_animals
-            self.img_base = img_base
-            self.img_fmt = img_fmt
-            self.map = Map(self.island_map)
-            self.ini_pop = self.add_population(ini_pop)
+                            raise ValueError("Invalid landscape")
+        return valid_string
 
     def initialize(self):
 
@@ -104,10 +111,8 @@ class BioSim:
         for key in params:
             if (species in valid_species) and (key in valid_parameters):
                 if species == 'herbivore':
-                    # for key in params.keys():
                     setattr(Herbivore, key, params[key])
                 else:
-                    # for key in params.keys():
                     setattr(Carnivore, key, params[key])
             else:
                 raise ValueError("Illegal animal parameter(s)")
@@ -122,10 +127,8 @@ class BioSim:
         for key in params:
             if (landscape in {'J', 'S'}) and (key in {'f_max', 'alpha'}):
                 if landscape == 'J':
-                    # for key in params.keys():
                     setattr(Cell.Cell, key[4], params[key])
                 else:
-                    # for key in params.keys():
                     setattr(Cell.Cell, key[3], params[key])
             else:
                 raise ValueError("Illegal landscape parameter(s)")
@@ -156,7 +159,6 @@ class BioSim:
         """
         Will take care of the visualisation according to specifications in
         simulation.
-
         :return:
         """
         x = []
