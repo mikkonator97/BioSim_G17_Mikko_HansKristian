@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sb
-import pandas as pd
+
 
 class Visualize:
     """
@@ -13,21 +13,13 @@ class Visualize:
         Creates subplots, and visualizes the map.
         :param map_matrix: list
         """
-        # self.year = []
-        # self.herbs = []
-        # self.carnis = []
-        # self.total = []
+        self.year = [0, 1, 2]
+        self.herbs = [10, 20, 30]
+        self.carnis = [1, 4, 10]
+        self.total = [11, 24, 40]
 
-        #self.df = pd.DataFrame({'Herbivores': {0: 100},
-        #                        'Carnivores': {0: carni}, 'Total': {0: total}})
+        # Might get population for the next year heh
 
-        self.df = pd.DataFrame({'Herbivore': [herbi], 'Carnivore': [carni],
-                               'Total': [total]}, index=[0])
-        # self.df = pd.DataFrame([herbi], columns=['Herbivores', 'Carnivores', 'Total'])
-
-
-
-        # self.fig = plt.figure()
 
         self.fig, self.axes = plt.subplots(figsize=(10, 5), ncols=2, nrows=2)
 
@@ -39,14 +31,16 @@ class Visualize:
         self.axes[1][1].set_title("Carnivore spread", y=y_title_margin)
 
         sb.heatmap(data=map_matrix, ax=self.axes[0][0])
-        sb.lineplot(data=self.df, ax=self.axes[0][1])
-        # sb.lineplot(x="year", y="population", data=self.df)
-        #self.axes[0][1] = df.plot.line()
-        # print(self.df)
+
+        self.axes[0][1].plot(self.year, self.herbs)
+        self.axes[0][1].plot(self.year, self.carnis)
+        self.axes[0][1].plot(self.year, self.total)
+
+
+        # sb.lineplot(data=, ax=self.axes[0][1])
+
+
         plt.show()
-        # sb.boxplot(y="b", x="a", data=df, orient='v', ax=axes[1])
-        # sb.boxplot(y="b", x="a", data=df, orient='v', ax=axes[2])
-        # sb.boxplot(y="b", x="a", data=df, orient='v', ax=axes[3])
 
 
         # self.ax0 = self.fig.add_subplot(221)
@@ -76,16 +70,12 @@ class Visualize:
 
     def update(self, herbs, carnis, year):
         self.update_population_statistics(herbs, carnis, year)
-        #s elf.axes[0][1].sns(data=self.data)
-        # sb.lineplot(data=self.df, ax=self.axes[0][1])
-        sb.lineplot(data=self.df, ax=self.axes[0][1])
-        print(self.df)
+        self.axes[0][1].plot(self.year, self.herbs)
+        self.axes[0][1].plot(self.year, self.carnis)
+        self.axes[0][1].plot(self.year, self.total)
+
         plt.show()
-        print('hei')
-        #sb.lineplot(x="year", y="population", data=self.df)
-        #plt.show()
-        #self.axes[01][1]
-        #self.axes[0][1]
+
 
 
     def update_population_statistics(self, herbs, carnis, year):
@@ -97,22 +87,12 @@ class Visualize:
         :param year: int
         :return:
         """
-        #row = pd.Series(
-        #    {'Herbivores': herbi, 'Carnivores': carni, 'Total': total}, name=year)
-        total = herbs + carnis
-        row = pd.DataFrame({'Herbivore': [herbs], 'Carnivore': [carnis],
-                               'Total': [total]}, index=[year])
+        self.year.append(year)
+        self.herbs.append(herbs)
+        self.carnis.append(carnis)
+        self.total.append(herbs+carnis)
 
-        self.df.append(row)
-        print(row)
-        print(self.df)
-        # self.df.append({'Herbivore': [herbs], 'Carnivore': [carnis]}, index = year)
-        # self.year.append(year)
-        # self.herbs.append(herbs)
-        # self.carnis.append(carnis)
-        # total = herbs + carnis
-        # self.total.append(total)
-        # self.data['year']
+
 
 
 
