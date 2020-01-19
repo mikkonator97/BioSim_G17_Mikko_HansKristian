@@ -220,7 +220,7 @@ class Cell:
         abundance = self.fodder / ((self.number_herbivores() + 1) * f)
         return abundance
 
-    def attractiveness_carnivore(self, f=50.0):
+    def get_abundance_carnivore(self, f=50.0):
         """
         Calculates the relative attractiveness for carnivores based on the
         weight of the herbivores, number of carnivores and their
@@ -231,8 +231,8 @@ class Cell:
         food = 0
         for creature in self.population_herbivores:
             food += creature.weight
-        attractiveness = food / ((self.number_carnivores() + 1) * f)
-        return attractiveness
+        abundance = food / ((self.number_carnivores() + 1) * f)
+        return abundance
 
     def add_age(self):
         """

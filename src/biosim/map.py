@@ -119,7 +119,7 @@ class Map:
                     propensities_herbivores[index] = math.exp(lambda1 * herbivore_abundance)
 
                     carnivore_abundance = self.cell_map[x_adjacent][y_adjacent].get_abundance_carnivore()
-                    propensities_carnivore[index] = math.exp(lambda1 * carnivore_abundance)
+                    propensities_carnivores[index] = math.exp(lambda1 * carnivore_abundance)
 
                     index += 1
 
