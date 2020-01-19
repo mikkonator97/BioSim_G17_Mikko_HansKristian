@@ -97,13 +97,21 @@ class BioSim:
         :param species: String, name of animal species
         :param params: Dict with valid parameter specification for species
         """
-        if species.lower() == 'herbivore':
-            for key in params.keys():
-                getattr(Fauna, key)[0] = params[key]
+        valid_species = ['herbivore', 'carnivore']
+        valid_parameters = ['w_birth', 'sigma_birth', 'beta', 'eta', 'a_half'
+                            , 'phi_age', 'w_half', 'phi_weigh', 'mu', 'lambda1'
+                            , 'gamma', 'zeta', 'xi', 'omega', 'F', 'DeltaPhiMax']
 
-        else:
-            for key in params.keys():
-                getattr(Fauna, key)[1] = params[key]
+        if (species in valid_species) and (params in valid_parameters):
+            if species.lower() == 'herbivore':
+                for key in params.keys():
+                    getattr(Fauna, key)[0] = params[key]
+
+            else:
+                for key in params.keys():
+                    getattr(Fauna, key)[1] = params[key]
+        raise ValueError
+        print("Illegal animal parameter(s)")
 
     def set_landscape_parameters(self, landscape, params):
         """
@@ -112,12 +120,16 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
-        if landscape == 'J':
-            for key in params.keys():
-                setattr(Cell.Cell, key[4], params[key])
-        elif landscape == 'S':
-            for key in params.keys():
-                setattr(Cell.Cell, key[3], params[key])
+
+        if (landscape in {'J', 'S'}) and (params in ['f_max', 'alpha']):
+            if landscape == 'J':
+                for key in params.keys():
+                    setattr(Cell.Cell, key[4], params[key])
+            else:
+                for key in params.keys():
+                    setattr(Cell.Cell, key[3], params[key])
+        raise ValueError
+        print("Illegal landscape parameter(s)")
 
     def simulate(self, num_years, vis_years=1, img_years=None):
         """
@@ -251,7 +263,7 @@ if __name__ == '__main__':
             "loc": (4, 6),
             "pop": [
                 {"species": "Herbivore", "age": 5, "weight": 20}
-                for _ in range(150)
+                for _ in range(6)
             ],
         }
     ]
@@ -296,11 +308,11 @@ if __name__ == '__main__':
         for j in range(sim.map.n_cols):
             sim.map.define_adjacent_cells(i, j)
 
-    sim.add_population(population=ini_herbs)
-    sim.add_population(population=ini_carns)
+    # sim.add_population(population=ini_herbs)
+    # sim.add_population(population=ini_carns)
     sim.set_landscape_parameters("J", {"f_max": 800})
 
-    sim.simulate(10)
+    sim.simulate(50)
     # sim.simulate(100)
     # sim.add_population(population=ini_carns)
     # sim.simulate(100)
