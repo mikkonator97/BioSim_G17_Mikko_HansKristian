@@ -3,7 +3,7 @@
 """
 """
 from biosim import Cell
-from biosim.fauna import Fauna
+from biosim.fauna import Fauna, Herbivore, Carnivore
 from biosim.map import Map
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,14 +15,14 @@ __email__ = ""
 
 class BioSim:
     def __init__(
-        self,
-        island_map,
-        ini_pop,
-        seed,
-        ymax_animals=None,
-        cmax_animals=None,
-        img_base=None,
-        img_fmt="png",
+            self,
+            island_map,
+            ini_pop,
+            seed,
+            ymax_animals=None,
+            cmax_animals=None,
+            img_base=None,
+            img_fmt="png",
     ):
         """
         :param island_map: Multi-line string specifying island geography
@@ -89,7 +89,6 @@ class BioSim:
         # self.map = Map(self.island_map)
         self.map.show_map()
 
-
     def set_animal_parameters(self, species, params):
         """
         Set parameters for animal species.
@@ -99,17 +98,17 @@ class BioSim:
         """
         valid_species = {'herbivore', 'carnivore'}
         valid_parameters = {'w_birth', 'sigma_birth', 'beta', 'eta', 'a_half'
-                            , 'phi_age', 'w_half', 'phi_weigh', 'mu', 'lambda1'
-                            , 'gamma', 'zeta', 'xi', 'omega', 'F', 'DeltaPhiMax'}
+                            , 'phi_age', 'w_half', 'phi_weight', 'mu', 'lambda1'
+                        , 'gamma', 'zeta', 'xi', 'omega', 'F', 'DeltaPhiMax'}
         species = species.lower()
         for key in params:
-            if (species.lower() in valid_species) and (key in valid_parameters):
+            if (species in valid_species) and (key in valid_parameters):
                 if species == 'herbivore':
-                    for key in params.keys():
-                        getattr(Fauna, key)[0] = params[key]
+                    # for key in params.keys():
+                    setattr(Herbivore, key, params[key])
                 else:
-                    for key in params.keys():
-                        getattr(Fauna, key)[1] = params[key]
+                    # for key in params.keys():
+                    setattr(Carnivore, key, params[key])
             else:
                 raise ValueError("Illegal animal parameter(s)")
 
@@ -123,11 +122,11 @@ class BioSim:
         for key in params:
             if (landscape in {'J', 'S'}) and (key in {'f_max', 'alpha'}):
                 if landscape == 'J':
-                    for key in params.keys():
-                        setattr(Cell.Cell, key[4], params[key])
+                    # for key in params.keys():
+                    setattr(Cell.Cell, key[4], params[key])
                 else:
-                    for key in params.keys():
-                        setattr(Cell.Cell, key[3], params[key])
+                    # for key in params.keys():
+                    setattr(Cell.Cell, key[3], params[key])
             else:
                 raise ValueError("Illegal landscape parameter(s)")
 
@@ -142,35 +141,42 @@ class BioSim:
         Image files will be numbered consecutively.
         """
         current_simulation_year = 0
-        x = []
-        y_herbivores = []
-        died_last_year = 0
         while current_simulation_year < num_years:
             print('Ingoing population: ', self.map.get_populations())
-            sim.map.yearly_stage1()
-            # print("    sim.map.yearly_stage1() has been compleated")
-            sim.map.yearly_stage2()
-            # print("    sim.map.yearly_stage2() has been compleated")
-            sim.map.yearly_stage3()
-            # print("    sim.map.yearly_stage3() has been compleated")
-            print("current_simulation_year", current_simulation_year, " out of ", num_years)
+            self.map.yearly_stage1()
+            self.map.yearly_stage2()
+            self.map.yearly_stage3()
+            print("current_simulation_year", current_simulation_year + 1,
+                  " out of ", num_years)
             current_simulation_year += 1
+            if current_simulation_year % vis_years == 0:
+                self.visualization(current_simulation_year)
 
-            herbs, carns, total = self.map.get_populations()
-            y_herbivores.append(herbs)
-            x.append(current_simulation_year)
-            pop_map = np.zeros((self.map.n_rows, self.map.n_cols))
-            map_matrix = np.zeros((self.map.n_rows, self.map.n_cols))
-            for x_cords in range(self.map.n_rows):
-                for y_cords in range(self.map.n_cols):
-                    pop_map[x_cords][y_cords] = self.map.cell_map[x_cords][
-                        y_cords].number_herbivores()
-                    map_matrix[x_cords][y_cords] = self.map.cell_map[x_cords][
-                        y_cords].landscape
-            # self.illustrate(x, y_herbivores)
-            # island = sb.heatmap(map_matrix)
-            heat_map = sb.heatmap(pop_map)
-            plt.show()
+    def visualization(self, current_simulation_year):
+        """
+        Will take care of the visualisation according to specifications in
+        simulation.
+
+        :return:
+        """
+        x = []
+        y_herbivores = []
+        herbs, carns, total = self.map.get_populations()
+        y_herbivores.append(herbs)
+        x.append(current_simulation_year)
+        pop_map = np.zeros((self.map.n_rows, self.map.n_cols))
+        map_matrix = np.zeros((self.map.n_rows, self.map.n_cols))
+        for x_cords in range(self.map.n_rows):
+            for y_cords in range(self.map.n_cols):
+                pop_map[x_cords][y_cords] = self.map.cell_map[x_cords][
+                    y_cords].number_herbivores()
+                map_matrix[x_cords][y_cords] = self.map.cell_map[x_cords][
+                    y_cords].landscape
+        # self.illustrate(x, y_herbivores)
+        # island = sb.heatmap(map_matrix)
+        heat_map = sb.heatmap(pop_map)
+        plt.show()
+        pass
 
     def illustrate(self, x, y):
         plt.plot(x, y)
@@ -191,7 +197,6 @@ class BioSim:
             cell_pop = item['pop']
 
             self.map.cell_map[i][j].add_pop(cell_pop)
-
 
     @property
     def year(self):
@@ -218,6 +223,7 @@ class BioSim:
         """Create MPEG4 movie from visualization images saved."""
         pass
 
+
 if __name__ == '__main__':
     map1 = """\
                   OOOOOOOOOOOOOOOOOOOOO
@@ -241,12 +247,6 @@ if __name__ == '__main__':
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
 
-
-
-
-    #
-    # BioSim_test = BioSim(map_string, test, seed)
-    # BioSim.initialize()
     island_map = """OOOOOOOOOOOOOOOOOOOOO
                     OOOOOOOOSMMMMJJJJJJJO
                     OSSSSSJJJJMMJJJJJJJOO
@@ -282,10 +282,7 @@ if __name__ == '__main__':
     ]
     seed = 18
     sim = BioSim(str(island_map), ini_herbs, seed)
-    # for i in range(sim.map.n_rows):
-    #     for j in range(sim.map.n_cols):
-    #         sim.map.cell_map[i][j].add_fodder()
-    # #print("Cell 10,10 amount of food: ", sim.map.cell_map[10][10].fodder)
+
     sim.set_animal_parameters("Herbivore", {"zeta": 3.2, "xi": 1.8})
     sim.set_animal_parameters(
         "Carnivore",
@@ -307,44 +304,11 @@ if __name__ == '__main__':
             "DeltaPhiMax": 9.0,
         },
     )
-    for i in range(sim.map.n_rows):
-        for j in range(sim.map.n_cols):
-            sim.map.define_adjacent_cells(i, j)
 
     # sim.add_population(population=ini_herbs)
     # sim.add_population(population=ini_carns)
     sim.set_landscape_parameters("J", {"f_max": 800})
 
-    sim.simulate(2)
+    sim.simulate(100)
     # sim.simulate(100)
     # sim.add_population(population=ini_carns)
-    # sim.simulate(100)
-
-    # sim.simulate(10)
-
-    # for row_index in sim.map.n_rows:
-    #     for col_index in sim.map.n_cols:
-    #
-    # for row_index in range(sim.map.n_rows):
-    #     for col_index in range(sim.map.n_cols):
-    #         for cell in sim.map.cell_map[row_index][col_index].adjacent_cells:
-    #             # print("this cells adjacent cells: ", sim.map.cell_map[row_index][col_index].adjacent_cells)
-    #             cell.adjacent_cells_attractiveness = [
-    #                 sim.map.cell_map[row_index + 1][col_index].attractiveness_herbivore(),
-    #                 sim.map.cell_map[row_index][col_index - 1].attractiveness_herbivore(),
-    #                 sim.map.cell_map[row_index - 1][col_index].attractiveness_herbivore(),
-    #                 sim.map.cell_map[row_index][col_index + 1].attractiveness_herbivore()
-    #             ]
-    #         # print("test", cell.adjacent_cells_attractiveness)
-    # for cell in sim.map.cell_map:
-    #     for adj_cell in cell.adjacent_cells:
-    #         if sim.map.cell_map[i][j].landscape == (0 or 1):
-    #             print("landscape", sim.map.cell_map[i][j].landscape)
-                #
-            # if sim.map.cell_map[i][j].landscape == (0 or 1):
-            #     print("landscape", sim.map.cell_map[i][j].landscape)
-            #     sim.map.cell_map[i][j].adjacent_cells_attractiveness.append(0)
-            # else:
-            #     sim.map.cell_map[i][j].adjacent_cells_attractiveness = sim.map.cell_map[i][j].attractiveness_herbivore()
-            # # print(sim.map.cell_map[i][j].attractiveness_herbivore)
-

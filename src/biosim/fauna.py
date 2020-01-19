@@ -85,13 +85,13 @@ class Fauna:
                 return birth_weight
         return 0
 
-
-    def ageing(self):
-        """
-        Increases the creatures age
-        :return:
-        """
-        self.age += 1
+    # remove this function? has a similar in cell
+    # def ageing(self):
+    #     """
+    #     Increases the creatures age
+    #     :return:
+    #     """
+    #     self.age += 1
 
     def get_fitness(self):
         """
