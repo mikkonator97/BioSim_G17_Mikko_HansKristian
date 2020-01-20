@@ -283,18 +283,19 @@ class Map:
                 current_cell = self.cell_map[row_index][col_index]
                 if current_cell.landscape in {2, 3, 4}:
                     current_cell.add_fodder()
+                    # Feed the herbivores
                     for creature in current_cell.population_herbivores:
-                        creature.fitness = creature.calculate_fitness()
+                        #creature.fitness = creature.calculate_fitness()
                         current_cell.ranked_fitness_herbivores()
                         current_cell.feed_herbivores(creature)
 
                     # Re-calculate herbivores fitness since weight increased
-                    for creature in current_cell.population_herbivores:
-                        creature.fitness = creature.calculate_fitness()
-
+                    #for creature in current_cell.population_herbivores:
+                        #creature.fitness = creature.calculate_fitness()
+                    # Feed the carnivores
                     if len(current_cell.population_carnivores) > 0:
                         for carnivore in current_cell.population_carnivores:
-                            carnivore.fitness = carnivore.calculate_fitness()
+                            #carnivore.fitness = carnivore.calculate_fitness()
                             current_cell.ranked_fitness_carnivores()
                             current_cell.feed_carnivores()
                     current_cell.mating_season()
@@ -334,13 +335,13 @@ class Map:
                         g = sum_age / len(cell.population_herbivores)
                         # print('Average age: ', g)
 
-    # def yearly_cycle(self):
+    def yearly_cycle(self):
     # #     # OPS! some of these functions can be put together
-    #     self.yearly_stage1()
+        self.yearly_stage1()
     # #     # NB! first year none can mate
-    #     self.migration()
+        self.migration()
     # #     # self.yearly_stage2()
-    #     self.yearly_stage3()
+        self.yearly_stage3()
 
     def get_population_maps(self):
         """

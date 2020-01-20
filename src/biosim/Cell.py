@@ -154,7 +154,7 @@ class Cell:
                 if kill_probability < probability_of_successful_hunt:
                     herbivore_eaten += \
                         carnivore.eat(herbivore.weight, herbivore_eaten)
-                    carnivore.calculate_fitness()
+                    # carnivore.calculate_fitness()
                     self.population_herbivores.remove(herbivore)
 
     def successful_hunt(self, carnivore, herbivore):
