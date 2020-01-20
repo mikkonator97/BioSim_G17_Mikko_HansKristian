@@ -203,8 +203,8 @@ class BioSim:
 
     def add_population(self, population):
         """
-        Add a population to the island
-
+        Add a population to the island based on dictionary containing location('loc'),
+        and population('pop'). 'pop' contains species, age, and weight of the creature.
         :param population: List of dictionaries specifying population
         """
         for item in population:
@@ -212,31 +212,29 @@ class BioSim:
             i = coordinates[0]
             j = coordinates[1]
             cell_pop = item['pop']
-
+            if self.map.cell_map[i][j].landscape not in {2,3,4}:
+                raise ValueError("The cell is uninhabitable!")
             self.map.cell_map[i][j].add_pop(cell_pop)
 
     def fill_animal_distribution_dataframe(self):
+        """
+        The function fills a pandas dataframe with the number of herbivores
+        and carnivores in each cell.
+        :return: dataframe.
+        """
         herbivores = []
         carnivores = []
         col = [j for _ in range(self.map.n_rows) for j in range(self.map.n_cols)]
         row = [j for j in range(self.map.n_rows) for _ in range(self.map.n_cols)]
 
-        print("row", row)
-        print("col", col)
-        data2 = pd.DataFrame()
         for row_index in range(self.map.n_rows):
             for col_index in range(self.map.n_cols):
                 herbivores.append(self.map.cell_map[row_index][
                                       col_index].number_herbivores())
                 carnivores.append(self.map.cell_map[row_index][
                                       col_index].number_carnivores())
-                # row.append(row_index)
-                # column.append(col_index)
-                # temp_data = pd.DataFrame({'Row': row_index, 'Col': col_index, 'Herbivores': herbivores, 'Carnivores': carnivores})
-                # data2.append(temp_data)
 
         data2 = {'Row': row, 'Col': col, 'Herbivore': herbivores, 'Carnivore': carnivores}
-
         df = pd.DataFrame(data2,
                           columns=['Row', 'Col', 'Herbivore', 'Carnivore'])
         return df
