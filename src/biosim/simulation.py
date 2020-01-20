@@ -3,7 +3,7 @@
 """
 """
 from biosim import Cell
-from biosim.fauna import Fauna, Herbivore, Carnivore
+from biosim.fauna import Herbivore, Carnivore
 from biosim.map import Map
 import matplotlib.pyplot as plt
 import numpy as np
@@ -29,12 +29,16 @@ class BioSim:
         :param island_map: Multi-line string specifying island geography
         :param ini_pop: List of dictionaries specifying initial population
         :param seed: Integer used as random number seed
-        :param ymax_animals: Number specifying y-axis limit for graph showing animal numbers
-        :param cmax_animals: Dict specifying color-code limits for animal densities
-        :param img_base: String with beginning of file name for figures, including path
+        :param ymax_animals: Number specifying y-axis limit for graph
+               showing animal numbers
+        :param cmax_animals: Dict specifying color-code limits for
+               animal densities
+        :param img_base: String with beginning of file name for figures,
+               including path
         :param img_fmt: String with file type for figures, e.g. 'png'
 
-        If ymax_animals is None, the y-axis limit should be adjusted automatically.
+        If ymax_animals is None, the y-axis limit should be adjusted
+        automatically.
 
         If cmax_animals is None, sensible, fixed default values should be used.
         cmax_animals is a dict mapping species names to numbers, e.g.,
@@ -62,14 +66,14 @@ class BioSim:
             self.img_base = img_base
             self.img_fmt = img_fmt
             self.map = Map(self.island_map)
-            # self.ini_pop = self.add_population(ini_pop)
             self.add_population(ini_pop)
-            # self._year = 1
 
     def check_validity_of_string(self, map_string):
         """
         This function checks if the mapstring is valid according to
-        the project specifications, and returns a boolean.
+        the project specifications, that is Ocean cell at the map's edges and
+        no other landscape than Ocean, Jungle, Savannah, Desert and Mountain,
+        and returns a boolean.
         :param map_string: multiline-string
         :return: boolean
         """
@@ -97,11 +101,6 @@ class BioSim:
                             raise ValueError("Invalid landscape")
         return valid_string
 
-    # def initialize(self):
-    #
-    #     # self.map = Map(self.island_map)
-    #     self.map.show_map()
-
     def set_animal_parameters(self, species, params):
         """
         Set parameters for animal species.
@@ -110,9 +109,10 @@ class BioSim:
         :param params: Dict with valid parameter specification for species
         """
         valid_species = {'herbivore', 'carnivore'}
-        valid_parameters = {'w_birth', 'sigma_birth', 'beta', 'eta', 'a_half'
-            , 'phi_age', 'w_half', 'phi_weight', 'mu', 'lambda1'
-            , 'gamma', 'zeta', 'xi', 'omega', 'F', 'DeltaPhiMax'}
+        valid_parameters = ['w_birth', 'sigma_birth', 'beta', 'eta',
+                            'a_half', 'phi_age', 'w_half', 'phi_weight',
+                            'mu', 'lambda1', 'gamma', 'zeta', 'xi',
+                            'omega', 'F', 'DeltaPhiMax']
         species = species.lower()
         for key in params:
             if (species in valid_species) and (key in valid_parameters):
@@ -146,7 +146,8 @@ class BioSim:
 
         :param num_years: number of years to simulate
         :param vis_years: years between visualization updates
-        :param img_years: years between visualizations saved to files (default: vis_years)
+        :param img_years: years between visualizations saved to files
+               (default: vis_years)
 
         Image files will be numbered consecutively.
         """
@@ -164,7 +165,8 @@ class BioSim:
             self._num_animals = total
             self._num_animals_per_species = {'Carnivore': carnivores,
                                              'Herbivore': herbivores}
-            self._animal_distribution = self.fill_animal_distribution_dataframe()
+            self._animal_distribution = \
+                self.fill_animal_distribution_dataframe()
 
             if current_simulation_year % vis_years == 0:
                 self.visualization(current_simulation_year)
@@ -204,8 +206,9 @@ class BioSim:
 
     def add_population(self, population):
         """
-        Add a population to the island based on dictionary containing location('loc'),
-        and population('pop'). 'pop' contains species, age, and weight of the creature.
+        Add a population to the island based on dictionary containing
+        location('loc') and population('pop'). 'pop' contains species, age,
+        and weight of the creature.
         :param population: List of dictionaries specifying population
         """
         for item in population:
@@ -225,8 +228,11 @@ class BioSim:
         """
         herbivores = []
         carnivores = []
-        col = [j for _ in range(self.map.n_rows) for j in range(self.map.n_cols)]
-        row = [j for j in range(self.map.n_rows) for _ in range(self.map.n_cols)]
+        col = [j for _ in range(self.map.n_rows)
+               for j in range(self.map.n_cols)]
+
+        row = [j for j in range(self.map.n_rows)
+               for _ in range(self.map.n_cols)]
 
         for row_index in range(self.map.n_rows):
             for col_index in range(self.map.n_cols):
@@ -235,7 +241,12 @@ class BioSim:
                 carnivores.append(self.map.cell_map[row_index][
                                       col_index].number_carnivores())
 
-        data2 = {'Row': row, 'Col': col, 'Herbivore': herbivores, 'Carnivore': carnivores}
+        data2 = {
+                'Row': row,
+                'Col': col,
+                'Herbivore': herbivores,
+                'Carnivore': carnivores
+        }
         df = pd.DataFrame(data2,
                           columns=['Row', 'Col', 'Herbivore', 'Carnivore'])
         return df
@@ -257,9 +268,12 @@ class BioSim:
 
     @property
     def animal_distribution(self):
-        """Pandas DataFrame with animal count per species for each cell on island."""
+        """
+        Pandas DataFrame with animal count per species for each cell on island.
+        """
         if self._animal_distribution.empty:
-            self._animal_distribution = self.fill_animal_distribution_dataframe()
+            self._animal_distribution = \
+                self.fill_animal_distribution_dataframe()
         return self._animal_distribution
 
     def make_movie(self):
