@@ -163,7 +163,6 @@ class Fauna:
 
     def wants_to_migrate(self):
         """
-        Depends that we already have calculated fitness.
         Returns True if the creature wants to migrate.
         :return: boolean
         """
@@ -191,24 +190,11 @@ class Herbivore(Fauna):
         self.DeltaPhiMax = None
         super().__init__(weight, age)
 
-    def give_birth(self):
-        """
-        This function will calculate the birth weight of the baby
-         and update the weight of the parent.
-        :return: float
-        """
-        birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
-        self.weight -= birth_weight * self.xi
-        self.have_mated = True
-        # print('A baby has been born')
-        return birth_weight
-
     def eat(self, fodder_amount=0):
         """
-        This function will let the creature eat.
+        Creatures gains weight according to food and beta, because of food.
         """
         self.weight += self.beta * fodder_amount
-        # print('Creature just ate and gained: ', self.beta * fodder_amount)
 
 
 class Carnivore(Fauna):
@@ -248,16 +234,3 @@ class Carnivore(Fauna):
         self.weight += self.beta * fodder_amount
         return fodder_amount
         # print('Creature just ate and gained: ', self.beta * fodder_amount)
-
-    # def give_birth(self):
-    #     """
-    #     This function will calculate the birth weight of the baby
-    #      and update the weight of the parent.
-    #     :return: float
-    #     """
-    #     birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
-    #     self.weight -= birth_weight * self.xi
-    #     self.have_mated = True
-    #     # print('A baby carnivore has been born')
-    #     return birth_weight
-    #
