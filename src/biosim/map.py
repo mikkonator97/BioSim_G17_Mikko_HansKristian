@@ -217,6 +217,7 @@ class Map:
                 carnivores += cell.number_carnivores()
         total = herbivores + carnivores
         return herbivores, carnivores, total
+
     def reset_mated_migration(self, cell):
         for creature in cell.population_herbivores:
             creature.have_mated = False
@@ -244,6 +245,7 @@ class Map:
                         creature.fitness = creature.calculate_fitness()
                         self.cell_map[row_index][col_index].ranked_fitness_herbivores()
                         self.cell_map[row_index][col_index].feed_herbivores(creature)
+
                     # Note to self: re-calculate fitness of hervbivores since weight has been increased?
                     for creature in self.cell_map[row_index][col_index].population_herbivores:
                         creature.fitness = creature.calculate_fitness()
