@@ -60,7 +60,7 @@ class BioSim:
         self.insert_population(ini_pop)
 
         herbi, carni, total = self.map.get_populations()
-        # self.visualize = Visualize(self.map)
+        self.visualize = Visualize(self.map)
 
     def insert_population(self, population):
         for item in population:
@@ -123,7 +123,8 @@ class BioSim:
                 herbs, carns, total = self.map.get_populations()
                 y_herbivores.append(herbs)
                 x.append(year)
-                #self.visualize.update(herbs, carns, year, self.map)
+
+                self.visualize.update(herbs, carns, year, self.map)
                 print('HALLO')
                 #y_carnivores[year] = carns
                 #y_total[year] = total
@@ -139,7 +140,7 @@ class BioSim:
         # heat_map = sb.heatmap(pop_map)
         # plt.show()
         # self.visualize.update(herbs, carns, year, self.map)
-        self.visualize = Visualize(self.map)
+
 
     def illustrate(self, x, y):
         plt.plot(x, y)

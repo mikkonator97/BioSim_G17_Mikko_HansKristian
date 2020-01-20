@@ -34,43 +34,25 @@ class Visualize:
 
         sb.heatmap(data=cell_map.map_matrix, ax=self.axes[0][0])
 
-        self.axes[0][1].plot(self.year, self.herbs)
-        self.axes[0][1].plot(self.year, self.carnis)
-        self.axes[0][1].plot(self.year, self.total)
+        # self.axes[0][1].plot(self.year, self.herbs)
+        # self.axes[0][1].plot(self.year, self.carnis)
+        # self.axes[0][1].plot(self.year, self.total)
+
+        self.line1, = plt.plot(self.year, self.herbs)
+        self.line2, = plt.plot(self.year, self.carnis)
+        self.line3, = plt.plot(self.year, self.total)
+
+        self.axes[0][1].imshow()
+
+
 
         cell_map.get_population_maps()
         sb.heatmap(data=cell_map.map_herbivores, ax=self.axes[1][0], cmap="YlGnBu")
         sb.heatmap(data=cell_map.map_carnivores, ax=self.axes[1][1])
 
-        # sb.lineplot(data=, ax=self.axes[0][1])
-        #self.line1 = self.axes[0][1].plot(np.arange(n_steps),
-        #               np.full(n_steps, np.nan), 'b-')[0]
 
 
         plt.show()
-
-
-        # self.ax0 = self.fig.add_subplot(221)
-
-        # self.ax0.title = ('Map of Rossumøya')
-        #self.ax0.sb.heatmap(map_matrix)
-
-        #self.ax1 = self.fig.add_subplot(222)
-        #self.ax2= self.fig.add_subplot(223)
-        #self.ax3 = self.fig.add_subplot(224)
-        # self.map = plt.subplot(2, 2, 1)
-        #plt.title('Map of Rossumøya')
-        #sb.heatmap(map_matrix)
-        ## self.population_statistics = plt.subplot(2, 2, 2)
-        ##plt.subplot(2, 2, 2)
-        #plt.title('Total amount of creatures')
-        #plt.xlabel('Year')
-        #plt.ylabel('Number of creatures')
-        #plt.subplot(2, 2, 3)
-        #plt.title('Spread of Herbivores')
-        #plt.subplot(2, 2, 4)
-        #plt.title('Spread of Carnivores')
-        #plt.show()
 
 
 
@@ -79,18 +61,28 @@ class Visualize:
         #plt.ion()
 
         self.update_population_statistics(herbs, carnis, year)
-        self.axes[0][1].plot(self.year, self.herbs)
-        self.axes[0][1].plot(self.year, self.carnis)
-        self.axes[0][1].plot(self.year, self.total)
+        # self.axes[0][1].plot(self.year, self.herbs)
+        # self.axes[0][1].plot(self.year, self.carnis)
+        # self.axes[0][1].plot(self.year, self.total)
 
         #sb.heatmap(data=cell_map.map_herbivores, ax=self.axes[1][0], cmap="YlGnBu")
         #sb.heatmap(data=cell_map.map_herbivores, ax=self.axes[1][1])
 
+        # self.axes[1][0].set_data(cell_map.map_herbivores)
 
+
+        # self.axes[0][1].set_data(herbs)
+
+
+        # plot values against indices, use autoscale_view and relim to readjust the axes
+        self.line1.set_data(self.year, self.herbs)
+        self.line2.set_data(self.year, self.carnis)
+        self.line3.set_data(self.year, self.total)
+
+        plt.draw()
         plt.pause(1e-6)
 
         print('should plot...', self.herbs)
-
 
 
     def update_population_statistics(self, herbs, carnis, year):
