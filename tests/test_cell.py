@@ -1,4 +1,4 @@
-from biosim.fauna import Fauna
+from biosim.fauna import Fauna, Herbivore, Carnivore
 from biosim.Cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
 import numpy as np
 
@@ -45,8 +45,8 @@ class TestCell:
                       {'species': 'herbivore', 'age': 40, 'weight': 43},
                       {'species': 'herbivore', 'age': 15, 'weight': 25}]}
              ]
-
-    def test_add_population(self, test=test):
+    test_cell = Jungle()
+    def test_add_pop(self, test=test):
         """
         Will test that we can add a population to the single cell.
         :param test:
@@ -60,20 +60,7 @@ class TestCell:
         test_cell.add_pop(cell_pop)
         assert test_cell.number_herbivores() == 6
 
-    def test_get_creatures(self, test=test):
-        """
-        Test that the correct number of animals are returned
-        :return:
-        """
-        cell_pop = {}
-        for item in test:
-            cell_pop = item['pop']
-
-        test_cell = Jungle()
-        test_cell.add_pop(cell_pop)
-        assert test_cell.number_herbivores() == 6
-
-    def test_get_number_of_carnivores(self):
+    def test_number_carnivores(self):
         """
         Test that the correct number of carnivores are returned.
         Currently checks that the empty cell contains 0 carnivores.
@@ -81,20 +68,24 @@ class TestCell:
         """
         test_cell = Jungle()
         num_carnivores = test_cell.number_carnivores()
-
         assert num_carnivores == 0
 
-    def test_get_number_of_herbivores(self, test=test):
+        for item in self.carn_list:
+            cell_pop = item['pop']
+        test_cell.add_pop(cell_pop)
+        num_carnivores = test_cell.number_carnivores()
+        assert num_carnivores == 3
+
+    def test_number_herbivores(self, test=test):
         """
         Test that the correct number of herbivores are returned
         :return:
         """
         cell_pop = {}
-        for item in test:
-            cell_pop = item['pop']
-
         test_cell = Jungle()
-        test_cell.add_pop(cell_pop)
+        for item in self.fauna_list:
+            cell_pop = item['pop']
+            test_cell.add_pop(cell_pop)
         assert test_cell.number_herbivores() == 6
 
     def test_add_fodder(self):
@@ -109,7 +100,6 @@ class TestCell:
         test_jungle.fodder = 0.0
         test_jungle.add_fodder()
         assert test_jungle.fodder == 800.0
-
         test_savannah = Savannah()
         assert test_savannah.fodder == 300.0
         test_savannah.fodder = 0
@@ -118,8 +108,14 @@ class TestCell:
         test_savannah.add_fodder()
         assert test_savannah.fodder == 153.0
 
+    def test_get_fodder(self):
+        """ Test that get_fodder returns the correct amount of fodder. """
+        test_jungle = Jungle()
+        test_jungle.fodder = 800.0
+        assert test_jungle.get_fodder() == 800
 
     def test_habitability(self):
+        """Test that the cells get correct habitability."""
         test_jungle = Jungle()
         test_savannah = Savannah()
         test_desert = Desert()
@@ -130,43 +126,6 @@ class TestCell:
         assert test_desert.habitable
         assert not test_ocean.habitable
         assert not test_mountain.habitable
-
-    # def test_add_fodder(self):
-    #     """
-    #     Test that fodder can be added to the cell
-    #     :return:
-    #     """
-    #     fodder_test = Cell((2, 2), 'J', fodder=300)
-    #     amount_of_fodder = fodder_test.get_fodder()
-    #     assert amount_of_fodder is not None
-    #     # pass
-
-    def test_mating_season(self, test=test):
-        """
-        Test that population can be added to the cell
-        :return:
-        """
-        cell_pop = {}
-        for item in test:
-            cell_pop = item['pop']
-        test_cell = Jungle()
-        test_cell.add_pop(cell_pop)
-        test_cell.mating_season()
-        assert test_cell.number_herbivores() != 6
-        # Will test that the creature only mates if they whey enough.
-        for creature in test_cell.population_herbivores:
-            creature.have_mated = False
-        test_cell.mating_season()
-        assert test_cell.number_herbivores() == 10
-        # Now I want to test that they can procreate next year.
-        for creature in test_cell.population_herbivores:
-            creature.weight += 20
-        test_cell.mating_season()
-        assert test_cell.number_herbivores() != 10
-        # Now I want to test that the creature only mates once a year.
-        # The population should now remain 16.
-        test_cell.mating_season()
-        assert test_cell.number_herbivores() == 16
 
     def test_ranked_fitness(self, test=test2):
         """
@@ -181,6 +140,21 @@ class TestCell:
         test_cell = Jungle()
         test_cell.add_pop(cell_pop)
         test_cell.ranked_fitness_herbivores()
+        for i in range(test_cell.number_herbivores() - 1):
+            fitness1 = test_cell.population_herbivores[i].fitness
+            fitness2 = test_cell.population_herbivores[i + 1].fitness
+            assert fitness1 > fitness2
+        test_cell.ranked_fitness_herbivores_weakest()
+        for i in range(test_cell.number_herbivores() - 1):
+            fitness1 = test_cell.population_herbivores[i].fitness
+            fitness2 = test_cell.population_herbivores[i + 1].fitness
+            assert fitness1 < fitness2
+        cell_pop = {}
+        for item in self.carn_list:
+            cell_pop = item['pop']
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+        test_cell.ranked_fitness_carnivores()
         for i in range(test_cell.number_herbivores() - 1):
             fitness1 = test_cell.population_herbivores[i].fitness
             fitness2 = test_cell.population_herbivores[i + 1].fitness
@@ -225,7 +199,6 @@ class TestCell:
         for i in range(1, len(weight)):
             assert test_cell.population_herbivores[i].weight == weight2[i]
 
-
     def test_feed_carnivore(self):
         """
         This function will test that the carnivore stops eating if it has eaten 50 units of fodder,
@@ -233,6 +206,145 @@ class TestCell:
         :return:
         """
         pass
+
+    def test_successfull_hunt(self):
+        """
+        Will test that a successfull hunt returns correct probability
+        """
+        test_cell = Jungle()
+        test_herbivore = Herbivore(weight=20, age=5)
+        test_herbivore.calculate_fitness()
+        test_carnivore = Carnivore(weight=10, age=80)
+        test_carnivore.calculate_fitness()
+        hunt = test_cell.successful_hunt(test_carnivore, test_herbivore)
+        assert hunt == 0
+        test_cell = Jungle()
+        test_herbivore = Herbivore(weight=20, age=5)
+        test_herbivore.calculate_fitness()
+        test_carnivore = Carnivore(weight=10, age=20)
+        test_carnivore.calculate_fitness()
+        hunt = test_cell.successful_hunt(test_carnivore, test_herbivore)
+        assert 1 > hunt > 0
+        test_cell = Jungle()
+        test_herbivore = Herbivore(weight=150, age=100)
+        test_herbivore.calculate_fitness()
+        test_carnivore = Carnivore(weight=3, age=1)
+        test_carnivore.calculate_fitness()
+        hunt = test_cell.successful_hunt(test_carnivore, test_herbivore)
+        assert hunt < 0.05
+
+    def test_alter_population(self, test=test):
+        """
+        Will test that the animals die in correct fashion. This test is heavily
+        dependent on Fauna.death. The randomness comes from that funcion. To
+        test alter_population, we insert weight 0 to make sure the creature
+        will die. The rest is up to the Fauna.deat() funtion.
+        :param test:
+        :return:
+        """
+        cell_pop = {}
+        for item in test:
+            cell_pop = item['pop']
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+
+        for creature in test_cell.population_herbivores:
+            creature.weight = 0
+        test_cell.alter_population()
+        assert test_cell.number_herbivores() == 0
+
+    def test_mating_season(self, test=test):
+        """
+        Test that population can be added to the cell
+        :return:
+        """
+        cell_pop = {}
+        for item in test:
+            cell_pop = item['pop']
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+        test_cell.mating_season()
+        assert test_cell.number_herbivores() != 6
+        # Will test that the creature only mates if they whey enough.
+        for creature in test_cell.population_herbivores:
+            creature.have_mated = False
+        test_cell.mating_season()
+        assert test_cell.number_herbivores() == 10
+        # Now I want to test that they can procreate next year.
+        for creature in test_cell.population_herbivores:
+            creature.weight += 20
+        test_cell.mating_season()
+        assert test_cell.number_herbivores() != 10
+        # Now I want to test that the creature only mates once a year.
+        # The population should now remain 16.
+        test_cell.mating_season()
+        assert test_cell.number_herbivores() == 16
+
+    def test_get_abundance_herbivore(self):
+        """
+        Will test that the correct amount of abundant fodder is returned.
+        """
+        cell_pop = {}
+        cell = Jungle()
+        for item in self.fauna_list:
+            cell_pop = item['pop']
+            cell.add_pop(cell_pop)
+        cell.fodder = 800
+        cell.number_herbivores()
+        population = 6
+        f = 10
+        test_abundance = cell.fodder / ((population + 1) * f)
+        assert cell.get_abundance_herbivore() == test_abundance
+
+    def test_get_abundance_carnivore(self, cell=test):
+        """
+        Will test that the correct amount of abundant fodder is returned.
+        Will also test that it is zero if there are no herbivores in the cell.
+        :param :
+        :return:
+        """
+        cell_pop = {}
+        test_cell = Jungle()
+        for item in cell:
+            cell_pop = item['pop']
+            test_cell.add_pop(cell_pop)
+
+        assert test_cell.get_abundance_carnivore() == 4
+        test_cell = Jungle()
+        cell = self.carn_list
+        for item in cell:
+            cell_pop = item['pop']
+            test_cell.add_pop(cell_pop)
+        assert test_cell.get_abundance_carnivore() == 0
+
+    def test_add_age(self, test=test):
+        """
+        Will test that all creatures get one year older from add_age function
+        :param test: dict
+        :return:
+        """
+        cell_pop = {}
+        for item in test:
+            cell_pop = item['pop']
+        test_cell = Jungle()
+        test_cell.add_pop(cell_pop)
+
+        # Defines list with old age
+        creature_count = test_cell.number_herbivores()
+        age_list = []
+        for i in range(creature_count):
+            age_list.append(test_cell.population_herbivores[i].age)
+
+        # Compares new age to old age + 1
+        test_cell.add_age()
+        for i in range(creature_count):
+            assert test_cell.population_herbivores[i].age == age_list[i] + 1
+
+    cell_pop = {}
+    for item in test:
+        cell_pop = item['pop']
+    test_cell = Jungle()
+    test_cell.add_pop(cell_pop)
 
     def test_lose_weight(self, test=test):
         """
@@ -266,104 +378,3 @@ class TestCell:
         for i in range(test_cell.number_herbivores()):
             new_weight = test_cell.population_herbivores[i].weight
             assert new_weight == weight2[i] - weight2[i] * 0.05
-
-
-
-    def test_alter_population_kills_when_0_weight(self, test=test):
-        """
-        Will test that the animals die in correct fashion. This test is heavily
-        dependent on Fauna.death. The randomness comes from that funcion. To
-        test alter_population, we insert weight 0 to make sure the creature
-        will die. The rest is up to the Fauna.deat() funtion.
-        :param test:
-        :return:
-        """
-
-        cell_pop = {}
-        for item in test:
-            cell_pop = item['pop']
-        test_cell = Jungle()
-        test_cell.add_pop(cell_pop)
-
-        for creature in test_cell.population_herbivores:
-            creature.weight = 0
-        test_cell.alter_population()
-
-        assert test_cell.number_herbivores() == 0
-
-
-
-    def test_add_age(self, test=test):
-        """
-        Will test that all creatures get one year older from add_age function
-        :param test: dict
-        :return:
-        """
-        cell_pop = {}
-        for item in test:
-            cell_pop = item['pop']
-        test_cell = Jungle()
-        test_cell.add_pop(cell_pop)
-
-        # Defines list with old age
-        creature_count = test_cell.number_herbivores()
-        age_list = []
-        for i in range(creature_count):
-            age_list.append(test_cell.population_herbivores[i].age)
-
-        # Compares new age to old age + 1
-        test_cell.add_age()
-        for i in range(creature_count):
-            assert test_cell.population_herbivores[i].age == age_list[i] + 1
-
-    cell_pop = {}
-    for item in test:
-        cell_pop = item['pop']
-    test_cell = Jungle()
-    test_cell.add_pop(cell_pop)
-
-    def test_get_abundance_herbivore(self, cell=test_cell):
-        """
-        Will test that the correct amount of abundant fodder is returned.
-        :param :
-        :return:
-        """
-        cell.fodder = 800
-        population = 6
-        f = 10
-        test_abundance = cell.fodder / ((population + 1) * f)
-        assert cell.get_abundance_herbivore() == test_abundance
-
-    def test_get_abundance_carnivore(self, cell=test):
-        """
-        Will test that the correct amount of abundant fodder is returned.
-        Will also test that it is zero if there are no herbivores in the cell.
-        :param :
-        :return:
-        """
-        cell_pop = {}
-        test_cell = Jungle()
-        for item in cell:
-            cell_pop = item['pop']
-            test_cell.add_pop(cell_pop)
-
-        assert test_cell.get_abundance_carnivore() == 4
-        test_cell = Jungle()
-        cell = self.carn_list
-        for item in cell:
-            cell_pop = item['pop']
-            test_cell.add_pop(cell_pop)
-        assert test_cell.get_abundance_carnivore() == 0
-
-
-
-
-
-    def test_migration(self):
-        """
-        Will test that the migration works properly.
-        :return:
-        """
-        pass
-
-
