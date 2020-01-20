@@ -131,32 +131,3 @@ class TestMap:
             cell_pop = item['pop']
             map2.cell_map[i][j].add_pop(cell_pop)
         assert map2.get_populations() == (6, 0, 6)
-
-        # insert_population(ini_pop)
-
-
-    # def test_fodder_jungle(self):
-    #     """
-    #     test that the correct amount of fodder is added to the jungle cell.
-    #     :return:
-    #     """
-    #     added_fodder = Map.add_fodder_jungle(800)
-    #     assert added_fodder == 800
-    #     assert added_fodder >= 0
-    #
-    # def test_fodder_savannah(self):
-    #     """
-    #     test that the correct amount of fodder is added to the savannah cell.
-    #     :return:
-    #     """
-    #     alpha = 0.3
-    #     f_max = 300
-    #     # fodderij =
-    #
-    #     added_fodder = Map.add_fodder_savannah(100)
-    #     assert added_fodder == 100
-    #     assert added_fodder >= 0
-    #
-    #
-    #
-    #
