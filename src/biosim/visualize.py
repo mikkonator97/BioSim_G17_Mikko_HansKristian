@@ -106,7 +106,7 @@ class Visualize(object):
             self._herbivore_ax = self._fig.add_subplot(2, 2, 3)
             self._herbivore_ax.set_title('Spread of herbivores')
             # self._herbivore_ax.imshow(self.map_size)
-            self.im_herbivore = self._herbivore_ax.imshow(map.map_herbivores)
+            #self.im_herbivore = self._herbivore_ax.imshow(map.map_herbivores)
 
 
         if self._carnivore_ax is None:
@@ -122,8 +122,9 @@ class Visualize(object):
         self._update_stats_graph(herbivore, carnivore)
         map.get_population_maps()
         self._update_herbivore_spread(map.map_herbivores)
+        self._update_carnivore_spread(map.map_carnivores)
         plt.pause(1e-6)
-        # plt.pause(3)
+
 
     def _update_stats_graph(self, herbivore, carnivore):
 
@@ -145,11 +146,10 @@ class Visualize(object):
 
 
     def _update_herbivore_spread(self, herbivore_spread):
-        # im.set_data(data)
-        print(herbivore_spread)
-        self.im_herbivore.set_data(herbivore_spread)
-        sb.heatmap(herbivore_spread, ax=self._carnivore_ax, cbar=False)
-        # self._herbivore_ax.set_data(data)
+        sb.heatmap(herbivore_spread, ax=self._herbivore_ax, cbar=False)
+
+    def _update_carnivore_spread(self, carnivore_spread):
+        sb.heatmap(carnivore_spread, ax=self._carnivore_ax, cbar=False)
 
 
 
