@@ -125,9 +125,7 @@ class BioSim:
                 herbs, carns, total = self.map.get_populations()
                 y_herbivores.append(herbs)
                 x.append(year)
-                visual.update_graphics(self.cell_map)
-
-                self.visualize.update(herbs, carns, year, self.map)
+                visual._update_graphics(self.map)
                 print('HALLO')
                 #y_carnivores[year] = carns
                 #y_total[year] = total

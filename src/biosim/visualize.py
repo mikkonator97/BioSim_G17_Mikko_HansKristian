@@ -24,7 +24,8 @@ class Visualize(object):
         :type img_fmt: str
         """
         self.i = 0
-        self.ymax = ymax
+        self._ymax = ymax
+        self.years = years
 
         self.map_size = np.random.random((10,10))
 
@@ -81,7 +82,7 @@ class Visualize(object):
         if self._stats_ax is None:
             self._stats_ax = self._fig.add_subplot(2, 2, 2)
             self._stats_ax.set_title('Population')
-            self._stats_ax.set_ylim(0, self.ymax)
+            self._stats_ax.set_ylim(0, 15000)
 
         # needs updating on subsequent calls to simulate()
         self._stats_ax.set_xlim(0, self._final_step + 1)
@@ -104,7 +105,8 @@ class Visualize(object):
         if self._herbivore_ax is None:
             self._herbivore_ax = self._fig.add_subplot(2, 2, 3)
             self._herbivore_ax.set_title('Spread of herbivores')
-            self._herbivore_ax.imshow(self.map_size)
+            # self._herbivore_ax.imshow(self.map_size)
+            self.im_herbivore = self._herbivore_ax.imshow(self.map_size)
 
 
         if self._carnivore_ax is None:
@@ -115,16 +117,18 @@ class Visualize(object):
 
         # plt.show()
 
-    def _update_graphics(self, cell_map):
-        herbivore, carnivore, total = cell_map.get_creatures()
-        _update_stats_graph(herbivore, carnivore)
-        _update_herbivore_spread(cell_map.map_herbivores)
+    def _update_graphics(self, map):
+        herbivore, carnivore, total = map.get_populations()
+        self._update_stats_graph(herbivore, carnivore)
+        map.get_population_maps()
+        self._update_herbivore_spread(map.map_herbivores)
         plt.pause(1e-6)
-        plt.pause(3)
+        # plt.pause(3)
 
     def _update_stats_graph(self, herbivore, carnivore):
 
         # print(type(self._herbivore_line))
+        print(herbivore, carnivore)
 
         herbivore_data = self._herbivore_line.get_ydata()
         carnivore_data = self._carnivore_line.get_ydata()
@@ -141,7 +145,10 @@ class Visualize(object):
 
 
     def _update_herbivore_spread(self, herbivore_spread):
-        im.set_data(data)
+        # im.set_data(data)
+        print(herbivore_spread)
+        self.im_herbivore.set_data(herbivore_spread)
+        # self._herbivore_ax.set_data(data)
 
 
 
