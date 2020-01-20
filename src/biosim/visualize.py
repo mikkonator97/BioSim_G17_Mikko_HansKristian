@@ -7,7 +7,7 @@ import os
 class Visualize(object):
     """Provides user interface for simulation, including visualization."""
 
-    def __init__(self,ymax=10000, years=50, img_dir=None, img_name='biosim',
+    def __init__(self, map,ymax=10000, years=50, img_dir=None, img_name='biosim',
                  img_fmt='png'):
         """
         :param sys_size:  system size, e.g. (5, 10)
@@ -27,7 +27,7 @@ class Visualize(object):
         self._ymax = ymax
         self.years = years
 
-        self.map_size = np.random.random((10,10))
+        # self.map_size = np.random.random((10,10))
 
         # self.carnivore
 
@@ -57,10 +57,10 @@ class Visualize(object):
         self._total_line = None
 
 
-        self._setup_graphics()
+        self._setup_graphics(map)
 
 
-    def _setup_graphics(self):
+    def _setup_graphics(self, map):
         """Creates subplots."""
 
 
@@ -106,7 +106,7 @@ class Visualize(object):
             self._herbivore_ax = self._fig.add_subplot(2, 2, 3)
             self._herbivore_ax.set_title('Spread of herbivores')
             # self._herbivore_ax.imshow(self.map_size)
-            self.im_herbivore = self._herbivore_ax.imshow(self.map_size)
+            self.im_herbivore = self._herbivore_ax.imshow(map.map_herbivores)
 
 
         if self._carnivore_ax is None:
