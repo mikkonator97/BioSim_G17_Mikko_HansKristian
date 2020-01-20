@@ -1,4 +1,3 @@
-
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
@@ -62,10 +61,10 @@ class Cell:
         if self.landscape == 3:
             available_fodder = float(self.get_fodder())
             f_max = self.f_max
-            self.fodder = (available_fodder + self.alpha[3] * (f_max - available_fodder))
+            self.fodder = (available_fodder + self.alpha[3]
+                           * (f_max - available_fodder))
         elif self.landscape == 4:
             self.fodder = self.f_max
-
 
     def add_pop(self, cell_pop):
         """
@@ -84,9 +83,6 @@ class Cell:
             else:
                 self.population_carnivores.append(Carnivore(weight=weight,
                                                             age=age))
-
-
-
 
     def alter_population(self):
         """
@@ -108,7 +104,8 @@ class Cell:
         index2 = 0
         number_of_carnivores = len(self.population_carnivores)
         while index2 < number_of_carnivores:
-            self.population_carnivores[index2].state = self.population_carnivores[index2].death()
+            self.population_carnivores[index2].state = \
+                self.population_carnivores[index2].death()
             if self.population_carnivores[index2].state:
                 self.population_carnivores.pop(index2)
                 number_of_carnivores -= 1
@@ -121,7 +118,6 @@ class Cell:
         from the cell, and the creature gets an increase in weight.
         :return:
         """
-        # print('Herbivore weighs: ', creature.weight)
         if self.fodder == 0:
             return
         elif self.fodder > 10:
@@ -134,11 +130,10 @@ class Cell:
 
     def feed_carnivores(self):
         """
-        This function will feed the carnivores,
-         where each carnivore will feast on the herbivores based on both carnivore and herbivore fitness.
+        This function will feed the carnivores, where each carnivore will
+        feast on the herbivores based on both carnivore and herbivore fitness.
         :return:
         """
-
         self.ranked_fitness_herbivores_weakest()
         self.ranked_fitness_carnivores()
         for carnivore in self.population_carnivores:
@@ -150,27 +145,29 @@ class Cell:
                     # print("herb_eaten over 50", herbivore_eaten)
                     break
 
-                probability_of_successful_hunt = self.successful_hunt(carnivore, herbivore)
+                probability_of_successful_hunt = \
+                    self.successful_hunt(carnivore, herbivore)
                 if probability_of_successful_hunt == 0:
                     continue
 
                 kill_probability = np.random.random()
                 if kill_probability < probability_of_successful_hunt:
-                    # print("A carnivore has killed: ")
-                    herbivore_eaten += carnivore.eat(herbivore.weight, herbivore_eaten)
-                    # print("herb_eaten", herbivore_eaten)
+                    herbivore_eaten += \
+                        carnivore.eat(herbivore.weight, herbivore_eaten)
                     carnivore.calculate_fitness()
                     self.population_herbivores.remove(herbivore)
 
     def successful_hunt(self, carnivore, herbivore):
         """
-        Function which returns the probability of a successful hunt where the carnivore will pray.
+        Function which returns the probability of a successful hunt
+        where the carnivore will pray.
         :return: float
         """
         if herbivore.fitness >= carnivore.fitness:
             return 0.0
         elif carnivore.DeltaPhiMax > (carnivore.fitness - herbivore.fitness):
-            return (carnivore.fitness - herbivore.fitness) / carnivore.DeltaPhiMax
+            fitness_difference = (carnivore.fitness - herbivore.fitness)
+            return fitness_difference / carnivore.DeltaPhiMax
         else:
             return 1.0
 
@@ -182,14 +179,11 @@ class Cell:
         """
         for herbivore in self.population_herbivores:
             new_creature = (herbivore.birth(self.number_herbivores()))
-            if new_creature != None:
-                # print('---X--------------->', len(self.population_herbivores))
+            if new_creature is not None:
                 self.population_herbivores.append(new_creature)
-                # print('New pop: ', self.number_herbivores())
         for carnivore in self.population_carnivores:
             new_creature = (carnivore.birth(self.number_carnivores()))
-            if new_creature != None:
-                # print('---X--------------->', len(self.population_herbivores))
+            if new_creature is not None:
                 self.population_carnivores.append(new_creature)
 
     def ranked_fitness_herbivores(self):
@@ -198,7 +192,6 @@ class Cell:
 
     def ranked_fitness_herbivores_weakest(self):
         """ Ranks herbivores in this cell from least fit to fittest."""
-
         self.population_herbivores.sort(key=lambda x: x.fitness, reverse=False)
 
     def ranked_fitness_carnivores(self):
@@ -234,7 +227,6 @@ class Cell:
         Increases the age for all the creatures in the population list.
         :return:
         """
-        # print('All creatures will age')
         for creature in self.population_herbivores:
             creature.age += 1
         for creature in self.population_carnivores:
@@ -250,7 +242,6 @@ class Cell:
             creature.reduce_weight()
         for creature in self.population_carnivores:
             creature.reduce_weight()
-
 
 
 class Ocean(Cell):
