@@ -3,11 +3,9 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from biosim.Cell import Cell, Ocean, Mountain, Desert, Savannah, Jungle
-import biosim.Cell
+from biosim.Cell import Ocean, Mountain, Desert, Savannah, Jungle
 import numpy as np
 import math
-
 
 
 class Map:
@@ -28,10 +26,8 @@ class Map:
         self.n_cols = len(str(self.map_string_split[0]))
         self.cell_map = np.empty((self.n_rows, self.n_cols), dtype=object)
         self.map_matrix = np.zeros((self.n_rows, self.n_cols))
-
         self.map_herbivores = np.zeros((self.n_rows, self.n_cols))
         self.map_carnivores = np.zeros((self.n_rows, self.n_cols))
-
         self.create_map()
 
     def create_map(self):
@@ -82,42 +78,61 @@ class Map:
         # Will update preferred location to each creature.
         self.update_preferred_locations()
         # for cell in self.cell_map:
-        for y in range(self.n_cols):
-            for x in range(self.n_rows):
-                self.migrate_herbivores(self.cell_map[x][y], x, y)
-                self.migrate_carnivores(self.cell_map[x][y], x, y)
+        for y_coord in range(self.n_cols):
+            for x_coord in range(self.n_rows):
+                self.migrate_herbivores(self.cell_map[x_coord][y_coord],
+                                        x_coord, y_coord)
+                self.migrate_carnivores(self.cell_map[x_coord][y_coord],
+                                        x_coord, y_coord)
 
-    def migrate_herbivores(self, cell, x, y):
+    def migrate_herbivores(self, cell, x_coord, y_coord):
+        """
+        The function checks if the herbivores in the cell want to migrate
+        to one of the adjacent cells, then move them to one of the these cells.
+        :param cell: np.array
+        :param x_coord: int
+        :param y_coord: int
+        :return:
+        """
         index = 0
         while index < cell.number_herbivores():
-            creature = self.cell_map[x][y].population_herbivores[index]
+            creature =\
+                self.cell_map[x_coord][y_coord].population_herbivores[index]
+
             if creature.wants_to_migrate():
                 move_index = self.select_index_to_move(
                     cell.probability_herbivores)
                 if move_index in [0, 1, 2, 3]:
                     move_to = cell.adjacent_cells2[move_index]
-                    move_from = x, y
+                    move_from = x_coord, y_coord
                     if self.cell_map[move_to[0]][move_to[1]].habitable:
                         self.move_herbivore(move_to, move_from, index)
                 index -= 1
             index += 1
 
-    def migrate_carnivores(self, cell, x, y):
+    def migrate_carnivores(self, cell, x_coord, y_coord):
+        """
+        The function checks if the carnivores in the cell want to migrate
+        to one of the adjacent cells, then move them to one of the these cells.
+        :param cell: np.array
+        :param x_coord: int
+        :param y_coord: int
+        :return:
+        """
         index = 0
         while index < cell.number_carnivores():
-            creature = self.cell_map[x][y].population_carnivores[index]
+            creature =\
+                self.cell_map[x_coord][y_coord].population_carnivores[index]
             if creature.wants_to_migrate():
                 move_index = self.select_index_to_move(
                     cell.probability_carnivores)
                 if move_index in [0, 1, 2, 3]:
                     move_to = cell.adjacent_cells2[move_index]
-                    move_from = x, y
+                    move_from = x_coord, y_coord
                     if self.cell_map[move_to[0]][move_to[1]].habitable:
                         self.move_carnivore(move_to, move_from, index)
                 index -= 1
             index += 1
-
-
 
     def update_preferred_locations(self):
         """
@@ -195,7 +210,6 @@ class Map:
         Uses probabilities to choose from destinations.
         NB! Requires 4 adjacent cells, and 4 probabilities to work.
         :param probabilities: list
-        :param destinations: list
         :return: tuple
         """
         if (sum(probabilities)) == 1:
@@ -242,6 +256,12 @@ class Map:
         return herbivores, carnivores, total
 
     def reset_mated_migration(self, cell):
+        """
+        Set the creatures have_migrated and have_mated attribute to False
+        and is called at the end of each year.
+        :param cell:
+        :return:
+        """
         for creature in cell.population_herbivores:
             creature.have_mated = False
             creature.have_migrated = False
@@ -251,43 +271,42 @@ class Map:
 
     def yearly_stage1(self):
         """
-        Yearly stage 1 handles the addition of fodder to each cell, feeding for both species,
-        and procreation of both species.
+        Yearly stage 1 handles the addition of fodder to each cell,
+        feeding for both species, and procreation of both species.
         Here we wil feed and procreate. Names up for change.
         NB! The order is important. Fodder grows first.
         Used to have feed_map and procreate_map. But put them together.
         :return:
         """
-
-        # code for carrying out feeding and procreation for each cell
         for row_index in range(self.n_rows):
             for col_index in range(self.n_cols):
-                if self.cell_map[row_index][col_index].landscape in {2, 3, 4}:
-                    self.cell_map[row_index][col_index].add_fodder()
-                    for creature in self.cell_map[row_index][col_index].population_herbivores:
+                current_cell = self.cell_map[row_index][col_index]
+                if current_cell.landscape in {2, 3, 4}:
+                    current_cell.add_fodder()
+                    for creature in current_cell.population_herbivores:
                         creature.fitness = creature.calculate_fitness()
-                        self.cell_map[row_index][col_index].ranked_fitness_herbivores()
-                        self.cell_map[row_index][col_index].feed_herbivores(creature)
+                        current_cell.ranked_fitness_herbivores()
+                        current_cell.feed_herbivores(creature)
 
-                    # Note to self: re-calculate fitness of hervbivores since weight has been increased?
-                    for creature in self.cell_map[row_index][col_index].population_herbivores:
+                    # Re-calculate herbivores fitness since weight increased
+                    for creature in current_cell.population_herbivores:
                         creature.fitness = creature.calculate_fitness()
 
-                    if len(self.cell_map[row_index][col_index].population_carnivores) > 0:
-                        for carnivore_creature in self.cell_map[row_index][col_index].population_carnivores:
-                            carnivore_creature.fitness = carnivore_creature.calculate_fitness()
-                            self.cell_map[row_index][col_index].ranked_fitness_carnivores()
-                            self.cell_map[row_index][col_index].feed_carnivores()
-                    self.cell_map[row_index][col_index].mating_season()
+                    if len(current_cell.population_carnivores) > 0:
+                        for carnivore in current_cell.population_carnivores:
+                            carnivore.fitness = carnivore.calculate_fitness()
+                            current_cell.ranked_fitness_carnivores()
+                            current_cell.feed_carnivores()
+                    current_cell.mating_season()
 
 
     def yearly_stage2(self):
         """
-        This function calls the migration function which handles the migration for both species.
+        This function calls the migration function which handles
+        the migration for both species.
         :return:
         """
         self.migration()
-
 
     def yearly_stage3(self):
         """
@@ -315,15 +334,20 @@ class Map:
                         g = sum_age / len(cell.population_herbivores)
                         # print('Average age: ', g)
 
-    def yearly_cycle(self):
-    #     # OPS! some of these functions can be put together
-        self.yearly_stage1()
-    #     # NB! first year none can mate
-        self.migration()
-    #     # self.yearly_stage2()
-        self.yearly_stage3()
+    # def yearly_cycle(self):
+    # #     # OPS! some of these functions can be put together
+    #     self.yearly_stage1()
+    # #     # NB! first year none can mate
+    #     self.migration()
+    # #     # self.yearly_stage2()
+    #     self.yearly_stage3()
 
     def get_population_maps(self):
+        """
+        Calculate the number of herbivores and carnivores and place them
+        in a map.
+        :return:
+        """
         for x_cords in range(self.n_rows):
             for y_cords in range(self.n_cols):
                 self.map_herbivores[x_cords][y_cords] = self.cell_map[x_cords][
