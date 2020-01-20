@@ -130,8 +130,9 @@ class BioSim:
         :param landscape: String, code letter for landscape
         :param params: Dict with valid parameter specification for landscape
         """
-        for key in params:
-            if (landscape in {'J', 'S'}) and (key in {'f_max', 'alpha'}):
+        for key, value in params.items():
+            if (landscape in {'J', 'S'}) \
+                    and (key in {'f_max', 'alpha'} and (value >= 0)):
                 if landscape == 'J':
                     setattr(Cell.Cell, key[4], params[key])
                 else:
