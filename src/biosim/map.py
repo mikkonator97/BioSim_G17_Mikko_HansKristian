@@ -164,7 +164,7 @@ class Map:
                 if sum(propensities_carnivores) != 0:
                     for i in range(len(propensities_carnivores)):
                         probabilities_carnivores[i] = propensities_carnivores[i] / sum(propensities_carnivores)
-                    self.cell_map[x_coordinate][y_coordinate].probability_carnuvires = probabilities_carnivores
+                    self.cell_map[x_coordinate][y_coordinate].probability_carnivores = probabilities_carnivores
 
 
     def select_index_to_move(self, probabilities):
