@@ -107,12 +107,15 @@ class Map:
         while index < cell.number_carnivores():
             creature = self.cell_map[x][y].population_carnivores[index]
             if creature.wants_to_migrate():
+                # print('Carnivore wants to migrate')
                 move_index = self.select_index_to_move(
                     cell.probability_carnivores)
                 if move_index in [0, 1, 2, 3]:
+                    print('Move to this cell: ', move_index)
                     move_to = cell.adjacent_cells2[move_index]
                     move_from = x, y
                     if self.cell_map[move_to[0]][move_to[1]].habitable:
+                        print('Should move carnivore')
                         self.move_carnivore(move_to, move_from, index)
                 index -= 1
             index += 1
