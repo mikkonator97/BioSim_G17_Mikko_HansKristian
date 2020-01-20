@@ -5,6 +5,7 @@
 
 Welcome to INF200_January_project_group_17's documentation!
 ===========================================================
+This is a simple test!
 
 .. toctree::
    :maxdepth: 2
