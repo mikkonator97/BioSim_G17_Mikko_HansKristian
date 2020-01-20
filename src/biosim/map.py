@@ -134,35 +134,61 @@ class Map:
         for y_coordinate in range(self.n_cols-1):
             for x_coordinate in range(self.n_rows-1):
                 # Setting default values to 0
-                probabilities_herbivores = [0, 0, 0, 0]
-                propensities_herbivores = [0, 0, 0, 0]
-                probabilities_carnivores = [0, 0, 0, 0]
-                propensities_carnivores = [0, 0, 0, 0]
-                index = 0
-                for adjacent_cell in self.cell_map[x_coordinate][y_coordinate].adjacent_cells2:
-                    x_adjacent, y_adjacent = adjacent_cell
-                    lambda1 = 1
 
-                    # Inserting propensity into lists
-                    herbivore_abundance = self.cell_map[x_adjacent][y_adjacent].get_abundance_herbivore()
-                    propensities_herbivores[index] = math.exp(lambda1 * herbivore_abundance)
+                # Find propensities for each cell.
+                propensities_herbivores, propensities_carnivores = \
+                    self.get_propensities(y_coordinate, x_coordinate)
 
-                    carnivore_abundance = self.cell_map[x_adjacent][y_adjacent].get_abundance_carnivore()
-                    propensities_carnivores[index] = math.exp(lambda1 * carnivore_abundance)
+                # Turn propensities into probabilities
+                probabilities_herbivores, probabilities_carnivores = \
+                    self.convert_into_probabilities(
+                        propensities_herbivores, propensities_carnivores,
+                        x_coordinate, y_coordinate)
 
-                    index += 1
 
-                # Turning the propensities into probability
-                if sum(propensities_herbivores) != 0:
-                    for i in range(len(propensities_herbivores)):
-                        probabilities_herbivores[i] = propensities_herbivores[i] / sum(propensities_herbivores)
-                    self.cell_map[x_coordinate][y_coordinate].probability_herbivores = probabilities_herbivores
 
-                if sum(propensities_carnivores) != 0:
-                    for i in range(len(propensities_carnivores)):
-                        probabilities_carnivores[i] = propensities_carnivores[i] / sum(propensities_carnivores)
-                    self.cell_map[x_coordinate][y_coordinate].probability_carnivores = probabilities_carnivores
+    def get_propensities(self,y_coordinate, x_coordinate):
+        propensities_herbivores = [0, 0, 0, 0]
+        propensities_carnivores = [0, 0, 0, 0]
+        index = 0
+        for adjacent_cell in self.cell_map[x_coordinate][
+            y_coordinate].adjacent_cells2:
+            x_adjacent, y_adjacent = adjacent_cell
+            lambda1 = 1
 
+            # Inserting propensity into lists
+            herbivore_abundance = self.cell_map[x_adjacent][
+                y_adjacent].get_abundance_herbivore()
+            propensities_herbivores[index] = math.exp(
+                lambda1 * herbivore_abundance)
+
+            carnivore_abundance = self.cell_map[x_adjacent][
+                y_adjacent].get_abundance_carnivore()
+            propensities_carnivores[index] = math.exp(
+                lambda1 * carnivore_abundance)
+            index += 1
+        return propensities_herbivores, propensities_carnivores
+
+    def convert_into_probabilities(self, propensities_herbivores,
+                                   propensities_carnivores, x_coordinate,
+                              y_coordinate):
+        probabilities_herbivores = [0, 0, 0, 0]
+        probabilities_carnivores = [0, 0, 0, 0]
+
+        if sum(propensities_herbivores) != 0:
+            for i in range(len(propensities_herbivores)):
+                probabilities_herbivores[i] = propensities_herbivores[i] / sum(
+                    propensities_herbivores)
+            self.cell_map[x_coordinate][
+                y_coordinate].probability_herbivores = probabilities_herbivores
+
+        if sum(propensities_carnivores) != 0:
+            for i in range(len(propensities_carnivores)):
+                probabilities_carnivores[i] = propensities_carnivores[i] / sum(
+                    propensities_carnivores)
+            self.cell_map[x_coordinate][
+                y_coordinate].probability_carnivores = probabilities_carnivores
+        return propensities_herbivores, probabilities_carnivores
 
     def select_index_to_move(self, probabilities):
         """
