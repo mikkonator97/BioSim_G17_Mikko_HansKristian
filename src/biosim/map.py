@@ -28,6 +28,10 @@ class Map:
         self.n_cols = len(str(self.map_string_split[0]))
         self.cell_map = np.empty((self.n_rows, self.n_cols), dtype=object)
         self.map_matrix = np.zeros((self.n_rows, self.n_cols))
+
+        self.map_herbivores = np.zeros((self.n_rows, self.n_cols))
+        self.map_carnivores = np.zeros((self.n_rows, self.n_cols))
+
         self.create_map()
 
     def create_map(self):
@@ -291,6 +295,15 @@ class Map:
         self.migration()
     #     # self.yearly_stage2()
         self.yearly_stage3()
+
+    def get_population_maps(self):
+        for x_cords in range(self.n_rows):
+            for y_cords in range(self.n_cols):
+                self.map_herbivores[x_cords][y_cords] = self.cell_map[x_cords][
+                    y_cords].number_herbivores()
+                self.map_carnivores[x_cords][y_cords] = self.cell_map[x_cords][
+                    y_cords].number_carnivores()
+
 
 
 if __name__ == "__main__":

@@ -132,6 +132,16 @@ class Cell:
                 index -= 1
             index += 1
 
+        index2 = 0
+        number_of_carnivores = len(self.population_carnivores)
+        while index2 < number_of_carnivores:
+            self.population_carnivores[index2].state = self.population_carnivores[index2].death()
+            if self.population_carnivores[index2].state:
+                self.population_carnivores.pop(index2)
+                number_of_carnivores -= 1
+                index2 -= 1
+            index2 += 1
+
     def feed_herbivores(self, creature):
         """
         For each creature in the population of the cell, fodder is subtracted
