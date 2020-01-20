@@ -107,15 +107,12 @@ class Map:
         while index < cell.number_carnivores():
             creature = self.cell_map[x][y].population_carnivores[index]
             if creature.wants_to_migrate():
-                # print('Carnivore wants to migrate')
                 move_index = self.select_index_to_move(
                     cell.probability_carnivores)
                 if move_index in [0, 1, 2, 3]:
-                    print('Move to this cell: ', move_index)
                     move_to = cell.adjacent_cells2[move_index]
                     move_from = x, y
                     if self.cell_map[move_to[0]][move_to[1]].habitable:
-                        print('Should move carnivore')
                         self.move_carnivore(move_to, move_from, index)
                 index -= 1
             index += 1
@@ -255,9 +252,8 @@ class Map:
                             carnivore_creature.fitness = carnivore_creature.calculate_fitness()
                             self.cell_map[row_index][col_index].ranked_fitness_carnivores()
                             self.cell_map[row_index][col_index].feed_carnivores()
-                        # print("All carnivores in this cell have eaten!")
                     self.cell_map[row_index][col_index].mating_season()
-                    # print("Mating season over")
+
 
     def yearly_stage2(self):
         """
@@ -328,9 +324,5 @@ if __name__ == "__main__":
                   OOOOOOOOOOOOOOOOOOOOO"""
 
     test_map = Map(map_string)
-    # print('f_max in a jungle cell: ', test_map.cell_map[10][10].f_max)
-    # print('the adjecent cells to the same cell ([10][10])', test_map.cell_map[10][10].adjecent_cells)
     y, x = test_map.cell_map[10][10].adjecent_cells[0]
-    # print(y,x)
-    # test_map.show_map()
-    # print((test_map.landscape_matrix))
+

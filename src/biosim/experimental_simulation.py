@@ -60,7 +60,7 @@ class BioSim:
         self.insert_population(ini_pop)
 
         herbi, carni, total = self.map.get_populations()
-        self.visualize = Visualize(self.map)
+        self.visualize = Visualize(self.map, frequency=2, years=200)
 
     def insert_population(self, population):
         for item in population:
@@ -121,11 +121,11 @@ class BioSim:
             print('Year: ', year)
             print('Ingoing population: ', self.map.get_populations())
             self.map.yearly_cycle()
-            if year % 10 == 0:
+            if year % 2 == 0:
                 herbs, carns, total = self.map.get_populations()
                 y_herbivores.append(herbs)
                 x.append(year)
-                visual._update_graphics(self.map)
+                visual._update_graphics(self.map, year)
                 print('HALLO')
                 #y_carnivores[year] = carns
                 #y_total[year] = total
@@ -272,6 +272,5 @@ if __name__ == '__main__':
 
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[1].age)
     # print('(10,10): ', BioSim_test.map.cell_map[10][10].population[0].age)
-    BioSim_test.simulate(50)
+    BioSim_test.simulate(200)
 
-    print(BioSim_test.map.cell_map[10][10].adjacent_cells2[1])
