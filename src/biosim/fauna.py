@@ -53,20 +53,25 @@ class Fauna:
         # self.species = species
         self.age = age
         self.weight = weight
-        self.fitness = self.calculate_fitness()
+        #self.fitness = self.calculate_fitness()
         # print(self.fitness)
+
         self.state = False
         self.have_mated = False
         self.have_migrated = False
         self.have_eaten = False
-        self.desired_location = tuple()
-        self.desired_cell = None
+
+
+
         self.survival_chance = 1
-        self.adjacent_cells = None
-        self.adjacent_cell_attractiveness_for_herbivores = None
-        self.adjacent_cell_attractiveness_for_carnivores = None
+
 
     def birth(self, population):
+        """
+        Will return a baby if the creature is supposed to give birth.
+        :param population: int
+        :return:
+        """
         birth_weight = self.find_birth_weight(population)
         if birth_weight > 0 and not self.have_mated:
             self.weight -= self.xi * birth_weight
@@ -77,7 +82,7 @@ class Fauna:
         """
         The function calculates the probability of giving birth,
         and the birth weight.
-        :param population:
+        :param population: int
         :return: float
         """
         birth_probability = min(1, 0.2 * self.fitness * (population - 1))
@@ -88,13 +93,19 @@ class Fauna:
                 return birth_weight
         return 0
 
-    def get_fitness(self):
+    @property
+    def fitness(self):
         """
         Returns the creatures fitness
         :return: float
         """
-        self.fitness = self.calculate_fitness()
-        return self.fitness
+        if self.weight <= 0:
+            return 0
+        else:
+            q_pos = 1.0 / (1.0 + math.exp(self.phi_age * (self.age - self.a_half)))
+            q_neg = 1.0 / (1.0 + math.exp(-self.phi_weight * (self.weight - self.w_half)))
+            phi = q_pos * q_neg
+            return phi
 
     def get_weight(self):
         """
@@ -118,26 +129,13 @@ class Fauna:
         """
         return self.age
 
-    def calculate_fitness(self):
-        """
-        Function which computes the herbivore fitness according to the formula
-        :return: float
-        """
-
-        if self.weight <= 0:
-            return 0
-        else:
-            q_pos = 1.0 / (1.0 + math.exp(self.phi_age * (self.age - self.a_half)))
-            q_neg = 1.0 / (1.0 + math.exp(-self.phi_weight * (self.weight - self.w_half)))
-            phi = q_pos * q_neg
-            return phi
 
     def death(self):
         """
         Returns True/False if the creature dies.
         :return: boolean
         """
-        fitness = self.get_fitness()
+        fitness = self.fitness
         death_number = np.random.random()
         self.survival_chance = 1 - (self.omega * (1 - fitness))
         # print('Death number: ', death_number)
