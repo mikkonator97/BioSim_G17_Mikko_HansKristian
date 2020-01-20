@@ -61,9 +61,7 @@ class Fauna:
         self.have_migrated = False
         self.have_eaten = False
 
-
-
-        self.survival_chance = 1
+        #self.survival_chance = 1
 
 
     def birth(self, population):
@@ -129,6 +127,10 @@ class Fauna:
         """
         return self.age
 
+    @property
+    def survival_chance(self):
+        return 1 - (self.omega * (1 - self.fitness))
+
 
     def death(self):
         """
@@ -137,7 +139,9 @@ class Fauna:
         """
         fitness = self.fitness
         death_number = np.random.random()
-        self.survival_chance = 1 - (self.omega * (1 - fitness))
+
+        #self.survival_chance = 1 - (self.omega * (1 - fitness))
+
         # print('Death number: ', death_number)
         # print('Weight: ', self.weight, 'Fitness: ',fitness)
         if fitness <= 0:
