@@ -28,13 +28,6 @@ class Visualize(object):
         self.frequency = frequency
         self.years = years
 
-        # self.map_size = np.random.random((10,10))
-
-        # self.carnivore
-
-        # self._system = DiffSys(sys_size, noise)
-        # self._herbivore_data = [0, 0, 0, 0]
-
         if img_dir is not None:
             self._img_base = os.path.join(img_dir, img_name)
         else:
