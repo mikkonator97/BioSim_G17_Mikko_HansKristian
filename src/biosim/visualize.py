@@ -8,19 +8,21 @@ class Visualize:
     This class will create the visual aids, then help us updating them.
     """
 
-    def __init__(self, map_matrix, herbi, carni, total):
+    def __init__(self, cell_map, year=0):
         """
         Creates subplots, and visualizes the map.
         :param map_matrix: list
         """
-        self.year = [0, 1, 2]
-        self.herbs = [10, 20, 30]
-        self.carnis = [1, 4, 10]
-        self.total = [11, 24, 40]
+        self.year = [year]
+
+        herbs, carnis, total = cell_map.get_populations()
+        self.herbs = [herbs]
+        self.carnis = [carnis]
+        self.total = [total]
+
+        self.map_matrix = cell_map.map_matrix
 
         # Might get population for the next year heh
-
-
         self.fig, self.axes = plt.subplots(figsize=(10, 5), ncols=2, nrows=2)
 
         #Setting titles
@@ -30,14 +32,19 @@ class Visualize:
         self.axes[1][0].set_title("Herbivore spread", y=y_title_margin)
         self.axes[1][1].set_title("Carnivore spread", y=y_title_margin)
 
-        sb.heatmap(data=map_matrix, ax=self.axes[0][0])
+        sb.heatmap(data=cell_map.map_matrix, ax=self.axes[0][0])
 
         self.axes[0][1].plot(self.year, self.herbs)
         self.axes[0][1].plot(self.year, self.carnis)
         self.axes[0][1].plot(self.year, self.total)
 
+        cell_map.get_population_maps()
+        sb.heatmap(data=cell_map.map_herbivores, ax=self.axes[1][0], cmap="YlGnBu")
+        sb.heatmap(data=cell_map.map_carnivores, ax=self.axes[1][1])
 
         # sb.lineplot(data=, ax=self.axes[0][1])
+        #self.line1 = self.axes[0][1].plot(np.arange(n_steps),
+        #               np.full(n_steps, np.nan), 'b-')[0]
 
 
         plt.show()
@@ -68,13 +75,21 @@ class Visualize:
 
 
 
-    def update(self, herbs, carnis, year):
+    def update(self, herbs, carnis, year, cell_map):
+        #plt.ion()
+
         self.update_population_statistics(herbs, carnis, year)
         self.axes[0][1].plot(self.year, self.herbs)
         self.axes[0][1].plot(self.year, self.carnis)
         self.axes[0][1].plot(self.year, self.total)
 
-        plt.show()
+        #sb.heatmap(data=cell_map.map_herbivores, ax=self.axes[1][0], cmap="YlGnBu")
+        #sb.heatmap(data=cell_map.map_herbivores, ax=self.axes[1][1])
+
+
+        plt.pause(1e-6)
+
+        print('should plot...', self.herbs)
 
 
 
