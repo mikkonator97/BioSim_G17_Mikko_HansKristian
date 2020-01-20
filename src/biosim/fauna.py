@@ -73,25 +73,20 @@ class Fauna:
             self.have_mated = True
             return self.__class__(weight=birth_weight, age=0)
 
-
-
     def find_birth_weight(self, population):
+        """
+        The function calculates the probability of giving birth,
+        and the birth weight.
+        :param population:
+        :return: float
+        """
         birth_probability = min(1, 0.2 * self.fitness * (population - 1))
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
-
 
         if self.weight > self.zeta * (9.5):
             if birth_probability > np.random.rand() and self.age > 0:
                 return birth_weight
         return 0
-
-    # remove this function? has a similar in cell
-    # def ageing(self):
-    #     """
-    #     Increases the creatures age
-    #     :return:
-    #     """
-    #     self.age += 1
 
     def get_fitness(self):
         """
@@ -123,7 +118,6 @@ class Fauna:
         """
         return self.age
 
-    # @property
     def calculate_fitness(self):
         """
         Function which computes the herbivore fitness according to the formula
@@ -174,20 +168,6 @@ class Fauna:
         return (self.mu * self.fitness) > np.random.random()
 
 
-    #def propensity(self, relative_abundance_of_fodder):
-    #    """
-    #    Calculates the propensity based on the amount of fodder
-    #    :param relative_abundance_of_fodder:
-    #    :return: float
-    #    """
-    #    try:
-    #        propensity = math.exp(self.lambda1 * relative_abundance_of_fodder)
-    #    except OverflowError:
-    #        print("        except OverflowError")
-    #        propensity = 1000
-
-     #   return propensity
-
 class Herbivore(Fauna):
 
     def __init__(self, weight, age=0):
@@ -209,49 +189,6 @@ class Herbivore(Fauna):
         self.DeltaPhiMax = None
         super().__init__(weight, age)
 
-        # self.w_birth = 8.0
-        # self.sigma_birth = 1.5
-        # self.xi = 1.2
-
-    def migrate(self):
-        """
-        If the creature has not migrated and wants to migrate,
-        then returns the desired cell.
-        """
-        # print("migrate function called!")
-        if self.have_migrated is False:
-            if self.wants_to_migrate():
-                # print("Creature wants to migrate")
-                destination_probabilities = self.get_destination_probabilities()
-                # print("destination probabilities: ",destination_probabilities)
-                self.desired_cell = np.random.choice(self.adjacent_cells, p=destination_probabilities)
-                # print("index destination: ", self.desired_cell)
-                return self.desired_cell
-
-    def get_destination_probabilities(self):
-        """
-        Calculates the probability of moving to each of the adjacent cells,
-        then returns a list with these probabilities.
-        :return: list
-        """
-        highest_relevance = []
-        probability_to_move = []
-        herb_adjacent_cells = self.adjacent_cell_attractiveness_for_herbivores
-        # print(adjacent_cells)
-        # print('adjacent cells', herb_adjacent_cells)
-        if herb_adjacent_cells is None:
-            probability_to_move = [0.25, 0.25, 0.25, 0.25]
-            return probability_to_move
-        else:
-            for relative_abundance_of_fodder in herb_adjacent_cells:
-                propensity = self.propensity(relative_abundance_of_fodder)
-                highest_relevance.append(propensity)
-            # print("highest relevance: ", highest_relevance)
-            for value in highest_relevance:
-                probability_to_move.append(value/sum(highest_relevance))
-            # print("probabilities to move: ", probability_to_move)
-            return probability_to_move
-
     def give_birth(self):
         """
         This function will calculate the birth weight of the baby
@@ -263,7 +200,6 @@ class Herbivore(Fauna):
         self.have_mated = True
         # print('A baby has been born')
         return birth_weight
-
 
     def eat(self, fodder_amount=0):
         """
@@ -311,64 +247,15 @@ class Carnivore(Fauna):
         return fodder_amount
         # print('Creature just ate and gained: ', self.beta * fodder_amount)
 
-    def give_birth(self):
-        """
-        This function will calculate the birth weight of the baby
-         and update the weight of the parent.
-        :return: float
-        """
-        birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
-        self.weight -= birth_weight * self.xi
-        self.have_mated = True
-        # print('A baby carnivore has been born')
-        return birth_weight
-
-    def migrate(self):
-        """
-        If the creature has not migrated and wants to migrate,
-        then returns the desired cell.
-        """
-        # print("migrate function called!")
-        if self.have_migrated is False:
-            if self.wants_to_migrate():
-                # print("Creature wants to migrate")
-                destination_probabilities = self.get_destination_probabilities()
-                # print("destination probabilities: ",destination_probabilities)
-                self.desired_cell = np.random.choice(self.adjacent_cells, p=destination_probabilities)
-                # print("index destination: ", self.desired_cell)
-                return self.desired_cell
-
-    def get_destination_probabilities(self):
-        """
-        Calculates the probability of moving to each of the adjacent cells,
-        then returns a list with these probabilities.
-        :return: list
-        """
-        highest_relevance = []
-        adjacent_cells = self.adjacent_cell_attractiveness_for_carnivores
-        # print(adjacent_cells)
-        # print('adjacent cells', adjacent_cells)
-        probability_to_move = []
-        if adjacent_cells is None:
-            probability_to_move = [0.25, 0.25, 0.25, 0.25]
-            return probability_to_move
-        else:
-            for relative_abundance_of_fodder in adjacent_cells:
-                propensity = self.propensity(relative_abundance_of_fodder)
-                highest_relevance.append(propensity)
-            # print("highest relevance: ", highest_relevance)
-            """
-            If there are many herbivores in a cell, it might cause infinite 
-            propensity, which gives inf as a value. np.random.choice will
-            then get NaN as a probability which causes error.
-            """
-            for index in range(len(highest_relevance)):
-                if math.isinf(highest_relevance[index]):
-                    highest_relevance[index] = 1000
-            # print("highest relevance: ", highest_relevance)
-
-            for value in highest_relevance:
-                probability_to_move.append(value/sum(highest_relevance))
-            # print("probabilities to move: ", probability_to_move)
-            # print("probabilities to move: ", probability_to_move)
-            return probability_to_move
+    # def give_birth(self):
+    #     """
+    #     This function will calculate the birth weight of the baby
+    #      and update the weight of the parent.
+    #     :return: float
+    #     """
+    #     birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
+    #     self.weight -= birth_weight * self.xi
+    #     self.have_mated = True
+    #     # print('A baby carnivore has been born')
+    #     return birth_weight
+    #

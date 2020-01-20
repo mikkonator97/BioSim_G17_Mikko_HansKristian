@@ -36,41 +36,12 @@ class Cell:
         self.adjacent_cells_carnivore_attractiveness = []
         self.F_h = 10
 
-        # self.abundance_herbivore = 0
-        # self.abundance_carnivore = 0
-
-    def send_adjacent_cells_to_fauna(self):
-        for creature in self.population_herbivores:
-            creature.adjacent_cells = self.adjacent_cells
-            creature.adjacent_cell_attractiveness_for_herbivores = self.adjacent_cells_herbivore_attractiveness
-        for creature in self.population_carnivores:
-            creature.adjacent_cells = self.adjacent_cells
-            creature.adjacent_cell_attractiveness_for_carnivores = self.adjacent_cells_carnivore_attractiveness
-
-    # def get_abundance_herbivore(self):
-    #     return self.fodder / ((self.number_herbivores() + 1) * self.F_h)
-    #
-    # def get_abundance_carnivore(self):
-    #     """
-    #     Returns the relative abundance of fodder for carnivores.
-    #     :return:
-    #     """
-    #     return sum(self.population_herbivores.weight) / ((len(self.population_carnivores) + 1) * self.F_h)
-
-    # def number_creatures(self):
-    #     """
-    #     Returns the total number of creatures in the cell
-    #     :return: int
-    #     """
-    #     return self.number_herbivores() + self.number_carnivores()
-
     def number_herbivores(self):
+        """ Returns the number of herbivores as an int"""
         return len(self.population_herbivores)
 
-    # def get_herbivores(self):
-    #     return self.population_herbivores
-
     def number_carnivores(self):
+        """ Returns the number of carnivores as an int"""
         return len(self.population_carnivores)
 
     def get_fodder(self):
@@ -108,10 +79,11 @@ class Cell:
             weight = creature.get('weight')
             age = creature.get('age')
             if species.lower() == 'herbivore':
-                self.population_herbivores.append(Herbivore(weight=weight, age=age))
+                self.population_herbivores.append(Herbivore(weight=weight,
+                                                            age=age))
             else:
-                self.population_carnivores.append(Carnivore(weight=weight, age=age))
-                # self.number_of_carnivores += 1
+                self.population_carnivores.append(Carnivore(weight=weight,
+                                                            age=age))
 
 
 
@@ -121,11 +93,12 @@ class Cell:
         Removes an animal from the list if it is supposed to die.
         :return:
         """
-
         index = 0
         number_of_herbivores = len(self.population_herbivores)
         while index < number_of_herbivores:
-            self.population_herbivores[index].state = self.population_herbivores[index].death()
+            self.population_herbivores[index].state = \
+                self.population_herbivores[index].death()
+
             if self.population_herbivores[index].state:
                 self.population_herbivores.pop(index)
                 number_of_herbivores -= 1
@@ -192,6 +165,11 @@ class Cell:
             return 1.0
 
     def mating_season(self):
+        """
+        This function calls birth for each herbivore and carnivore and
+        append a new object to the current herbivore/carnivore
+        population in this cell.
+        """
         for herbivore in self.population_herbivores:
             new_creature = (herbivore.birth(self.number_herbivores()))
             if new_creature != None:
@@ -205,12 +183,16 @@ class Cell:
                 self.population_carnivores.append(new_creature)
 
     def ranked_fitness_herbivores(self):
+        """ Ranks herbivores in this cell from fittest to least fit."""
         self.population_herbivores.sort(key=lambda x: x.fitness, reverse=True)
 
     def ranked_fitness_herbivores_weakest(self):
+        """ Ranks herbivores in this cell from least fit to fittest."""
+
         self.population_herbivores.sort(key=lambda x: x.fitness, reverse=False)
 
     def ranked_fitness_carnivores(self):
+        """ Ranks carnivores in this cell from fittest to least fit."""
         self.population_carnivores.sort(key=lambda x: x.fitness, reverse=True)
 
     def get_abundance_herbivore(self, f=10.0):

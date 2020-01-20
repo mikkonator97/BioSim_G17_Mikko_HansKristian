@@ -8,6 +8,7 @@ from biosim.map import Map
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sb
+import pandas as pd
 
 __author__ = ""
 __email__ = ""
@@ -47,6 +48,10 @@ class BioSim:
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
         """
+        self._animal_distribution = pd.DataFrame
+        self._num_animals_per_species = {'Carnivore': 0, 'Herbivore': 0}
+        self._num_animals = 0
+        self._year = 0
         if self.check_validity_of_string(island_map) is False:
             raise ValueError("Invalid multiline mapstring!")
         else:
@@ -59,6 +64,7 @@ class BioSim:
             self.map = Map(self.island_map)
             # self.ini_pop = self.add_population(ini_pop)
             self.add_population(ini_pop)
+            # self._year = 1
 
     def check_validity_of_string(self, map_string):
         """
@@ -91,10 +97,10 @@ class BioSim:
                             raise ValueError("Invalid landscape")
         return valid_string
 
-    def initialize(self):
-
-        # self.map = Map(self.island_map)
-        self.map.show_map()
+    # def initialize(self):
+    #
+    #     # self.map = Map(self.island_map)
+    #     self.map.show_map()
 
     def set_animal_parameters(self, species, params):
         """
@@ -152,8 +158,16 @@ class BioSim:
             print("current_simulation_year", current_simulation_year + 1,
                   " out of ", num_years)
             current_simulation_year += 1
+            self._year += 1
+            herbivores, carnivores, total = self.map.get_populations()
+            self._num_animals = total
+            self._num_animals_per_species = {'Carnivore': carnivores, 'Herbivore': herbivores}
+            fill_animal_distribution = self.map.
+
             if current_simulation_year % vis_years == 0:
                 self.visualization(current_simulation_year)
+            if (img_years is not None) and (vis_years % img_years == 0):
+               pass
 
     def visualization(self, current_simulation_year):
         """
@@ -203,23 +217,22 @@ class BioSim:
     @property
     def year(self):
         """Last year simulated."""
-        pass
+        return self._year
 
     @property
     def num_animals(self):
         """Total number of animals on island."""
-        pass
+        return self._num_animals
 
     @property
     def num_animals_per_species(self):
         """Number of animals per species in island, as dictionary."""
-        pass
+        return self._num_animals_per_species
 
     @property
     def animal_distribution(self):
         """Pandas DataFrame with animal count per species for each cell on island."""
-        df = pd.DataFrame(sim.map.cell_map)
-        pd.DataFrame.plot(df)
+        return self._animal_distribution
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""
@@ -268,9 +281,17 @@ if __name__ == '__main__':
             "loc": (4, 6),
             "pop": [
                 {"species": "Herbivore", "age": 5, "weight": 20}
-                for _ in range(6)
+                for _ in range(10)
             ],
-        }
+        },
+        # {
+        #     "loc": (5, 6),
+        #     "pop": [
+        #         {"species": "Herbivore", "age": 5, "weight": 20}
+        #         for _ in range(150)
+        #     ],
+        # }
+
     ]
 
     ini_carns = [
@@ -278,7 +299,7 @@ if __name__ == '__main__':
             "loc": (4, 6),
             "pop": [
                 {"species": "Carnivore", "age": 5, "weight": 20}
-                for _ in range(40)
+                for _ in range(10)
             ],
         }
     ]
@@ -311,6 +332,7 @@ if __name__ == '__main__':
     # sim.add_population(population=ini_carns)
     sim.set_landscape_parameters("J", {"f_max": 800})
 
-    sim.simulate(100)
+    sim.simulate(10)
+    print(sim.num_animals_per_species)
     # sim.simulate(100)
     # sim.add_population(population=ini_carns)
