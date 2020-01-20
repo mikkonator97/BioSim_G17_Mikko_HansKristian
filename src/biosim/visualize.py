@@ -143,12 +143,12 @@ class Visualize(object):
 
 
     def _update_herbivore_spread(self, herbivore_spread):
-        sb.heatmap(herbivore_spread, ax=self._herbivore_ax, cbar=False)
+        #sb.heatmap(herbivore_spread, ax=self._herbivore_ax, cbar=False)
         pass
 
     def _update_carnivore_spread(self, carnivore_spread):
         pass
-        sb.heatmap(carnivore_spread, ax=self._carnivore_ax, cbar=False)
+        #sb.heatmap(carnivore_spread, ax=self._carnivore_ax, cbar=False)
 
 
 
