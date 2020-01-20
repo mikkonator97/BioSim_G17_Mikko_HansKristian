@@ -148,6 +148,7 @@ class Visualize(object):
         # im.set_data(data)
         print(herbivore_spread)
         self.im_herbivore.set_data(herbivore_spread)
+        sb.heatmap(herbivore_spread, ax=self._carnivore_ax, cbar=False)
         # self._herbivore_ax.set_data(data)
 
 
