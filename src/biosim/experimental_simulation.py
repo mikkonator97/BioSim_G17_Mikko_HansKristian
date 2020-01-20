@@ -115,6 +115,8 @@ class BioSim:
         y_herbivores = []
         #y_carnivores = [0] * n
         #y_total = [0] * n
+        visual = Visualize()
+        visual._setup_graphics()
         for year in range(num_years):
             print('Year: ', year)
             print('Ingoing population: ', self.map.get_populations())
@@ -123,6 +125,7 @@ class BioSim:
                 herbs, carns, total = self.map.get_populations()
                 y_herbivores.append(herbs)
                 x.append(year)
+                visual.update_graphics(self.cell_map)
 
                 self.visualize.update(herbs, carns, year, self.map)
                 print('HALLO')
