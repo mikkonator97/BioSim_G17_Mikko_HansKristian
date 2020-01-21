@@ -14,7 +14,10 @@ import pandas as pd
 
 class BioSim:
     """
-    hei
+    The BioSim class handels the creation of a biosim-object and methods for
+    simulation, adding population, setting landscape- and animalparameters.
+    There is also a method for making an MPEG4 movie from saved simulation
+    images.
     """
     def __init__(
             self,

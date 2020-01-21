@@ -10,8 +10,8 @@ import math
 
 class Map:
     """
-    Creates a dictionary with the coordinates of the map based on
-    multi_line_map_string, and add the corresponding landscape type
+    Creates a numpy array with the coordinates of the map based on
+    multi_line_map_string, and add the corresponding landscape type.
     """
     def __init__(self, map_string):
         """

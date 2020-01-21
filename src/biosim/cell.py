@@ -2,17 +2,17 @@
 
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
-"""
-This class contains information about the Cell object, methods for getting
-information out of this cell, and methods for adding fodder to jungel and 
-savannah cells.
-"""
 
 from biosim.fauna import Fauna, Herbivore, Carnivore
 import numpy as np
 
 
 class Cell:
+    """
+    This class contains information about the Cell object, methods for getting
+    information out of this cell, and methods for adding fodder to jungel and
+    savannah cells.
+    """
 
     def __init__(self, coordinates=None, landscape=None, fodder=0):
         self.f_max = [0.0, 0.0, 0.0, 300.0, 800.0]
