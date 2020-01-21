@@ -3,7 +3,7 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from biosim import cell
+from biosim.cell import Cell
 from biosim.fauna import Herbivore, Carnivore
 from biosim.map import Map
 import matplotlib.pyplot as plt
