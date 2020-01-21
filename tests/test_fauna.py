@@ -25,6 +25,7 @@ class TestFauna:
         test_adult = Fauna(age=30)
         assert test_baby.age == 0
         assert test_adult.age == 30
+        assert test_adult.get_age() == 30
 
     def test_weight(self):
         """
@@ -42,6 +43,7 @@ class TestFauna:
         test_herbi = Herbivore(weight=100, age=10)
         test_herbi.reduce_weight()
         assert test_herbi.weight == 95
+        assert test_herbi.get_weight() == 95
 
     def test_birth(self):
         """
@@ -181,3 +183,19 @@ class TestCarnivores:
         """
         test_carnivore = Carnivore(weight=25, age=5)
         assert test_carnivore.fitness >= 0.999
+
+    def test_eat(self):
+        """
+        This test will check that the eat function increases if the creature
+        eats. Also checks that the creature does not eat if it is full.
+        Also checks that the correct of fodder is returned.
+        self, fodder_amount=0, herbivore_already_eaten=0
+        """
+        carnivore = Carnivore(10, 10)
+        # Checks that the amount returned is correct.
+        assert carnivore.eat(100, 10) == 40
+        assert carnivore.weight == 10 + 40 * carnivore.beta
+        # Checks that no food over 50 is eaten, and also tests same weight.
+        assert carnivore.eat(100, 50) == 0
+        assert carnivore.weight == 10 + 40 * carnivore.beta
+
