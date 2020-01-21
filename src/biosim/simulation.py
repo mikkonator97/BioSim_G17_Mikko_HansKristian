@@ -71,6 +71,10 @@ class BioSim:
             self.img_fmt = img_fmt
             self.map = Map(self.island_map)
             self.add_population(ini_pop)
+            if self.img_base is not None:
+                self._image_counter = 0
+                self.vis_years = 1
+
 
     def check_validity_of_string(self, map_string):
         """
@@ -155,6 +159,7 @@ class BioSim:
 
         Image files will be numbered consecutively.
         """
+        self.vis_years = vis_years
         current_simulation_year = 0
         while current_simulation_year < num_years:
             print('Ingoing population: ', self.map.get_populations())
@@ -282,7 +287,9 @@ class BioSim:
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""
-        pass
+        if (self.img_base is not None) and (self._year % self.vis_years == 0):
+            plt.savefig('{img_base}_{img_no:05d}.{type}'.format(img_base=self.img_base, img_no=self._image_counter, type=self.img_fmt))
+            self._image_counter += 1
 
 
 if __name__ == '__main__':
