@@ -4,7 +4,7 @@
 # from math import exp
 import mock
 import unittest
-from biosim.fauna import Fauna, Herbivore
+from biosim.fauna import Fauna, Herbivore, Carnivore
 import pytest
 
 class TestFauna:
@@ -117,6 +117,7 @@ class TestFauna:
         test_creature = Herbivore(10, 10)
         # return (self.mu * self.fitness) > np.random.random()
         assert test_creature.wants_to_migrate()
+
     @pytest.mark.parametrize('age, weight', [[50, 3], [60, 5], [70, 10]])
     def test_wants_to_migrate(self, age, weight):
         """
@@ -126,8 +127,6 @@ class TestFauna:
         """
         test_creature1 = Herbivore(age, weight)
         assert test_creature1.wants_to_migrate() is False
-
-
 
 
 class TestHerbivores:
@@ -150,21 +149,35 @@ class TestCarnivores:
     Will test properties special for carnivores.
     """
 
-    def test_eat(self):
+    @pytest.mark.parametrize('age, weight', [[50, 50], [60, 55], [70, 60]])
+    def test_eat(self, age, weight):
         """
         Will test that carnivores try to eat until it has passed 50 units
         of food in a year or there are no herbivores left in the cell.
         Will test that
-
         :return:
         """
-        pass
+        amount_eaten = 0
+        test_herbivores = [Herbivore(age, weight), Herbivore(age=2, weight=20)]
+        test_carnivore = Carnivore(weight=25, age=5)
+        for herbivore in test_herbivores:
+            amount_eaten += test_carnivore.eat(herbivore.weight, amount_eaten)
+        assert amount_eaten == 50
+
+        amount_eaten = 0
+        test_carnivore = Carnivore(weight=25, age=5)
+        old_weight = test_carnivore.weight
+        test_small_herbivores = [Herbivore(age=20, weight=15),
+                                 Herbivore(age=2, weight=20)]
+        for herbivore in test_small_herbivores:
+            amount_eaten += test_carnivore.eat(herbivore.weight, amount_eaten)
+        assert (amount_eaten <= 50)\
+        and (test_carnivore.weight == (old_weight + 26.25))
 
     def test_carnivore_fitness(self):
         """
-        Will test that carnivores increases fitness whenever it eats.
+        Will test that a fit carnivore is actually fit.
         :return:
         """
-        # phi = Carnivore.get_fitness()
-        # ssert 0 <= phi <= 1
-        pass
+        test_carnivore = Carnivore(weight=25, age=5)
+        assert test_carnivore.fitness >= 0.999
