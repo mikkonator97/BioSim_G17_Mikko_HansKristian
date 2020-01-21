@@ -138,11 +138,9 @@ class Cell:
         self.ranked_fitness_carnivores()
         for carnivore in self.population_carnivores:
             herbivore_eaten = 0
-            # print("new carnivore")
 
             for herbivore in self.population_herbivores:
                 if herbivore_eaten >= 50:
-                    # print("herb_eaten over 50", herbivore_eaten)
                     break
 
                 probability_of_successful_hunt = \
@@ -154,7 +152,6 @@ class Cell:
                 if kill_probability < probability_of_successful_hunt:
                     herbivore_eaten += \
                         carnivore.eat(herbivore.weight, herbivore_eaten)
-                    # carnivore.calculate_fitness()
                     self.population_herbivores.remove(herbivore)
 
     def successful_hunt(self, carnivore, herbivore):
