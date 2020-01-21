@@ -3,7 +3,7 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-import cv2
+# import cv2
 import glob
 import os
 import argparse

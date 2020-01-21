@@ -146,10 +146,10 @@ class TestCell:
             cell_pop = item['pop']
         test_cell = Jungle()
         test_cell.add_pop(cell_pop)
-        self.test_cell.ranked_fitness_carnivores()
-        for i in range(test_cell.number_herbivores() - 1):
-            fitness1 = test_cell.population_herbivores[i].fitness
-            fitness2 = test_cell.population_herbivores[i + 1].fitness
+        test_cell.ranked_fitness_carnivores()
+        for i in range(test_cell.number_carnivores() - 1):
+            fitness1 = test_cell.population_carnivores[i].fitness
+            fitness2 = test_cell.population_carnivores[i + 1].fitness
             assert fitness1 > fitness2
 
     def test_feed_herbivores(self, test=test):
@@ -293,13 +293,12 @@ class TestCell:
         """
         Will test that the correct amount of abundant fodder is returned.
         """
-        self.test_cell
         self.test_cell.fodder = 800
-        self.test_cell.number_herbivores()
         population = 6
         f = 10
         test_abundance = self.test_cell.fodder / ((population + 1) * f)
         assert self.test_cell.get_abundance_herbivore() == test_abundance
+
 
     def test_get_abundance_carnivore(self, cell=test):
         """
@@ -315,6 +314,7 @@ class TestCell:
             test_cell.add_pop(cell_pop)
 
         assert test_cell.get_abundance_carnivore() == 4
+        assert self.test_cell.get_abundance_carnivore() == 0.92
         test_cell = Jungle()
         cell = self.carn_list
         for item in cell:
@@ -344,12 +344,6 @@ class TestCell:
         test_cell.add_age()
         for i in range(creature_count):
             assert test_cell.population_herbivores[i].age == age_list[i] + 1
-
-    cell_pop = {}
-    for item in test:
-        cell_pop = item['pop']
-    test_cell = Jungle()
-    test_cell.add_pop(cell_pop)
 
     def test_lose_weight(self, test=test):
         """
