@@ -129,7 +129,7 @@ class Visualize(object):
         carnivore_data = self._carnivore_line.get_ydata()
         total_data = self._total_line.get_ydata()
 
-        print(herbivore_data)
+        # print(herbivore_data)
 
         herbivore_data[current_year] = herbivore
         carnivore_data[current_year] = carnivore
