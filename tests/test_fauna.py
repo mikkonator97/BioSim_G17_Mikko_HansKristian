@@ -126,16 +126,6 @@ class TestHerbivores:
     Will test properties special for herbivores.
     """
 
-    def test_eating(self):
-        """
-        Will test that the creatures with highest amount of fitness eats first.
-        Will test that they eat if they are able to.
-        :return:
-        """
-        test_herbivore = Herbivore(weight=100, age=10)
-        test_herbivore.eat(10)
-        assert test_herbivore.weight == 109
-
     def test_herbivore_fitness(self):
         """
         Will test that the fitness formula works.

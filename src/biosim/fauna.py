@@ -191,12 +191,6 @@ class Herbivore(Fauna):
         self.DeltaPhiMax = None
         super().__init__(weight, age)
 
-    def eat(self, fodder_amount=0):
-        """
-        Creatures gains weight according to food and beta, because of food.
-        """
-        self.weight += self.beta * fodder_amount
-
 
 class Carnivore(Fauna):
     """
