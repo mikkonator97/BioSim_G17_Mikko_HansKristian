@@ -216,10 +216,13 @@ class TestCell:
         assert test_cell.feed_carnivores() is None
 
         test_cell = Jungle()
-        cell_pop = {}
+        cell_pop = {}   
         test3 = [{'loc': (10, 10),
                   'pop': [{'species': 'herbivore', 'age': 100, 'weight': 70},
-                          {'species': 'herbivore', 'age': 0, 'weight': 6},
+                          {'species': 'herbivore', 'age': 100, 'weight': 70},
+                          {'species': 'herbivore', 'age': 100, 'weight': 70},
+                          {'species': 'herbivore', 'age': 100, 'weight': 70},
+                          {'species': 'herbivore', 'age': 100, 'weight': 70},
                           ]}]
         for item in test3:
             cell_pop = item['pop']
@@ -229,14 +232,7 @@ class TestCell:
 
         test_cell.add_pop(test_carnivore)
         test_cell.feed_carnivores()
-        assert len(test_cell.population_herbivores) == 1
-
-        # cell_pop = {}
-        # for item in test:
-        #     cell_pop = item['pop']
-        # test_cell.add_pop(cell_pop)
-        # test_carnivore = Carnivore(weight=3, age=1)
-        # assert test_cell.feed_carnivores() == 1
+        assert len(test_cell.population_herbivores) == 4
 
     def test_successfull_hunt(self):
         """
