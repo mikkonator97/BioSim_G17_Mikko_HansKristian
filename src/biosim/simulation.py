@@ -371,11 +371,11 @@ if __name__ == '__main__':
     )
 
     # sim.add_population(population=ini_herbs)
-    sim.add_population(population=ini_carns)
     sim.set_landscape_parameters("J", {"f_max": 800})
 
-    sim.simulate(5)
-    print(sim.num_animals_per_species)
-    print(sim.animal_distribution)
+    sim.simulate(20)
+    sim.add_population(population=ini_carns)
+    sim.simulate(20)
+
     # sim.simulate(100)
     # sim.add_population(population=ini_carns)
