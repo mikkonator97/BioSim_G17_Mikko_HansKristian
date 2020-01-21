@@ -6,7 +6,7 @@ __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 from biosim.cell import Cell
 from biosim.fauna import Herbivore, Carnivore
 from biosim.map import Map
-from visualize import Visualize
+from biosim.visualize import Visualize
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sb
@@ -144,9 +144,9 @@ class BioSim:
             if (landscape in {'J', 'S'}) \
                     and (key in {'f_max', 'alpha'} and (value >= 0)):
                 if landscape == 'J':
-                    setattr(cell.Cell, key[4], params[key])
+                    setattr(Cell, key[4], params[key])
                 else:
-                    setattr(cell.Cell, key[3], params[key])
+                    setattr(Cell, key[3], params[key])
             else:
                 raise ValueError("Illegal landscape parameter(s)")
 
