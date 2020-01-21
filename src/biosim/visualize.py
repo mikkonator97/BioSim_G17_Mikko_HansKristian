@@ -162,6 +162,17 @@ class Visualize(object):
 
         #sb.heatmap(carnivore_spread, ax=self._carnivore_ax, cbar=False)
 
+    def _save_graphics(self):
+        """Saves graphics to file if file name given."""
+
+        if self._img_base is None:
+            return
+
+        plt.savefig('{base}_{num:05d}.{type}'.format(base=self._img_base,
+                                                     num=self._img_ctr,
+                                                     type=self._img_fmt))
+        self._img_ctr += 1
+
 
 
 
