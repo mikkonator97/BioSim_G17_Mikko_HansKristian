@@ -87,7 +87,9 @@ class Cell:
 
     def alter_population(self):
         """
-        Removes an animal from the list if it is supposed to die.
+        Runs through the population of both species. Uses while-loops to avoid
+        iteration errors when creatures are removed. They are removed if the
+        probability is higher than the chances for them to live.
         :return:
         """
         index = 0
@@ -95,7 +97,6 @@ class Cell:
         while index < number_of_herbivores:
             self.population_herbivores[index].state = \
                 self.population_herbivores[index].death()
-
             if self.population_herbivores[index].state:
                 self.population_herbivores.pop(index)
                 number_of_herbivores -= 1
@@ -243,25 +244,36 @@ class Cell:
 
 
 class Ocean(Cell):
+    """
+    Subclass for Ocean cells. Does not need much info, other than habitable.
+    """
     def __init__(self):
         super().__init__(coordinates=None, landscape=0, fodder=0)
         self.habitable = False
 
 
 class Mountain(Cell):
+    """
+    Subclass for Mountain cells. Does not need much info, other that habitable.
+    """
     def __init__(self):
         super().__init__(coordinates=None, landscape=1, fodder=0)
         self.habitable = False
 
 
 class Desert(Cell):
+    """
+    Subclass for Desert cells. Does not need much info, other that habitable.
+    """
     def __init__(self):
         super().__init__(coordinates=None, landscape=2, fodder=0)
         self.habitable = True
 
 
 class Savannah(Cell):
-
+    """
+    Subclass for Savannah cells. Defines variables unique for Savannah cells.
+    """
     def __init__(self):
         super().__init__(coordinates=None, landscape=3, fodder=0)
         self.f_max = self.f_max[3]
@@ -270,6 +282,9 @@ class Savannah(Cell):
 
 
 class Jungle(Cell):
+    """
+    Subclass for Jungle cells. Defines variables unique for Jungle cells.
+    """
     def __init__(self):
         super().__init__(coordinates=None, landscape=4, fodder=0)
         self.habitable = True
