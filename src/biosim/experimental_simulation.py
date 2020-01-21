@@ -121,7 +121,7 @@ class BioSim:
             print('Year: ', year)
             print('Ingoing population: ', self.map.get_populations())
             self.map.yearly_cycle()
-            if year % 2 == 0:
+            if year % 1 == 0:
                 herbs, carns, total = self.map.get_populations()
                 y_herbivores.append(herbs)
                 x.append(year)
