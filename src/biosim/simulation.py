@@ -3,6 +3,10 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
+import cv2
+import glob
+import os
+import argparse
 from biosim import cell
 from biosim.fauna import Herbivore, Carnivore
 from biosim.map import Map
@@ -75,7 +79,7 @@ class BioSim:
             if self.img_base is not None:
                 self._image_counter = 0
                 self.vis_years = 1
-        self.visualize = Visualize(self.map, frequency=2, years=200)
+        self.visualize = Visualize(self.map, frequency=2, years=200, img_dir=None)
 
 
     def check_validity_of_string(self, map_string):
@@ -184,37 +188,8 @@ class BioSim:
                                                      current_simulation_year)
             if (img_years is not None) and (vis_years % img_years == 0):
                 pass
+            self.visualize._save_graphics()
 
-    def visualization(self, current_simulation_year):
-        """
-        Will take care of the visualisation according to specifications in
-        simulation.
-        :return:
-        """
-        x = []
-        y_herbivores = []
-        herbs, carns, total = self.map.get_populations()
-        y_herbivores.append(herbs)
-        x.append(current_simulation_year)
-        pop_map = np.zeros((self.map.n_rows, self.map.n_cols))
-        map_matrix = np.zeros((self.map.n_rows, self.map.n_cols))
-        for x_cords in range(self.map.n_rows):
-            for y_cords in range(self.map.n_cols):
-                pop_map[x_cords][y_cords] = self.map.cell_map[x_cords][
-                    y_cords].number_herbivores()
-                map_matrix[x_cords][y_cords] = self.map.cell_map[x_cords][
-                    y_cords].landscape
-        # self.illustrate(x, y_herbivores)
-        # island = sb.heatmap(map_matrix)
-        heat_map = sb.heatmap(pop_map)
-        plt.show()
-
-
-    def illustrate(self, x, y):
-        plt.plot(x, y)
-        plt.xlabel('Year')
-        plt.ylabel('Population of herbivores')
-        plt.show()
 
     def add_population(self, population):
         """
@@ -290,9 +265,28 @@ class BioSim:
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""
-        if (self.img_base is not None) and (self._year % self.vis_years == 0):
-            plt.savefig('{img_base}_{img_no:05d}.{type}'.format(img_base=self.img_base, img_no=self._image_counter, type=self.img_fmt))
-            self._image_counter += 1
+        # if (self.img_base is not None) and (self._year % self.vis_years == 0):
+        #     plt.savefig('{img_base}_{img_no:05d}.{type}'.format(img_base=self.img_base, img_no=self._image_counter, type=self.img_fmt))
+        #    self._image_counter += 1
+        img_array = []
+        for filename in os.listdir('images'):
+            img = cv2.imread(filename)
+            height, width, layers = img.shape
+            size = (width, height)
+            img_array.append(img)
+
+        out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'),
+                              15, size)
+
+        for i in range(len(img_array)):
+            out.write(img_array[i])
+        out.release()
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
@@ -387,9 +381,10 @@ if __name__ == '__main__':
     # sim.add_population(population=ini_herbs)
     sim.set_landscape_parameters("J", {"f_max": 800})
     sim.add_population(population=ini_carns)
-    sim.simulate(100, vis_years=1)
+    # sim.simulate(100, vis_years=1)
 
-    sim.simulate(20, vis_years=5)
+    # sim.simulate(20, vis_years=5)
+    sim.make_movie()
 
     # sim.simulate(100)
     # sim.add_population(population=ini_carns)
