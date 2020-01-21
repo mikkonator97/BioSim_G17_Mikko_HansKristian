@@ -26,6 +26,7 @@ class TestFauna:
         test_adult = Fauna(age=30)
         assert test_baby.age == 0
         assert test_adult.age == 30
+        assert test_adult.get_age() == 30
 
     def test_weight(self):
         """
@@ -43,6 +44,7 @@ class TestFauna:
         test_herbi = Herbivore(weight=100, age=10)
         test_herbi.reduce_weight()
         assert test_herbi.weight == 95
+        assert test_herbi.get_weight() == 95
 
     def test_birth(self):
         """

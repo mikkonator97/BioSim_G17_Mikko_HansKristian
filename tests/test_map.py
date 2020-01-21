@@ -34,6 +34,14 @@ class TestMap:
                      {'species': 'herbivore', 'age': 5, 'weight': 40},
                      {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
 
+    test_both = [{'loc': (10, 10),
+             'pop': [{'species': 'carnivore', 'age': 10, 'weight': 15},
+                     {'species': 'carnivore', 'age': 5, 'weight': 40},
+                     {'species': 'carnivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 5, 'weight': 40},
+                     {'species': 'herbivore', 'age': 15, 'weight': 25}]}]
+
     map = Map(map_string)
 
     cell_pop = {}
@@ -126,15 +134,18 @@ class TestMap:
         # map.move()
         pass
 
-    def test_migration(self, map=map_string, pop=test):
+    def test_migration(self, map=map_string, pop=test, pop2=test_both):
         """
         Will test that herbivores are removed from old cell, and that there
         are more in another cell.
+
+        Also tests that carnivores does not move when there are no herbivores
+        nextdoor.
         :param map:
         :param pop:
         :return:
         """
-
+        # Test first with only herbivores.
         map1 = Map(map)
         for item in pop:
             i, j = item['loc']
@@ -143,6 +154,79 @@ class TestMap:
         assert map1.cell_map[10][10].number_herbivores() == 6
         map1.migration()
         assert map1.cell_map[10][10].number_herbivores() != 6
+
+        # Now adds population with both species.
+        for item in pop2:
+            i, j = item['loc']
+            cell_pop2 = item['pop']
+            map1.cell_map[i][j].add_pop(cell_pop2)
+
+        # Now there are only creatures in 10, 10, so they should now move
+        assert map1.cell_map[10][10].number_carnivores() == 3
+        map1.migration()
+        assert map1.cell_map[10][10].number_carnivores() == 3
+
+    def test_carnivores_follow_herbivores(self, map1=map):
+        """
+        First we create a big population of both species. Now we test that the
+        carnivores does not move after first call of migration.
+        The next call we can expect that the population of carnivores in the
+        starting cell has changed. We will do this with a mock. OR HIGH POPS.
+        :return:
+        """
+        n_herbs = 1000
+        n_carns = 1000
+        ini_herbs = [
+            {
+                "loc": (10, 10),
+                "pop": [
+                    {"species": "Herbivore", "age": 5, "weight": 20}
+                    for _ in range(n_herbs)
+                ],
+            },
+        ]
+
+        ini_carns = [
+            {
+                "loc": (10, 10),
+                "pop": [
+                    {"species": "Carnivore", "age": 5, "weight": 20}
+                    for _ in range(n_carns)
+                ],
+            }
+        ]
+
+        for item in ini_herbs:
+            i, j = item['loc']
+            cell_herbivores = item['pop']
+            map1.cell_map[i][j].add_pop(cell_herbivores)
+
+        for item in ini_carns:
+            i, j = item['loc']
+            cell_carnivores = item['pop']
+            map1.cell_map[i][j].add_pop(cell_carnivores)
+
+        # Make sure that the correct amount is at first.
+        assert map1.get_populations() == (n_herbs, n_carns, n_herbs + n_carns)
+        assert map1.cell_map[10][10].number_carnivores() == n_carns
+        assert map1.cell_map[10][10].number_herbivores() == n_herbs
+        # Make sure that only herbivores move first round.
+        map1.migration()
+        assert map1.cell_map[10][10].number_carnivores() == n_carns
+        assert map1.cell_map[10][10].number_herbivores() != n_herbs
+        # Looks like carnivores follow herbivores straight away, easy fix if we
+        # want to, just switch order, think we will keep it.
+        # Make sure that both populations are different that initially
+        map1.migration()
+        assert map1.cell_map[10][10].number_carnivores() != n_carns
+        assert map1.cell_map[10][10].number_herbivores() != n_herbs
+
+
+
+
+
+
+
 
 
 
