@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import numpy as np
 import seaborn as sb
 import subprocess
@@ -6,6 +7,7 @@ import os
 
 class Visualize(object):
     """Provides user interface for simulation, including visualization."""
+    _DEFAULT_MOVIE_FORMAT = 'mp4'
 
     def __init__(self, map, frequency=10, ymax=10000, years=200, img_dir=None, img_name='biosim',
                  img_fmt='png'):
@@ -172,6 +174,37 @@ class Visualize(object):
                                                      num=self._img_ctr,
                                                      type=self._img_fmt))
         self._img_ctr += 1
+
+    def make_movie(self, movie_fmt=_DEFAULT_MOVIE_FORMAT):
+        """
+        Creates MPEG4 movie from visualization images saved.
+        .. :note:
+            Requires ffmpeg
+        The movie is stored as img_base + movie_fmt
+        """
+        _FFMPEG_BINARY = 'ffmpeg'
+
+        if self._img_base is None:
+            raise RuntimeError("No filename defined.")
+
+        if movie_fmt == 'mp4':
+            try:
+                # Parameters chosen according to http://trac.ffmpeg.org/wiki/Encode/H.264,
+                # section "Compatibility"
+                subprocess.check_call([_FFMPEG_BINARY,
+                                       '-i',
+                                       '{}_%05d.png'.format(self._img_base),
+                                       '-y',
+                                       '-profile:v', 'baseline',
+                                       '-level', '3.0',
+                                       '-pix_fmt', 'yuv420p',
+                                       '{}.{}'.format(self._img_base,
+                                                      movie_fmt)])
+            except subprocess.CalledProcessError as err:
+                raise RuntimeError('ERROR: ffmpeg failed with: {}'.format(err))
+
+
+
 
 
 

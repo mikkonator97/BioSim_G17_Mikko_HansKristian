@@ -274,12 +274,10 @@ class BioSim:
         # if (self.img_base is not None) and (self._year % self.vis_years == 0):
         #     plt.savefig('{img_base}_{img_no:05d}.{type}'.format(img_base=self.img_base, img_no=self._image_counter, type=self.img_fmt))
         #    self._image_counter += 1
-        img_array = []
-        for filename in os.listdir('images'):
-            img = cv2.imread(os.listdir(filename)
-            height, width, layers = img.shape
-            size = (width, height)
-            img_array.append(img)
+        self.visualize.make_movie(movie_fmt='mp4')
+
+
+
 
     def save_mid_simulation_result(self, herbivores, carnivores, total):
         """ Saves the mid simulation results to a CSV-file each year. """
@@ -389,7 +387,7 @@ if __name__ == '__main__':
     # sim.simulate(100, vis_years=1)
 
     # sim.simulate(20, vis_years=5)
-    sim.make_movie()
+    # sim.make_movie()
 
     # sim.simulate(100)
     # sim.add_population(population=ini_carns)
