@@ -7,7 +7,7 @@ import cv2
 import glob
 import os
 import argparse
-from biosim import cell
+from biosim.cell import Cell
 from biosim.fauna import Herbivore, Carnivore
 from biosim.map import Map
 from visualize import Visualize
@@ -85,7 +85,7 @@ class BioSim:
             if self.img_base is not None:
                 self._image_counter = 0
                 self.vis_years = 1
-        self.visualize = Visualize(self.map, frequency=2, years=200, img_dir=None)
+        self.visualize = Visualize(self.map, frequency=2, years=200, img_dir='images')
 
 
     def check_validity_of_string(self, map_string):
@@ -192,6 +192,7 @@ class BioSim:
             if current_simulation_year % vis_years == 0:
                 self.visualize._update_graphics(self.map,
                                                      current_simulation_year)
+                # self.visualize._save_graphics()
             if (img_years is not None) and (vis_years % img_years == 0):
                 pass
 
@@ -275,7 +276,7 @@ class BioSim:
         #    self._image_counter += 1
         img_array = []
         for filename in os.listdir('images'):
-            img = cv2.imread(filename)
+            img = cv2.imread(os.listdir(filename)
             height, width, layers = img.shape
             size = (width, height)
             img_array.append(img)
@@ -291,12 +292,6 @@ class BioSim:
         for i in range(len(img_array)):
             out.write(img_array[i])
         out.release()
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
