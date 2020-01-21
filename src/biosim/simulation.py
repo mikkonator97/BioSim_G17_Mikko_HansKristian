@@ -3,14 +3,15 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from biosim.cell import Cell
-from biosim.fauna import Herbivore, Carnivore
-from biosim.map import Map
-from biosim.visualize import Visualize
+from .cell import Cell
+from .fauna import Herbivore, Carnivore
+from .map import Map
+from .visualize import Visualize
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sb
 import pandas as pd
+import csv
 
 
 class BioSim:
