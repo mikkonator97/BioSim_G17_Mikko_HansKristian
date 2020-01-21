@@ -136,6 +136,8 @@ class Visualize(object):
 
         #self.herbi[current_year] = herbivore
 
+        print('herbivore_data', herbivore_data)
+
 
         self._herbivore_line.set_ydata(herbivore_data)
         self._carnivore_line.set_ydata(carnivore_data)
