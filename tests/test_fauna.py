@@ -126,16 +126,6 @@ class TestHerbivores:
     Will test properties special for herbivores.
     """
 
-    def test_eating(self):
-        """
-        Will test that the creatures with highest amount of fitness eats first.
-        Will test that they eat if they are able to.
-        :return:
-        """
-        test_herbivore = Herbivore(weight=100, age=10)
-        test_herbivore.eat(10)
-        assert test_herbivore.weight == 109
-
     def test_herbivore_fitness(self):
         """
         Will test that the fitness formula works.
@@ -144,24 +134,7 @@ class TestHerbivores:
         # This was the easiest combination to calculate by hand...
         # NB! Works with default parameters.
         test_herbivore = Herbivore(weight=10, age=40)
-        assert test_herbivore.get_fitness() == 0.25
-
-    def test_migrate(self):
-        """
-        Test that a creature stays in place if it does not want to migrate.
-        Test that a creature will migrate if it wants to
-        :return:
-        """
-        test_herbivore = Herbivore(age=10, weight=30)
-        test_herbivore.have_migrated = True
-        desired_cell_pre_migration = test_herbivore.desired_cell
-        test_herbivore.migrate()
-        assert desired_cell_pre_migration == test_herbivore.desired_cell
-        # """Needs a test object with adjacent cells to make this work"""
-        # test_herbivore.have_migrated = False
-        # desired_cell_pre_migration = test_herbivore.desired_cell
-        # test_herbivore.migrate()
-        # assert desired_cell_pre_migration != test_herbivore.desired_cell
+        assert test_herbivore.fitness == 0.25
 
 class TestCarnivores:
     """

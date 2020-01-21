@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sb
 import pandas as pd
+import csv
 
 
 class BioSim:
@@ -33,6 +34,7 @@ class BioSim:
             cmax_animals=None,
             img_base=None,
             img_fmt="png",
+            save_csv=False,
     ):
         """
         :param island_map: Multi-line string specifying island geography
@@ -45,6 +47,8 @@ class BioSim:
         :param img_base: String with beginning of file name for figures,
                including path
         :param img_fmt: String with file type for figures, e.g. 'png'
+        :param save_csv: Boolean, gives the user the option to save mid
+               results to a csv-file
 
         If ymax_animals is None, the y-axis limit should be adjusted
         automatically.
@@ -60,6 +64,7 @@ class BioSim:
 
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
+
         """
         self._animal_distribution = pd.DataFrame()
         self._num_animals_per_species = {'Carnivore': 0, 'Herbivore': 0}
@@ -76,6 +81,7 @@ class BioSim:
             self.img_fmt = img_fmt
             self.map = Map(self.island_map)
             self.add_population(ini_pop)
+            self.save_csv = save_csv
             if self.img_base is not None:
                 self._image_counter = 0
                 self.vis_years = 1
@@ -148,9 +154,9 @@ class BioSim:
             if (landscape in {'J', 'S'}) \
                     and (key in {'f_max', 'alpha'} and (value >= 0)):
                 if landscape == 'J':
-                    setattr(cell.Cell, key[4], params[key])
+                    setattr(Cell, key[4], params[key])
                 else:
-                    setattr(cell.Cell, key[3], params[key])
+                    setattr(Cell, key[3], params[key])
             else:
                 raise ValueError("Illegal landscape parameter(s)")
 
@@ -188,7 +194,6 @@ class BioSim:
                                                      current_simulation_year)
             if (img_years is not None) and (vis_years % img_years == 0):
                 pass
-            self.visualize._save_graphics()
 
 
     def add_population(self, population):
@@ -275,6 +280,11 @@ class BioSim:
             size = (width, height)
             img_array.append(img)
 
+    def save_mid_simulation_result(self, herbivores, carnivores, total):
+        """ Saves the mid simulation results to a CSV-file each year. """
+        with open('save mid simulation result', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(self._year, herbivores, carnivores, total)
         out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'),
                               15, size)
 
