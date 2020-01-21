@@ -84,7 +84,7 @@ class Fauna:
         :return: float
         """
         # is this self.gamma? check tommorrow
-        birth_probability = min(1, 0.2 * self.fitness * (population - 1))
+        birth_probability = min(1, self.gamma * self.fitness * (population - 1))
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
 
         if self.weight > self.zeta * (9.5):

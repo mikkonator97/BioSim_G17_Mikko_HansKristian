@@ -8,7 +8,7 @@ __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 """
 This file is used for testing of the class Cell.
 """
-
+import pytest
 
 class TestCell:
     fauna_list = [{'loc': (3, 4),
@@ -45,7 +45,18 @@ class TestCell:
                       {'species': 'herbivore', 'age': 40, 'weight': 43},
                       {'species': 'herbivore', 'age': 15, 'weight': 25}]}
              ]
-    test_cell = Jungle()
+
+    test_random_carn = [{'loc': (10, 10),
+              'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
+                      ]} for _ in range(10)
+             ]
+
+    @pytest.fixture(autouse=True)
+    def jungle_test_cell(self):
+        self.test_cell = Jungle()
+        for item in self.fauna_list:
+            cell_pop = item['pop']
+            self.test_cell.add_pop(cell_pop)
 
     def test_add_pop(self, test=test):
         """
@@ -53,13 +64,8 @@ class TestCell:
         :param test:
         :return:
         """
-        cell_pop = {}
-        for item in test:
-            cell_pop = item['pop']
-
-        test_cell = Jungle()
-        test_cell.add_pop(cell_pop)
-        assert test_cell.number_herbivores() == 6
+        assert self.test_cell.number_herbivores() == 6
+        assert self.test_cell.number_carnivores() == 3
 
     def test_number_carnivores(self):
         """
@@ -71,10 +77,7 @@ class TestCell:
         num_carnivores = test_cell.number_carnivores()
         assert num_carnivores == 0
 
-        for item in self.carn_list:
-            cell_pop = item['pop']
-        test_cell.add_pop(cell_pop)
-        num_carnivores = test_cell.number_carnivores()
+        num_carnivores = self.test_cell.number_carnivores()
         assert num_carnivores == 3
 
     def test_number_herbivores(self, test=test):
@@ -82,12 +85,7 @@ class TestCell:
         Test that the correct number of herbivores are returned
         :return:
         """
-        cell_pop = {}
-        test_cell = Jungle()
-        for item in self.fauna_list:
-            cell_pop = item['pop']
-            test_cell.add_pop(cell_pop)
-        assert test_cell.number_herbivores() == 6
+        assert self.test_cell.number_herbivores() == 6
 
     def test_add_fodder(self):
         """
@@ -96,11 +94,11 @@ class TestCell:
         that fodder can be added to a cell.
         :return:
         """
-        test_jungle = Jungle()
-        assert test_jungle.fodder == 800.0
-        test_jungle.fodder = 0.0
-        test_jungle.add_fodder()
-        assert test_jungle.fodder == 800.0
+        # test_jungle = Jungle()
+        assert self.test_cell.fodder == 800.0
+        self.test_cell.fodder = 0.0
+        self.test_cell.add_fodder()
+        assert self.test_cell.fodder == 800.0
         test_savannah = Savannah()
         assert test_savannah.fodder == 300.0
         test_savannah.fodder = 0
@@ -111,9 +109,7 @@ class TestCell:
 
     def test_get_fodder(self):
         """ Test that get_fodder returns the correct amount of fodder. """
-        test_jungle = Jungle()
-        test_jungle.fodder = 800.0
-        assert test_jungle.get_fodder() == 800
+        assert self.test_cell.get_fodder() == 800
 
     def test_habitability(self):
         """Test that the cells get correct habitability."""
@@ -135,27 +131,22 @@ class TestCell:
         :param test: List of creatures in a population.
         :return:
         """
-        cell_pop = {}
-        for item in test:
-            cell_pop = item['pop']
-        test_cell = Jungle()
-        test_cell.add_pop(cell_pop)
-        test_cell.ranked_fitness_herbivores()
-        for i in range(test_cell.number_herbivores() - 1):
-            fitness1 = test_cell.population_herbivores[i].fitness
-            fitness2 = test_cell.population_herbivores[i + 1].fitness
+        self.test_cell.ranked_fitness_herbivores()
+        for i in range(self.test_cell.number_herbivores() - 1):
+            fitness1 = self.test_cell.population_herbivores[i].fitness
+            fitness2 = self.test_cell.population_herbivores[i + 1].fitness
             assert fitness1 > fitness2
-        test_cell.ranked_fitness_herbivores_weakest()
-        for i in range(test_cell.number_herbivores() - 1):
-            fitness1 = test_cell.population_herbivores[i].fitness
-            fitness2 = test_cell.population_herbivores[i + 1].fitness
+        self.test_cell.ranked_fitness_herbivores_weakest()
+        for i in range(self.test_cell.number_herbivores() - 1):
+            fitness1 = self.test_cell.population_herbivores[i].fitness
+            fitness2 = self.test_cell.population_herbivores[i + 1].fitness
             assert fitness1 < fitness2
         cell_pop = {}
         for item in self.carn_list:
             cell_pop = item['pop']
         test_cell = Jungle()
         test_cell.add_pop(cell_pop)
-        test_cell.ranked_fitness_carnivores()
+        self.test_cell.ranked_fitness_carnivores()
         for i in range(test_cell.number_herbivores() - 1):
             fitness1 = test_cell.population_herbivores[i].fitness
             fitness2 = test_cell.population_herbivores[i + 1].fitness
@@ -238,26 +229,17 @@ class TestCell:
         """
         Will test that a successfull hunt returns correct probability
         """
-        test_cell = Jungle()
         test_herbivore = Herbivore(weight=20, age=5)
-        test_herbivore.fitness
         test_carnivore = Carnivore(weight=10, age=80)
-        test_carnivore.fitness
-        hunt = test_cell.successful_hunt(test_carnivore, test_herbivore)
+        hunt = self.test_cell.successful_hunt(test_carnivore, test_herbivore)
         assert hunt == 0
-        test_cell = Jungle()
         test_herbivore = Herbivore(weight=20, age=5)
-        test_herbivore.fitness
         test_carnivore = Carnivore(weight=10, age=20)
-        test_carnivore.fitness
-        hunt = test_cell.successful_hunt(test_carnivore, test_herbivore)
+        hunt = self.test_cell.successful_hunt(test_carnivore, test_herbivore)
         assert 1 > hunt > 0
-        test_cell = Jungle()
         test_herbivore = Herbivore(weight=150, age=100)
-        test_herbivore.fitness
         test_carnivore = Carnivore(weight=3, age=1)
-        test_carnivore.fitness
-        hunt = test_cell.successful_hunt(test_carnivore, test_herbivore)
+        hunt = self.test_cell.successful_hunt(test_carnivore, test_herbivore)
         assert hunt < 0.05
 
     def test_alter_population(self, test=test):
@@ -292,7 +274,7 @@ class TestCell:
         test_cell.add_pop(cell_pop)
         test_cell.mating_season()
         assert test_cell.number_herbivores() != 6
-        # Will test that the creature only mates if they whey enough.
+        # Will test that the creature only mates if they weigh enough.
         for creature in test_cell.population_herbivores:
             creature.have_mated = False
         test_cell.mating_season()
@@ -311,17 +293,13 @@ class TestCell:
         """
         Will test that the correct amount of abundant fodder is returned.
         """
-        cell_pop = {}
-        cell = Jungle()
-        for item in self.fauna_list:
-            cell_pop = item['pop']
-            cell.add_pop(cell_pop)
-        cell.fodder = 800
-        cell.number_herbivores()
+        self.test_cell
+        self.test_cell.fodder = 800
+        self.test_cell.number_herbivores()
         population = 6
         f = 10
-        test_abundance = cell.fodder / ((population + 1) * f)
-        assert cell.get_abundance_herbivore() == test_abundance
+        test_abundance = self.test_cell.fodder / ((population + 1) * f)
+        assert self.test_cell.get_abundance_herbivore() == test_abundance
 
     def test_get_abundance_carnivore(self, cell=test):
         """
