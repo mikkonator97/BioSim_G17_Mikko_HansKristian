@@ -288,7 +288,7 @@ class Map:
             creature.have_mated = False
             creature.have_migrated = False
 
-    def yearly_stage1(self):
+    def feeding_and_procreation(self):
         """
         Yearly stage 1 handles the addition of fodder to each cell,
         feeding for both species, and procreation of both species.
@@ -308,9 +308,6 @@ class Map:
                         current_cell.ranked_fitness_herbivores()
                         current_cell.feed_herbivores(creature)
 
-                    # Re-calculate herbivores fitness since weight increased
-                    #for creature in current_cell.population_herbivores:
-                        #creature.fitness = creature.calculate_fitness()
                     # Feed the carnivores
                     if len(current_cell.population_carnivores) > 0:
                         for carnivore in current_cell.population_carnivores:
@@ -319,16 +316,7 @@ class Map:
                             current_cell.feed_carnivores()
                     current_cell.mating_season()
 
-
-    def yearly_stage2(self):
-        """
-        This function calls the migration function which handles
-        the migration for both species.
-        :return:
-        """
-        self.migration()
-
-    def yearly_stage3(self):
+    def agein_weight_loss_and_death(self):
         """
         This function makes the creatures one year older, causes them to
         lose weight according to some beta and their current weight,
@@ -360,11 +348,11 @@ class Map:
         :return:
         """
     # #     # OPS! some of these functions can be put together
-        self.yearly_stage1()
+        self.feeding_and_procreation()
     # #     # NB! first year none can mate
         self.migration()
     # #     # self.yearly_stage2()
-        self.yearly_stage3()
+        self.agein_weight_loss_and_death()
 
     def get_population_maps(self):
         """

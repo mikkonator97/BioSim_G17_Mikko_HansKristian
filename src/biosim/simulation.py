@@ -163,9 +163,9 @@ class BioSim:
         current_simulation_year = 0
         while current_simulation_year < num_years:
             print('Ingoing population: ', self.map.get_populations())
-            self.map.yearly_stage1()
-            self.map.yearly_stage2()
-            self.map.yearly_stage3()
+            self.map.feeding_and_procreation()
+            self.map.migration()
+            self.map.agein_weight_loss_and_death()
             print("current_simulation_year", current_simulation_year + 1,
                   " out of ", num_years)
             current_simulation_year += 1
@@ -352,7 +352,7 @@ if __name__ == '__main__':
             "loc": (4, 6),
             "pop": [
                 {"species": "Carnivore", "age": 5, "weight": 20}
-                for _ in range(10)
+                for _ in range(40)
             ],
         }
     ]
@@ -384,9 +384,9 @@ if __name__ == '__main__':
     # sim.add_population(population=ini_herbs)
     sim.set_landscape_parameters("J", {"f_max": 800})
 
-    sim.simulate(20)
+    sim.simulate(20, vis_years=5)
     sim.add_population(population=ini_carns)
-    sim.simulate(20)
+    sim.simulate(20, vis_years=5)
 
     # sim.simulate(100)
     # sim.add_population(population=ini_carns)
