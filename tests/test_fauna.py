@@ -3,7 +3,7 @@
 # Fauna is the superclass, and all other creatures will be found under.
 # from math import exp
 from biosim.fauna import Fauna, Herbivore
-
+import pytest
 
 class TestFauna:
     """
@@ -40,16 +40,6 @@ class TestFauna:
         test_herbi = Herbivore(weight=100, age=10)
         test_herbi.reduce_weight()
         assert test_herbi.weight == 95
-
-    def test_migration(self):
-        """
-        Will test that the animals move towards a location based on the
-        amount of fodder.
-        Will also test that animals unable to move because of low fitness
-        have to stay behind.
-        :return:
-        """
-        pass
 
     def test_birth(self):
         """
@@ -120,6 +110,15 @@ class TestFauna:
         test_creature4 = Herbivore(age=10, weight=15)
         assert not test_creature4.death()
 
+    @pytest.mark.parametrize('age, weight', [[50, 3], [60, 5], [70, 10]])
+    def test_wants_to_migrate(self, age, weight):
+        """
+        Will test that animals unable to move because of low fitness
+        have to stay behind.
+        :return:
+        """
+        test_creature1 = Herbivore(age, weight)
+        assert test_creature1.wants_to_migrate() is False
 
 class TestHerbivores:
     """
@@ -141,7 +140,7 @@ class TestCarnivores:
     Will test properties special for carnivores.
     """
 
-    def test_eating(self):
+    def test_eat(self):
         """
         Will test that carnivores try to eat until it has passed 50 units
         of food in a year or there are no herbivores left in the cell.
