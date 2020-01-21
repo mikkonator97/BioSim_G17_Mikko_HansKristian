@@ -1,5 +1,5 @@
 from biosim.fauna import Fauna, Herbivore, Carnivore
-from biosim.Cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
+from biosim.cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
 import numpy as np
 
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
@@ -24,9 +24,9 @@ class TestCell:
                            {'species': 'Carnivore', 'age': 5, 'weight': 20},
                            {'species': 'Carnivore', 'age': 8, 'weight': 5}]}]
     carn_list = [{'loc': (4, 4),
-                   'pop': [{'species': 'Carnivore', 'age': 3, 'weight': 35},
-                           {'species': 'Carnivore', 'age': 5, 'weight': 20},
-                           {'species': 'Carnivore', 'age': 8, 'weight': 5}]}]
+                  'pop': [{'species': 'Carnivore', 'age': 3, 'weight': 35},
+                          {'species': 'Carnivore', 'age': 5, 'weight': 20},
+                          {'species': 'Carnivore', 'age': 8, 'weight': 5}]}]
 
     test = [{'loc': (10, 10),
              'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
@@ -46,6 +46,7 @@ class TestCell:
                       {'species': 'herbivore', 'age': 15, 'weight': 25}]}
              ]
     test_cell = Jungle()
+
     def test_add_pop(self, test=test):
         """
         Will test that we can add a population to the single cell.
@@ -199,13 +200,43 @@ class TestCell:
         for i in range(1, len(weight)):
             assert test_cell.population_herbivores[i].weight == weight2[i]
 
-    def test_feed_carnivore(self):
+    def test_feed_carnivore(self, test=test2):
         """
-        This function will test that the carnivore stops eating if it has eaten 50 units of fodder,
-        if there is no herbivores left to eat, or if the carnivore has tried to kill all the herbivores in the cell.
+        This function will test that the carnivore will not eat if there is no
+        herbivores in the cell, stops eating if it has eaten 50 units of fodder
+        if there is no herbivores left to eat, or if the carnivore has tried
+        to kill all the herbivores in the cell.
         :return:
         """
-        pass
+        test_cell = Jungle()
+        cell_pop = {}
+        for item in self.carn_list:
+            cell_pop = item['pop']
+        test_cell.add_pop(cell_pop)
+        assert test_cell.feed_carnivores() is None
+
+        test_cell = Jungle()
+        cell_pop = {}
+        test3 = [{'loc': (10, 10),
+                  'pop': [{'species': 'herbivore', 'age': 100, 'weight': 70},
+                          {'species': 'herbivore', 'age': 0, 'weight': 6},
+                          ]}]
+        for item in test3:
+            cell_pop = item['pop']
+            test_cell.add_pop(cell_pop)
+        test_carnivore = [{'species': 'carnivore', 'age': 1,
+                                    'weight': 6}]
+
+        test_cell.add_pop(test_carnivore)
+        test_cell.feed_carnivores()
+        assert len(test_cell.population_herbivores) == 1
+
+        # cell_pop = {}
+        # for item in test:
+        #     cell_pop = item['pop']
+        # test_cell.add_pop(cell_pop)
+        # test_carnivore = Carnivore(weight=3, age=1)
+        # assert test_cell.feed_carnivores() == 1
 
     def test_successfull_hunt(self):
         """
@@ -213,23 +244,23 @@ class TestCell:
         """
         test_cell = Jungle()
         test_herbivore = Herbivore(weight=20, age=5)
-        test_herbivore.calculate_fitness()
+        test_herbivore.fitness
         test_carnivore = Carnivore(weight=10, age=80)
-        test_carnivore.calculate_fitness()
+        test_carnivore.fitness
         hunt = test_cell.successful_hunt(test_carnivore, test_herbivore)
         assert hunt == 0
         test_cell = Jungle()
         test_herbivore = Herbivore(weight=20, age=5)
-        test_herbivore.calculate_fitness()
+        test_herbivore.fitness
         test_carnivore = Carnivore(weight=10, age=20)
-        test_carnivore.calculate_fitness()
+        test_carnivore.fitness
         hunt = test_cell.successful_hunt(test_carnivore, test_herbivore)
         assert 1 > hunt > 0
         test_cell = Jungle()
         test_herbivore = Herbivore(weight=150, age=100)
-        test_herbivore.calculate_fitness()
+        test_herbivore.fitness
         test_carnivore = Carnivore(weight=3, age=1)
-        test_carnivore.calculate_fitness()
+        test_carnivore.fitness
         hunt = test_cell.successful_hunt(test_carnivore, test_herbivore)
         assert hunt < 0.05
 

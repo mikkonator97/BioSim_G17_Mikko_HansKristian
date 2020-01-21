@@ -4,7 +4,7 @@ __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
 import numpy as np
-import math
+from math import exp
 
 
 class Fauna:
@@ -99,10 +99,10 @@ class Fauna:
         :return: float
         """
         if self.weight <= 0:
-            return 0
+            return 0.0
         else:
-            q_pos = 1.0 / (1.0 + math.exp(self.phi_age * (self.age - self.a_half)))
-            q_neg = 1.0 / (1.0 + math.exp(-self.phi_weight * (self.weight - self.w_half)))
+            q_pos = 1.0 / (1.0 + exp(self.phi_age * (self.age - self.a_half)))
+            q_neg = 1.0 / (1.0 + exp(-self.phi_weight * (self.weight - self.w_half)))
             phi = q_pos * q_neg
             return phi
 

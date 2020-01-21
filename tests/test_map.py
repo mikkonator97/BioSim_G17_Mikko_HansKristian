@@ -3,7 +3,7 @@ __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
 from biosim.fauna import Fauna
-from biosim.Cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
+from biosim.cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
 from biosim.map import Map
 from biosim.simulation import BioSim
 
