@@ -384,7 +384,7 @@ if __name__ == '__main__':
     # sim.add_population(population=ini_herbs)
     sim.set_landscape_parameters("J", {"f_max": 800})
     sim.add_population(population=ini_carns)
-    # sim.simulate(100, vis_years=1)
+    sim.simulate(100, vis_years=1)
 
     # sim.simulate(20, vis_years=5)
     # sim.make_movie()

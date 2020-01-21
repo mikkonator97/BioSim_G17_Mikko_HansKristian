@@ -70,10 +70,13 @@ class Visualize(object):
         # Add left subplot for images created with imshow().
         # We cannot create the actual ImageAxis object before we know
         # the size of the image, so we delay its creation.
+        map_plot = PlotMap(map)
         if self._map_ax is None:
             self._map_ax = self._fig.add_subplot(2, 2, 1)
             self._map_ax.set_title('Map of Rossumøya')
-            self._img_axis = None
+            # self._img_axis = None
+            self.im_map = self._map_ax.imshow(map.map_matrix,
+                                                          vmax=4)
 
         # Add right subplot for line graph of mean.
         if self._stats_ax is None:
@@ -202,6 +205,12 @@ class Visualize(object):
                                                       movie_fmt)])
             except subprocess.CalledProcessError as err:
                 raise RuntimeError('ERROR: ffmpeg failed with: {}'.format(err))
+
+class PlotMap:
+
+    def __init__(self, map):
+        self.map = map
+        self.map_matrix = map.map_matrix
 
 
 
