@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import matplotlib.colors as mcolors
 import numpy as np
 import seaborn as sb
@@ -70,13 +71,15 @@ class Visualize(object):
         # Add left subplot for images created with imshow().
         # We cannot create the actual ImageAxis object before we know
         # the size of the image, so we delay its creation.
-        map_plot = PlotMap(map)
+        #ap_plot = PlotMap(map)
+        cmap = mpl.colors.ListedColormap(['royalblue', 'grey',
+                                  'khaki', 'honeydew', 'forestgreen'])
         if self._map_ax is None:
             self._map_ax = self._fig.add_subplot(2, 2, 1)
             self._map_ax.set_title('Map of Rossumøya')
             # self._img_axis = None
             self.im_map = self._map_ax.imshow(map.map_matrix,
-                                                          vmax=4)
+                                                          vmax=4, cmap=cmap)
 
         # Add right subplot for line graph of mean.
         if self._stats_ax is None:
@@ -207,10 +210,25 @@ class Visualize(object):
                 raise RuntimeError('ERROR: ffmpeg failed with: {}'.format(err))
 
 class PlotMap:
+    map_colors = {
+        0: mcolors.to_rgba("navy"),
+        1: mcolors.to_rgba("lightslategrey"),
+        2: mcolors.to_rgba("salmon"),
+        3: mcolors.to_rgba("#e1ab62"),
+        4: mcolors.to_rgba("forestgreen"),
+    }
+    map_labels = {
+        "O": "Ocean",
+        "M": "Mountain",
+        "D": "Desert",
+        "S": "Savannah",
+        "J": "Jungle",
+    }
 
     def __init__(self, map):
         self.map = map
         self.map_matrix = map.map_matrix
+
 
 
 
