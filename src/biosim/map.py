@@ -159,6 +159,14 @@ class Map:
                                                 x_coordinate, y_coordinate)
 
     def get_propensities(self,y_coordinate, x_coordinate):
+        """
+        Takes two lists of zeros, and turns them into lists containing the
+        propensities of fodder for each species. Each value in the list
+        represents an adjacent cell.
+        :param y_coordinate: int
+        :param x_coordinate: int
+        :return:
+        """
         propensities_herbivores = [0, 0, 0, 0]
         propensities_carnivores = [0, 0, 0, 0]
         index = 0
@@ -183,6 +191,16 @@ class Map:
     def convert_into_probabilities(self, propensities_herbivores,
                                    propensities_carnivores, x_coordinate,
                               y_coordinate):
+        """
+        Takes the lists containing propensities and calculates probabilities
+        for each species to migrate to the cell represented by the index of
+        that list.
+        :param propensities_herbivores: list
+        :param propensities_carnivores: list
+        :param x_coordinate: int
+        :param y_coordinate: int
+        :return:
+        """
         probabilities_herbivores = [0, 0, 0, 0]
         probabilities_carnivores = [0, 0, 0, 0]
 
@@ -203,17 +221,20 @@ class Map:
 
     def select_index_to_move(self, probabilities):
         """
-        Uses probabilities to choose from destinations.
-        NB! Requires 4 adjacent cells, and 4 probabilities to work.
+        Uses the list of probabilities as a parameter to choose a number
+        between 0 and 3. The number represents the index the creature will use
+        in order to migrate.
         :param probabilities: list
-        :return: tuple
+        :return: int
         """
         if (sum(probabilities)) == 1:
             return np.random.choice([0, 1, 2, 3], p=probabilities)
 
     def move_herbivore(self, move_to, move_from, creature_index):
         """
-        Moves the herbivore
+        Moves the herbivore from move_from to move_to. They are both tuples,
+        and contain coordinates which will be used as indexes from removal and
+        adding of the creature. The creature is selected with creature_index.
         :param move_to: tuple
         :param move_from: tuple
         :param creature_index: int
@@ -226,7 +247,9 @@ class Map:
 
     def move_carnivore(self, move_to, move_from, creature_index):
         """
-        Moves the carnivore
+        Moves the carnivore from move_from to move_to. They are both tuples,
+        and contain coordinates which will be used as indexes from removal and
+        adding of the creature. The creature is selected with creature_index.
         :param move_to: tuple
         :param move_from: tuple
         :param creature_index: int
@@ -332,6 +355,10 @@ class Map:
                         # print('Average age: ', g)
 
     def yearly_cycle(self):
+        """
+        Will run through each stage of the yearly cycle.
+        :return:
+        """
     # #     # OPS! some of these functions can be put together
         self.yearly_stage1()
     # #     # NB! first year none can mate
