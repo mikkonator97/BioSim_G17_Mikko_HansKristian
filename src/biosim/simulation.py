@@ -6,6 +6,7 @@ __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 from biosim.cell import Cell
 from biosim.fauna import Herbivore, Carnivore
 from biosim.map import Map
+from visualize import Visualize
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sb
@@ -74,6 +75,7 @@ class BioSim:
             if self.img_base is not None:
                 self._image_counter = 0
                 self.vis_years = 1
+        self.visualize = Visualize(self.map, frequency=2, years=200)
 
 
     def check_validity_of_string(self, map_string):
@@ -178,7 +180,8 @@ class BioSim:
                 self.fill_animal_distribution_dataframe()
 
             if current_simulation_year % vis_years == 0:
-                self.visualization(current_simulation_year)
+                self.visualize._update_graphics(self.map,
+                                                     current_simulation_year)
             if (img_years is not None) and (vis_years % img_years == 0):
                 pass
 
@@ -205,7 +208,7 @@ class BioSim:
         # island = sb.heatmap(map_matrix)
         heat_map = sb.heatmap(pop_map)
         plt.show()
-        pass
+
 
     def illustrate(self, x, y):
         plt.plot(x, y)
@@ -334,7 +337,7 @@ if __name__ == '__main__':
             "loc": (4, 6),
             "pop": [
                 {"species": "Herbivore", "age": 5, "weight": 20}
-                for _ in range(10)
+                for _ in range(100)
             ],
         },
         # {
@@ -352,7 +355,7 @@ if __name__ == '__main__':
             "loc": (4, 6),
             "pop": [
                 {"species": "Carnivore", "age": 5, "weight": 20}
-                for _ in range(40)
+                for _ in range(10)
             ],
         }
     ]
@@ -383,9 +386,9 @@ if __name__ == '__main__':
 
     # sim.add_population(population=ini_herbs)
     sim.set_landscape_parameters("J", {"f_max": 800})
-
-    sim.simulate(20, vis_years=5)
     sim.add_population(population=ini_carns)
+    sim.simulate(100, vis_years=1)
+
     sim.simulate(20, vis_years=5)
 
     # sim.simulate(100)
