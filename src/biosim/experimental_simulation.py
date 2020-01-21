@@ -62,6 +62,7 @@ class BioSim:
         herbi, carni, total = self.map.get_populations()
         self.visualize = Visualize(self.map, frequency=2, years=200)
 
+
     def insert_population(self, population):
         for item in population:
             i, j = item['loc']
