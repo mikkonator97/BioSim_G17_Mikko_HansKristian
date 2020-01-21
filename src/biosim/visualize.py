@@ -111,6 +111,10 @@ class Visualize(object):
             self.im_carnivore = self._carnivore_ax.imshow(map.map_herbivores,
                                                           vmax=150)
 
+        self._stats_ax.legend((self._herbivore_line, self._carnivore_line,
+                               self._total_line), ('Herbivores', 'Carnivores',
+                                                   'Total'), prop={'size':6})
+
     def _update_graphics(self, map, current_year):
         herbivore, carnivore, total = map.get_populations()
         self._update_stats_graph(herbivore, carnivore, current_year)
