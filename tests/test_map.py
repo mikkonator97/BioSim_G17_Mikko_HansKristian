@@ -6,7 +6,10 @@ from biosim.fauna import Fauna
 from biosim.cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
 from biosim.map import Map
 from biosim.simulation import BioSim
+import mock
+import unittest
 
+# Testing the operations within a function
 
 class TestMap:
     map_string = """\
@@ -46,6 +49,21 @@ class TestMap:
         assert map.cell_map[0][0].landscape == 0
         assert map.cell_map[10][10].landscape == 4
 
+    def test_get_populations(self, map_string=map_string, pop=test):
+        """
+        Will test that once a population is added, we can get it using the
+        get_populations function.
+        :param map:
+        :param pop:
+        :return:
+        """
+        map2 = Map(map_string)
+        for item in pop:
+            i, j = item['loc']
+            cell_pop = item['pop']
+            map2.cell_map[i][j].add_pop(cell_pop)
+        assert map2.get_populations() == (6, 0, 6)
+
     def test_list_of_adjacent_cells(self, map=map):
         """
         Will test that the list of adjacent cells is correct.
@@ -84,6 +102,15 @@ class TestMap:
         sim.map.migration()
         assert sim.map.cell_map[1][1].number_herbivores() == 1
 
+
+    @mock.patch("biosim.map.choice", return_value=1, autospec=True)
+    def test_select_index_to_move(self, mock_choice, map=map):
+        probabilities_index_test = [0, 0.25, 0.75, 0.25]
+        index = map.select_index_to_move(probabilities_index_test)
+        assert index == 1
+        mock_choice.assert_called_once_with(1)
+
+
     def test_creature_moves_to_preferred(self, map=map, pop=test):
         """
         If the creature is supposed to move: test that the creature will be
@@ -118,16 +145,4 @@ class TestMap:
         assert map1.cell_map[10][10].number_herbivores() != 6
 
 
-    def test_get_populations(self, map_string=map_string, pop=test):
-        """
-        Will test that once a p
-        :param map:
-        :param pop:
-        :return:
-        """
-        map2 = Map(map_string)
-        for item in pop:
-            i, j = item['loc']
-            cell_pop = item['pop']
-            map2.cell_map[i][j].add_pop(cell_pop)
-        assert map2.get_populations() == (6, 0, 6)
+

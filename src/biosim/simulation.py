@@ -10,7 +10,7 @@ import argparse
 from biosim.cell import Cell
 from biosim.fauna import Herbivore, Carnivore
 from biosim.map import Map
-from visualize import Visualize
+from biosim.visualize import Visualize
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sb
