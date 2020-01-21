@@ -2,6 +2,8 @@
 # These tests will go through the needs and specifications for the faunas.
 # Fauna is the superclass, and all other creatures will be found under.
 # from math import exp
+import mock
+import unittest
 from biosim.fauna import Fauna, Herbivore
 
 
@@ -119,6 +121,14 @@ class TestFauna:
         # And therefore want to test that the creature survives.
         test_creature4 = Herbivore(age=10, weight=15)
         assert not test_creature4.death()
+
+    @mock.patch("fauna.random", return_value=0.5, autospec=True)
+    def test_wants_to_migrate(self, mock_randint):
+        test_creature = Herbivore(10, 10)
+        # return (self.mu * self.fitness) > np.random.random()
+        assert test_creature.wants_to_migrate()
+
+
 
 
 class TestHerbivores:
