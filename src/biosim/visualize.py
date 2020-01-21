@@ -53,10 +53,11 @@ class Visualize(object):
 
         self._setup_graphics(map)
 
+        self.herbi = np.full(self._final_step, np.nan)
+
 
     def _setup_graphics(self, map):
         """Creates subplots."""
-
 
         # create new figure window
         if self._fig is None:
@@ -77,7 +78,7 @@ class Visualize(object):
             self._stats_ax = self._fig.add_subplot(2, 2, 2)
             self._stats_ax.set_title('Population')
             self._stats_ax.set_ylim(0, self._ymax)
-            #self._stats_ax.set_xlim(0, self.years)
+            self._stats_ax.set_xlim(0, self._final_step)
 
         # needs updating on subsequent calls to simulate()
         self._stats_ax.set_xlim(0, self._final_step + 1)
@@ -100,17 +101,14 @@ class Visualize(object):
         if self._herbivore_ax is None:
             self._herbivore_ax = self._fig.add_subplot(2, 2, 3)
             self._herbivore_ax.set_title('Spread of herbivores')
-            # self._herbivore_ax.imshow(self.map_size)
-            #self.im_herbivore = self._herbivore_ax.imshow(map.map_herbivores)
-
+            self.im_herbivore = self._herbivore_ax.imshow(map.map_herbivores,
+                                                          vmax=300)
 
         if self._carnivore_ax is None:
             self._carnivore_ax = self._fig.add_subplot(2, 2, 4)
             self._carnivore_ax.set_title('Spread of carnivores')
-            #self._carnivore_ax.hspace(0.5)
-        #self._carnivore_line = stats_plot[0]
-
-        # plt.show()
+            self.im_carnivore = self._carnivore_ax.imshow(map.map_herbivores,
+                                                          vmax=150)
 
     def _update_graphics(self, map, current_year):
         herbivore, carnivore, total = map.get_populations()
@@ -118,13 +116,13 @@ class Visualize(object):
         map.get_population_maps()
         self._update_herbivore_spread(map.map_herbivores)
         self._update_carnivore_spread(map.map_carnivores)
-        plt.pause(1e-6)
+        plt.pause(1e-2)
 
 
     def _update_stats_graph(self, herbivore, carnivore, current_year):
 
         # print(type(self._herbivore_line))
-        print(herbivore, carnivore)
+        #print(herbivore, carnivore)
 
         herbivore_data = self._herbivore_line.get_ydata()
         carnivore_data = self._carnivore_line.get_ydata()
@@ -136,18 +134,24 @@ class Visualize(object):
         carnivore_data[current_year] = carnivore
         total_data[current_year] = herbivore + carnivore
 
+        #self.herbi[current_year] = herbivore
+
+
         self._herbivore_line.set_ydata(herbivore_data)
         self._carnivore_line.set_ydata(carnivore_data)
         self._total_line.set_ydata(total_data)
         #self.i += 1
 
 
-    def _update_herbivore_spread(self, herbivore_spread):
+    def _update_herbivore_spread(self, map_herbivores):
         #sb.heatmap(herbivore_spread, ax=self._herbivore_ax, cbar=False)
-        pass
+        # print('Herbs: ', map_herbivores)
+        self.im_herbivore.set_data(map_herbivores)
+        #print(map_herbivores)
 
-    def _update_carnivore_spread(self, carnivore_spread):
-        pass
+    def _update_carnivore_spread(self, map_carnivores):
+        self.im_carnivore.set_data(map_carnivores)
+
         #sb.heatmap(carnivore_spread, ax=self._carnivore_ax, cbar=False)
 
 
