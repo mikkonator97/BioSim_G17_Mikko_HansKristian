@@ -149,6 +149,8 @@ class TestMap(unittest.TestCase):
 
     def test_carnivores_follow_herbivores(self, map1=map):
         """
+        NB! This test might be redundant, carnivores can still move even though
+        there are no adjacent herbivores....
         First we create a big population of both species. Now we test that the
         carnivores does not move after first call of migration.
         The next call we can expect that the population of carnivores in the
@@ -201,6 +203,24 @@ class TestMap(unittest.TestCase):
         map1.migration()
         assert map1.cell_map[10][10].number_carnivores() != n_carns
         assert map1.cell_map[10][10].number_herbivores() != n_herbs
+
+    def test_reset_migration_mated(self):
+        """
+        :return:
+        """
+        self.map2.migration()
+        self.map2.cell_map[10][10].mating_season()
+        self.map2.reset_mated_migration(self.map2.cell_map[10][10])
+
+        for herbivore in self.map2.cell_map[10][10].population_herbivores:
+            assert not herbivore.have_mated
+            assert not herbivore.have_migrated
+
+        for carnivore in self.map2.cell_map[10][10].population_carnivores:
+            assert not carnivore.have_mated
+            assert not carnivore.have_migrated
+
+
 
 
 
