@@ -1,9 +1,9 @@
-# from biosim.fauna import Fauna
+# -*- coding: utf-8 -*-
 
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from biosim.Cell import Ocean, Mountain, Desert, Savannah, Jungle
+from biosim.cell import Ocean, Mountain, Desert, Savannah, Jungle
 import numpy as np
 import math
 
@@ -13,7 +13,6 @@ class Map:
     Creates a dictionary with the coordinates of the map based on
     multi_line_map_string, and add the corresponding landscape type
     """
-
     def __init__(self, map_string):
         """
         Will create the map as an array, containing objects with cells.
@@ -376,4 +375,3 @@ if __name__ == "__main__":
 
     test_map = Map(map_string)
     y, x = test_map.cell_map[10][10].adjecent_cells[0]
-

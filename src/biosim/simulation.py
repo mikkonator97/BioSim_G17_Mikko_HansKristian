@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-"""
-"""
-from biosim import Cell
+__author__ = 'Hans Kristian Lunda, Mikko Rekstad'
+__email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
+
+from biosim import cell
 from biosim.fauna import Herbivore, Carnivore
 from biosim.map import Map
 import matplotlib.pyplot as plt
@@ -10,11 +11,11 @@ import numpy as np
 import seaborn as sb
 import pandas as pd
 
-__author__ = ""
-__email__ = ""
-
 
 class BioSim:
+    """
+    hei
+    """
     def __init__(
             self,
             island_map,
@@ -134,9 +135,9 @@ class BioSim:
             if (landscape in {'J', 'S'}) \
                     and (key in {'f_max', 'alpha'} and (value >= 0)):
                 if landscape == 'J':
-                    setattr(Cell.Cell, key[4], params[key])
+                    setattr(cell.Cell, key[4], params[key])
                 else:
-                    setattr(Cell.Cell, key[3], params[key])
+                    setattr(cell.Cell, key[3], params[key])
             else:
                 raise ValueError("Illegal landscape parameter(s)")
 

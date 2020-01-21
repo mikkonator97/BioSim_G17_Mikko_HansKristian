@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
+
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
-
 """
 This class contains information about the Cell object, methods for getting
 information out of this cell, and methods for adding fodder to jungel and 

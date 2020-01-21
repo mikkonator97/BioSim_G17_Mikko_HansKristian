@@ -1,5 +1,5 @@
 from biosim.fauna import Fauna, Herbivore, Carnivore
-from biosim.Cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
+from biosim.cell import Cell, Jungle, Ocean, Mountain, Savannah, Desert
 import numpy as np
 
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
@@ -24,9 +24,9 @@ class TestCell:
                            {'species': 'Carnivore', 'age': 5, 'weight': 20},
                            {'species': 'Carnivore', 'age': 8, 'weight': 5}]}]
     carn_list = [{'loc': (4, 4),
-                   'pop': [{'species': 'Carnivore', 'age': 3, 'weight': 35},
-                           {'species': 'Carnivore', 'age': 5, 'weight': 20},
-                           {'species': 'Carnivore', 'age': 8, 'weight': 5}]}]
+                  'pop': [{'species': 'Carnivore', 'age': 3, 'weight': 35},
+                          {'species': 'Carnivore', 'age': 5, 'weight': 20},
+                          {'species': 'Carnivore', 'age': 8, 'weight': 5}]}]
 
     test = [{'loc': (10, 10),
              'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},
@@ -46,6 +46,7 @@ class TestCell:
                       {'species': 'herbivore', 'age': 15, 'weight': 25}]}
              ]
     test_cell = Jungle()
+
     def test_add_pop(self, test=test):
         """
         Will test that we can add a population to the single cell.
@@ -213,6 +214,22 @@ class TestCell:
             cell_pop = item['pop']
         test_cell.add_pop(cell_pop)
         assert test_cell.feed_carnivores() is None
+
+        test_cell = Jungle()
+        cell_pop = {}
+        test3 = [{'loc': (10, 10),
+                  'pop': [{'species': 'herbivore', 'age': 100, 'weight': 70},
+                          {'species': 'herbivore', 'age': 0, 'weight': 6},
+                          ]}]
+        for item in test3:
+            cell_pop = item['pop']
+            test_cell.add_pop(cell_pop)
+        test_carnivore = [{'species': 'carnivore', 'age': 1,
+                                    'weight': 6}]
+
+        test_cell.add_pop(test_carnivore)
+        test_cell.feed_carnivores()
+        assert len(test_cell.population_herbivores) == 1
 
         # cell_pop = {}
         # for item in test:
