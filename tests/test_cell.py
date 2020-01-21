@@ -216,7 +216,7 @@ class TestCell:
         assert test_cell.feed_carnivores() is None
 
         test_cell = Jungle()
-        cell_pop = {}   
+        cell_pop = {}
         test3 = [{'loc': (10, 10),
                   'pop': [{'species': 'herbivore', 'age': 100, 'weight': 70},
                           {'species': 'herbivore', 'age': 100, 'weight': 70},
