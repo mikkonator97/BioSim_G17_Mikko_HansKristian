@@ -29,6 +29,7 @@ class BioSim:
             cmax_animals=None,
             img_base=None,
             img_fmt="png",
+            save_csv=False,
     ):
         """
         :param island_map: Multi-line string specifying island geography
@@ -41,6 +42,8 @@ class BioSim:
         :param img_base: String with beginning of file name for figures,
                including path
         :param img_fmt: String with file type for figures, e.g. 'png'
+        :param save_csv: Boolean, gives the user the option to save mid
+               results to a csv-file
 
         If ymax_animals is None, the y-axis limit should be adjusted
         automatically.
@@ -56,6 +59,7 @@ class BioSim:
 
         where img_no are consecutive image numbers starting from 0.
         img_base should contain a path and beginning of a file name.
+
         """
         self._animal_distribution = pd.DataFrame()
         self._num_animals_per_species = {'Carnivore': 0, 'Herbivore': 0}
@@ -72,6 +76,7 @@ class BioSim:
             self.img_fmt = img_fmt
             self.map = Map(self.island_map)
             self.add_population(ini_pop)
+            self.save_csv = save_csv
             if self.img_base is not None:
                 self._image_counter = 0
                 self.vis_years = 1
@@ -182,8 +187,8 @@ class BioSim:
             if current_simulation_year % vis_years == 0:
                 self.visualize._update_graphics(self.map,
                                                      current_simulation_year)
-            if (img_years is not None) and (vis_years % img_years == 0):
-                pass
+            if self.save_csv:
+                self.save_mid_simulation_result(herbivores,carnivores, total)
 
     def visualization(self, current_simulation_year):
         """
@@ -294,6 +299,11 @@ class BioSim:
             plt.savefig('{img_base}_{img_no:05d}.{type}'.format(img_base=self.img_base, img_no=self._image_counter, type=self.img_fmt))
             self._image_counter += 1
 
+    def save_mid_simulation_result(self, herbivores, carnivores, total):
+        """ Saves the mid simulation results to a CSV-file each year. """
+        with open('save mid simulation result', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(self._year, herbivores, carnivores, total)
 
 if __name__ == '__main__':
     map1 = """\
