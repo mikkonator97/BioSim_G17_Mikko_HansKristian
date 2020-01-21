@@ -11,7 +11,7 @@ import unittest
 
 # Testing the operations within a function
 
-class TestMap:
+class TestMap(unittest.TestCase):
     map_string = """\
                   OOOOOOOOOOOOOOOOOOOOO
                   OOOOOOOOSMMMMJJJJJJJO
@@ -44,6 +44,17 @@ class TestMap:
 
     map = Map(map_string)
 
+    def setUp(self, test=test, map_string=map_string):
+        print('SetUP')
+        self.map2 = Map(map_string)
+        for item in test:
+           i, j = item['loc']
+           cell_pop = item['pop']
+           self.map2.cell_map[i][j].add_pop(cell_pop)
+
+
+
+
     cell_pop = {}
     for item in test:
         cell_pop = item['pop']
@@ -57,31 +68,23 @@ class TestMap:
         assert map.cell_map[0][0].landscape == 0
         assert map.cell_map[10][10].landscape == 4
 
-    def test_get_populations(self, map_string=map_string, pop=test):
+    def test_get_populations(self):
         """
         Will test that once a population is added, we can get it using the
-        get_populations function.
-        :param map:
-        :param pop:
+        get_populations function. The population is added in the setUp func.
         :return:
         """
-        map2 = Map(map_string)
-        for item in pop:
-            i, j = item['loc']
-            cell_pop = item['pop']
-            map2.cell_map[i][j].add_pop(cell_pop)
-        assert map2.get_populations() == (6, 0, 6)
+        assert self.map2.get_populations() == (6, 0, 6)
 
-    def test_list_of_adjacent_cells(self, map=map):
+    def test_list_of_adjacent_cells(self):
         """
         Will test that the list of adjacent cells is correct.
         It is supposed to be a list of tuples.
-        !!! Remember, mountain and oceans does not get adjacent cells.
-        :param map:
+        Remember, mountain and oceans does not get adjacent cells.
         :return:
         """
-        assert (10, 11) in map.cell_map[10][10].adjacent_cells2
-        assert map.cell_map[10][10].adjacent_cells2 == [(11,10),(10,11),
+        assert (10, 11) in self.map2.cell_map[10][10].adjacent_cells2
+        assert self.map2.cell_map[10][10].adjacent_cells2 == [(11,10),(10,11),
                                                        (9,10),(10,9)]
 
     def test_preferred_list_middle_of_jungle(self, map=map):
@@ -118,23 +121,7 @@ class TestMap:
         assert index == 1
         mock_choice.assert_called_once_with(1)
 
-
-    def test_creature_moves_to_preferred(self, map=map, pop=test):
-        """
-        If the creature is supposed to move: test that the creature will be
-        removed from the previous cell. Then ensure that it has been added to
-        the new cell.
-        :param map: object.
-        :param test: dict.
-        :return:
-        """
-        pass
-
-    def test_move(self, map=map):
-        # map.move()
-        pass
-
-    def test_migration(self, map=map_string, pop=test, pop2=test_both):
+    def test_migration(self, map=map_string, pop2=test_both):
         """
         Will test that herbivores are removed from old cell, and that there
         are more in another cell.
@@ -145,26 +132,20 @@ class TestMap:
         :param pop:
         :return:
         """
-        # Test first with only herbivores.
-        map1 = Map(map)
-        for item in pop:
-            i, j = item['loc']
-            cell_pop = item['pop']
-            map1.cell_map[i][j].add_pop(cell_pop)
-        assert map1.cell_map[10][10].number_herbivores() == 6
-        map1.migration()
-        assert map1.cell_map[10][10].number_herbivores() != 6
+        assert self.map2.cell_map[10][10].number_herbivores() == 6
+        self.map2.migration()
+        assert self.map2.cell_map[10][10].number_herbivores() != 6
 
         # Now adds population with both species.
         for item in pop2:
             i, j = item['loc']
             cell_pop2 = item['pop']
-            map1.cell_map[i][j].add_pop(cell_pop2)
+            self.map2.cell_map[i][j].add_pop(cell_pop2)
 
         # Now there are only creatures in 10, 10, so they should now move
-        assert map1.cell_map[10][10].number_carnivores() == 3
-        map1.migration()
-        assert map1.cell_map[10][10].number_carnivores() == 3
+        assert self.map2.cell_map[10][10].number_carnivores() == 3
+        self.map2.migration()
+        assert self.map2.cell_map[10][10].number_carnivores() == 3
 
     def test_carnivores_follow_herbivores(self, map1=map):
         """
