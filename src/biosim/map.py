@@ -154,12 +154,9 @@ class Map:
                     self.get_propensities(y_coordinate, x_coordinate)
 
                 # Turn propensities into probabilities
-                probabilities_herbivores, probabilities_carnivores = \
-                    self.convert_into_probabilities(
-                        propensities_herbivores, propensities_carnivores,
-                        x_coordinate, y_coordinate)
-
-
+                self.convert_into_probabilities(propensities_herbivores,
+                                                propensities_carnivores,
+                                                x_coordinate, y_coordinate)
 
     def get_propensities(self,y_coordinate, x_coordinate):
         propensities_herbivores = [0, 0, 0, 0]
@@ -202,7 +199,7 @@ class Map:
                     propensities_carnivores)
             self.cell_map[x_coordinate][
                 y_coordinate].probability_carnivores = probabilities_carnivores
-        return propensities_herbivores, probabilities_carnivores
+        # return propensities_herbivores, probabilities_carnivores
 
     def select_index_to_move(self, probabilities):
         """

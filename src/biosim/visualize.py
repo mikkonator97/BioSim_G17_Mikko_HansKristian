@@ -83,6 +83,7 @@ class Visualize(object):
         # needs updating on subsequent calls to simulate()
         self._stats_ax.set_xlim(0, self._final_step + 1)
 
+        # Define the lines, and plot them.
         if self._herbivore_line is None:
             stats_plot = self._stats_ax.plot(np.arange(0, self._final_step),
                                            np.full(self._final_step, np.nan))
@@ -128,7 +129,7 @@ class Visualize(object):
         carnivore_data = self._carnivore_line.get_ydata()
         total_data = self._total_line.get_ydata()
 
-        print(herbivore_data)
+        # print(herbivore_data)
 
         herbivore_data[current_year] = herbivore
         carnivore_data[current_year] = carnivore
@@ -136,12 +137,13 @@ class Visualize(object):
 
         #self.herbi[current_year] = herbivore
 
-        print('herbivore_data', herbivore_data)
+        # print('herbivore_data', herbivore_data)
 
 
         self._herbivore_line.set_ydata(herbivore_data)
         self._carnivore_line.set_ydata(carnivore_data)
         self._total_line.set_ydata(total_data)
+        plt.draw()
         #self.i += 1
 
 
