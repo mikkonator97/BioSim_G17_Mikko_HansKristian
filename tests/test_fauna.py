@@ -4,7 +4,7 @@
 # from math import exp
 import mock
 import unittest
-from biosim.fauna import Fauna, Herbivore
+from biosim.fauna import Fauna, Herbivore, Carnivore
 
 
 class TestFauna:
@@ -169,3 +169,19 @@ class TestCarnivores:
         # phi = Carnivore.get_fitness()
         # ssert 0 <= phi <= 1
         pass
+
+    def test_eat(self):
+        """
+        This test will check that the eat function increases if the creature
+        eats. Also checks that the creature does not eat if it is full.
+        Also checks that the correct of fodder is returned.
+        self, fodder_amount=0, herbivore_already_eaten=0
+        """
+        carnivore = Carnivore(10, 10)
+        # Checks that the amount returned is correct.
+        assert carnivore.eat(100, 10) == 40
+        assert carnivore.weight == 10 + 40 * carnivore.beta
+        # Checks that no food over 50 is eaten, and also tests same weight.
+        assert carnivore.eat(100, 50) == 0
+        assert carnivore.weight == 10 + 40 * carnivore.beta
+
