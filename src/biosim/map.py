@@ -337,25 +337,15 @@ class Map:
                     cell.add_age()
                     cell.lose_weight()
                     self.reset_mated_migration(cell)
-
                     cell.alter_population()
-                    sum_age = 0
-                    for herbivore in cell.population_herbivores:
-                        sum_age += herbivore.age
-                    if len(cell.population_herbivores) != 0:
-                        g = sum_age / len(cell.population_herbivores)
-                        # print('Average age: ', g)
 
     def yearly_cycle(self):
         """
         Will run through each stage of the yearly cycle.
         :return:
         """
-    # #     # OPS! some of these functions can be put together
         self.feeding_and_procreation()
-    # #     # NB! first year none can mate
         self.migration()
-    # #     # self.yearly_stage2()
         self.agein_weight_loss_and_death()
 
     def get_population_maps(self):
