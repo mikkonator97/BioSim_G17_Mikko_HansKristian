@@ -16,7 +16,7 @@ class Visualize(object):
     _DEFAULT_MOVIE_FORMAT = 'mp4'
 
     def __init__(self, map, frequency=10, ymax=10000, years=200, img_dir=None, img_name='biosim',
-                 img_fmt='png'):
+                 img_fmt='png', cmax_animals=None):
         """
         :param sys_size:  system size, e.g. (5, 10)
         :type sys_size: (int, int)
@@ -35,6 +35,7 @@ class Visualize(object):
         self._ymax = ymax
         self.frequency = frequency
         self.years = years
+        self.cmax_animals = cmax_animals
 
         if img_dir is not None:
             self._img_base = img_dir #os.path.join(img_dir, img_name)
@@ -218,7 +219,7 @@ class Visualize(object):
             Requires ffmpeg
         The movie is stored as img_base + movie_fmt
         """
-        _FFMPEG_BINARY = 'ffmpeg'
+        _FFMPEG_BINARY = 'C:\\Users\\Hans Kristian\\Downloads\\ffmpeg-20200115-0dc0837-win64-static\\ffmpeg-20200115-0dc0837-win64-static.ffmpeg.exe'
 
         if self._img_base is None:
             raise RuntimeError("No filename defined.")

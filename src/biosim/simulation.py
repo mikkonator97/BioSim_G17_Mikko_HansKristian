@@ -76,7 +76,7 @@ class BioSim:
             self.add_population(ini_pop)
             self.save_csv = save_csv
             self.visualize = Visualize(self.map, frequency=2, years=200,
-                                       img_dir=self.img_base or ".")
+                                       img_dir=self.img_base or ".", cmax_animals=self.cmax_animals)
             if self.img_base is not None:
                 self._image_counter = 0
                 self.vis_years = 1
