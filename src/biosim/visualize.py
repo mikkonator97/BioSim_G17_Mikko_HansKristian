@@ -192,7 +192,7 @@ class Visualize(object):
             Requires ffmpeg
         The movie is stored as img_base + movie_fmt
         """
-        _FFMPEG_BINARY = 'ffmpeg'
+        _FFMPEG_BINARY = 'C:\\Users\\Hans Kristian\\Downloads\\ffmpeg-20200115-0dc0837-win64-static\\ffmpeg-20200115-0dc0837-win64-static.ffmpeg.exe'
 
         if self._img_base is None:
             raise RuntimeError("No filename defined.")
