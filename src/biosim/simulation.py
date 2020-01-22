@@ -85,8 +85,8 @@ class BioSim:
             if self.img_base is not None:
                 self._image_counter = 0
                 self.vis_years = 1
-        self.visualize = Visualize(self.map, frequency=2, years=200, img_dir='images')
-
+        self.visualize = Visualize(self.map, frequency=2, years=200,
+                                   img_dir='.')
 
     def check_validity_of_string(self, map_string):
         """
@@ -192,9 +192,9 @@ class BioSim:
             if current_simulation_year % vis_years == 0:
                 self.visualize._update_graphics(self.map,
                                                      current_simulation_year)
-                # self.visualize._save_graphics()
-            if (img_years is not None) and (vis_years % img_years == 0):
-                pass
+                self.visualize._save_graphics()
+            if self.save_csv is True:
+                self.save_mid_simulation_result(herbivores, carnivores, total)
 
 
     def add_population(self, population):
@@ -281,15 +281,16 @@ class BioSim:
 
     def save_mid_simulation_result(self, herbivores, carnivores, total):
         """ Saves the mid simulation results to a CSV-file each year. """
-        with open('save mid simulation result', 'w', newline='') as file:
+        with open('save mid simulation result', 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(self._year, herbivores, carnivores, total)
-        out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'),
-                              15, size)
+            writer.writerow([self._year, herbivores, carnivores, total])
 
-        for i in range(len(img_array)):
-            out.write(img_array[i])
-        out.release()
+        # out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'),
+        #                       15, size)
+        #
+        # for i in range(len(img_array)):
+        #     out.write(img_array[i])
+        # out.release()
 
 
 if __name__ == '__main__':
