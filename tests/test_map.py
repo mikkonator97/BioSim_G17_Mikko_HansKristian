@@ -114,6 +114,7 @@ class TestMap(unittest.TestCase):
         assert sim.map.cell_map[1][1].number_herbivores() == 1
 
 
+    #mock.patch("biosim.map.choice", return_value=1, autospec=True)
     @mock.patch("biosim.map.choice", return_value=1, autospec=True)
     def test_select_index_to_move(self, mock_choice, map=map):
         probabilities_index_test = [0, 0.25, 0.75, 0.25]
@@ -219,6 +220,30 @@ class TestMap(unittest.TestCase):
         for carnivore in self.map2.cell_map[10][10].population_carnivores:
             assert not carnivore.have_mated
             assert not carnivore.have_migrated
+
+    def test_yearly_cycle_age(self):
+        """
+        Will test that yearly cycle alters the population.
+        :return:
+        """
+
+        age_herbivores = []
+        for herbivore in self.map2.cell_map[10][10].population_herbivores:
+            age_herbivores.append(herbivore.age)
+
+        age_carnivores = []
+        for carnivore in self.map2.cell_map[10][10].population_carnivores:
+            age_carnivores.append(carnivore.age)
+
+        pop_before = self.map2.get_populations()
+        self.map2.yearly_cycle()
+        # Tests that there are a different number of creatures.
+        assert pop_before != self.map2.get_populations()
+
+
+    def test_herbivores_no_death_no_birth(self):
+        self.map2.feedin
+
 
 
 

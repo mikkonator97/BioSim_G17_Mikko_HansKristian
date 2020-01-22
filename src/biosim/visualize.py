@@ -1,3 +1,7 @@
+
+__author__ = 'Hans Kristian Lunda, Mikko Rekstad'
+__email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
+
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.colors as mcolors

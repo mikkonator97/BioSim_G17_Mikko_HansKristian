@@ -17,8 +17,6 @@ class Cell:
     def __init__(self, coordinates=None, landscape=None, fodder=0):
         self.f_max = [0.0, 0.0, 0.0, 300.0, 800.0]
         self.alpha = [None, None, None, 0.3, None]
-        # self.f_max = self.f_max[landscape]
-        # self.alpha = self.alpha[landscape]
         self.coordinates = coordinates
         self.landscape = landscape
         self.fodder = fodder

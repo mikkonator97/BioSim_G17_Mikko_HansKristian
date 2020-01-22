@@ -1,7 +1,8 @@
 
-# These tests will go through the needs and specifications for the faunas.
-# Fauna is the superclass, and all other creatures will be found under.
-# from math import exp
+__author__ = 'Hans Kristian Lunda, Mikko Rekstad'
+__email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
+
+
 import mock
 import unittest
 from biosim.fauna import Fauna, Herbivore, Carnivore

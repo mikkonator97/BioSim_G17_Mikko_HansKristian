@@ -158,7 +158,7 @@ class Map:
                                                 propensities_carnivores,
                                                 x_coordinate, y_coordinate)
 
-    def get_propensities(self,y_coordinate, x_coordinate):
+    def get_propensities(self, y_coordinate, x_coordinate):
         """
         Takes two lists of zeros, and turns them into lists containing the
         propensities of fodder for each species. Each value in the list
@@ -171,7 +171,7 @@ class Map:
         propensities_carnivores = [0, 0, 0, 0]
         index = 0
         for adjacent_cell in self.cell_map[x_coordinate][
-            y_coordinate].adjacent_cells2:
+                                            y_coordinate].adjacent_cells2:
             x_adjacent, y_adjacent = adjacent_cell
             lambda1 = 1
 
@@ -190,7 +190,7 @@ class Map:
 
     def convert_into_probabilities(self, propensities_herbivores,
                                    propensities_carnivores, x_coordinate,
-                              y_coordinate):
+                                   y_coordinate):
         """
         Takes the lists containing propensities and calculates probabilities
         for each species to migrate to the cell represented by the index of
@@ -242,7 +242,8 @@ class Map:
         """
         x_to, y_to = move_to
         x_from, y_from = move_from
-        herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(creature_index)
+        herbivore = self.cell_map[x_from][y_from].population_herbivores.pop(
+            creature_index)
         self.cell_map[x_to][y_to].population_herbivores.append(herbivore)
 
     def move_carnivore(self, move_to, move_from, creature_index):
@@ -257,7 +258,8 @@ class Map:
         """
         x_to, y_to = move_to
         x_from, y_from = move_from
-        carnivore = self.cell_map[x_from][y_from].population_carnivores.pop(creature_index)
+        carnivore = self.cell_map[x_from][y_from].population_carnivores.pop(
+            creature_index)
         self.cell_map[x_to][y_to].population_carnivores.append(carnivore)
 
     def get_populations(self):
@@ -366,24 +368,3 @@ class Map:
                     y_cords].number_herbivores()
                 self.map_carnivores[x_cords][y_cords] = self.cell_map[x_cords][
                     y_cords].number_carnivores()
-
-
-
-if __name__ == "__main__":
-    map_string = """\
-                  OOOOOOOOOOOOOOOOOOOOO
-                  OOOOOOOOSMMMMJJJJJJJO
-                  OSSSSSJJJJMMJJJJJJJOO
-                  OSSSSSSSSSMMJJJJJJOOO
-                  OSSSSSJJJJJJJJJJJJOOO
-                  OSSSSSJJJDDJJJSJJJOOO
-                  OSSJJJJJDDDJJJSSSSOOO
-                  OOSSSSJJJDDJJJSOOOOOO
-                  OSSSJJJJJDDJJJJJJJOOO
-                  OSSSSJJJJDDJJJJOOOOOO
-                  OOSSSSJJJJJJJJOOOOOOO
-                  OOOSSSSJJJJJJJOOOOOOO
-                  OOOOOOOOOOOOOOOOOOOOO"""
-
-    test_map = Map(map_string)
-    y, x = test_map.cell_map[10][10].adjecent_cells[0]
