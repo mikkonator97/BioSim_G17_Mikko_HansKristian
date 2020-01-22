@@ -6,6 +6,7 @@ __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 from biosim.cell import Ocean, Mountain, Desert, Savannah, Jungle
 import numpy as np
 import math
+from numba import jit
 
 
 class Map:
@@ -289,7 +290,7 @@ class Map:
         for creature in cell.population_carnivores:
             creature.have_mated = False
             creature.have_migrated = False
-
+    @jit()
     def feeding_and_procreation(self):
         """
         Yearly stage 1 handles the addition of fodder to each cell,
