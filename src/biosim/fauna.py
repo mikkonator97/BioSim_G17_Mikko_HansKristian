@@ -30,39 +30,16 @@ class Fauna:
     DeltaPhiMax = [None, 10.0]
 
     def __init__(self, weight=0, age=0, seed=1):
-
         """
-        self.w_birth = w_birth[species_id]
-        self.sigma_birth = sigma_birth[species_id]
-        self.beta = beta[species_id]
-        self.eta = eta[species_id]
-        self.a_half = a_half[species_id]
-        self.phi_age = phi_age[species_id]
-        self.w_half = w_half[species_id]
-        self.phi_weight = phi_weight[species_id]
-        self.mu = mu[species_id]
-        self.lambda1 = lamda1[species_id]
-        self.gamma = gamma[species_id]
-        self.zeta = zeta[species_id]
-        self.xi = xi[species_id]
-        self.omega = omega[species_id]
-        self.F = F[species_id]
-        self.DeltaPhiMax = DeltaPhiMax[species_id]
+        This function initializes the Fauna object.
         """
         np.random.seed(seed=seed)
-        # self.species = species
         self.age = age
         self.weight = weight
-        #self.fitness = self.calculate_fitness()
-        # print(self.fitness)
-
         self.state = False
         self.have_mated = False
         self.have_migrated = False
         self.have_eaten = False
-
-        #self.survival_chance = 1
-
 
     def birth(self, population):
         """

@@ -276,9 +276,6 @@ class BioSim:
         #    self._image_counter += 1
         self.visualize.make_movie(movie_fmt='mp4')
 
-
-
-
     def save_mid_simulation_result(self, herbivores, carnivores, total):
         """ Saves the mid simulation results to a CSV-file each year. """
         with open('save mid simulation result', 'a', newline='') as file:
@@ -387,8 +384,13 @@ if __name__ == '__main__':
     sim.add_population(population=ini_carns)
     sim.simulate(100, vis_years=1)
 
+    # #properties of the sim object
+    # print(sim.year)
+    # print(sim.num_animals)
+    # print(sim.num_animals_per_species)
+    # print(sim.animal_distribution)
+
     # sim.simulate(20, vis_years=5)
     # sim.make_movie()
-
     # sim.simulate(100)
     # sim.add_population(population=ini_carns)
