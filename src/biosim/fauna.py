@@ -60,11 +60,10 @@ class Fauna:
         :param population: int
         :return: float
         """
-        # is this self.gamma? check tommorrow
         birth_probability = min(1, self.gamma * self.fitness * (population - 1))
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
 
-        if self.weight > self.zeta * (9.5):
+        if self.weight > self.zeta * (self.w_birth + self.sigma_birth):
             if birth_probability > np.random.rand() and self.age > 0:
                 return birth_weight
         return 0
@@ -206,3 +205,5 @@ class Carnivore(Fauna):
         self.weight += self.beta * fodder_amount
         return fodder_amount
         # print('Creature just ate and gained: ', self.beta * fodder_amount)
+
+
