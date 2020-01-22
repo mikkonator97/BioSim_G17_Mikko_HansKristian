@@ -315,12 +315,13 @@ class Map:
 
                     # Feed the carnivores
                     if len(current_cell.population_carnivores) > 0:
-                        for carnivore in current_cell.population_carnivores:
-                            current_cell.ranked_fitness_carnivores()
-                            current_cell.feed_carnivores()
+                        # for carnivore in current_cell.population_carnivores:
+                            #carnivore.fitness = carnivore.calculate_fitness()
+                        current_cell.ranked_fitness_carnivores()
+                        current_cell.feed_carnivores()
                     current_cell.mating_season()
 
-    def agein_weight_loss_and_death(self):
+    def ageing_weight_loss_and_death(self):
         """
         This function makes the creatures one year older, causes them to
         lose weight according to some beta and their current weight,
@@ -346,7 +347,7 @@ class Map:
         """
         self.feeding_and_procreation()
         self.migration()
-        self.agein_weight_loss_and_death()
+        self.ageing_weight_loss_and_death()
 
     def get_population_maps(self):
         """
