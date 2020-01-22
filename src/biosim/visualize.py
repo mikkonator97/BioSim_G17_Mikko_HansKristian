@@ -9,6 +9,7 @@ import numpy as np
 import seaborn as sb
 import subprocess
 import os
+import math
 
 class Visualize(object):
     """Provides user interface for simulation, including visualization."""
@@ -161,11 +162,12 @@ class Visualize(object):
         # Converts nan values
         added_herbivores = 0
         added_carnivores = 0
-        for i in len(current_year):
-            if herbivore_data[i] is NaN:
+        for i in range(current_year):
+            if math.isnan(herbivore_data[i]):
+            # if herbivore_data[i] is NaN:
                 if added_herbivores == 0:
-                    herbivore_step = added_herbivores / self.step
-                    carnivore_step = added_carnivores / self.step
+                    herbivore_step = added_herbivores / self.frequency
+                    carnivore_step = added_carnivores / self.frequency
                 if i != 0:
                     herbivore_data[i] = herbivore_data[i-1] + herbivore_step
                     carnivore_data[i] = carnivore_data[i - 1] + carnivore_step

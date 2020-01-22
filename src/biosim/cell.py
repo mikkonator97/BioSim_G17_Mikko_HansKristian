@@ -60,9 +60,9 @@ class Cell:
         if self.landscape == 3:
             available_fodder = float(self.get_fodder())
             self.fodder = (available_fodder + self.alpha[3]
-                           * (self.f_max[3] - available_fodder))
+                           * (self.f_max - available_fodder))
         elif self.landscape == 4:
-            self.fodder = self.f_max[4]
+            self.fodder = self.f_max
 
     def add_pop(self, cell_pop):
         """
