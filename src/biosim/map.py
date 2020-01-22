@@ -220,7 +220,8 @@ class Map:
                 y_coordinate].probability_carnivores = probabilities_carnivores
         # return propensities_herbivores, probabilities_carnivores
 
-    def select_index_to_move(self, probabilities):
+    @staticmethod
+    def select_index_to_move(probabilities):
         """
         Uses the list of probabilities as a parameter to choose a number
         between 0 and 3. The number represents the index the creature will use
@@ -277,7 +278,8 @@ class Map:
         total = herbivores + carnivores
         return herbivores, carnivores, total
 
-    def reset_mated_migration(self, cell):
+    @staticmethod
+    def reset_mated_migration(cell):
         """
         Set the creatures have_migrated and have_mated attribute to False
         and is called at the end of each year.
@@ -290,6 +292,7 @@ class Map:
         for creature in cell.population_carnivores:
             creature.have_mated = False
             creature.have_migrated = False
+
     @jit()
     def feeding_and_procreation(self):
         """
@@ -307,14 +310,12 @@ class Map:
                     current_cell.add_fodder()
                     # Feed the herbivores
                     for creature in current_cell.population_herbivores:
-                        #creature.fitness = creature.calculate_fitness()
                         current_cell.ranked_fitness_herbivores()
                         current_cell.feed_herbivores(creature)
 
                     # Feed the carnivores
                     if len(current_cell.population_carnivores) > 0:
                         for carnivore in current_cell.population_carnivores:
-                            #carnivore.fitness = carnivore.calculate_fitness()
                             current_cell.ranked_fitness_carnivores()
                             current_cell.feed_carnivores()
                     current_cell.mating_season()
