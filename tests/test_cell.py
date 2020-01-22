@@ -10,6 +10,7 @@ This file is used for testing of the class Cell.
 """
 import pytest
 
+
 class TestCell:
     fauna_list = [{'loc': (3, 4),
                    'pop': [{'species': 'herbivore', 'age': 10, 'weight': 15},

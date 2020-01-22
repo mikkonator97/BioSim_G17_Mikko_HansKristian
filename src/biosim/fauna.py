@@ -60,7 +60,9 @@ class Fauna:
         :param population: int
         :return: float
         """
-        birth_probability = min(1, self.gamma * self.fitness * (population - 1))
+        birth_probability = min(1, self.gamma
+                                * self.fitness * (population - 1))
+
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
 
         if self.weight > self.zeta * (self.w_birth + self.sigma_birth):
@@ -116,26 +118,14 @@ class Fauna:
         """
         fitness = self.fitness
         death_number = np.random.random()
-
-        #self.survival_chance = 1 - (self.omega * (1 - fitness))
-
-        # print('Death number: ', death_number)
-        # print('Weight: ', self.weight, 'Fitness: ',fitness)
         if fitness <= 0:
-            # print('Dies because of negative fitness.')
             return True
         else:
             if death_number > self.survival_chance:
-                # print('-----> New Creature death, fitness: ', fitness)
-                # print('Random number: ', death_number)
-                # print('The probability: ', self.survival_chance)
-                # print('Will die at age: ',self.age,' and fitness: ', fitness)
                 return True
             elif self.weight < 0:
-                # print('Dies because of negative weight.')
                 return True
             else:
-                # print('Survives and thrives!')
                 return False
 
     def wants_to_migrate(self):
@@ -201,9 +191,6 @@ class Carnivore(Fauna):
             fodder_amount = fodder_amount
 
         if(fodder_amount + herbivore_already_eaten) > self.F:
-           fodder_amount = self.F - herbivore_already_eaten
+            fodder_amount = self.F - herbivore_already_eaten
         self.weight += self.beta * fodder_amount
         return fodder_amount
-        # print('Creature just ate and gained: ', self.beta * fodder_amount)
-
-

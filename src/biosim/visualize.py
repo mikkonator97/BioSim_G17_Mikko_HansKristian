@@ -58,11 +58,9 @@ class Visualize(object):
         self._carnivore_line = None
         self._total_line = None
 
-
         self._setup_graphics(map)
 
         self.herbi = np.full(self._final_step, np.nan)
-
 
     def _setup_graphics(self, map):
         """

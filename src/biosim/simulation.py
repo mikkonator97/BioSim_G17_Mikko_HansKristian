@@ -337,7 +337,7 @@ if __name__ == '__main__':
             ],
         }
     ]
-    # seed = 18
+
     sim = BioSim(str(island_map), ini_herbs, seed=18)
 
     # sim.set_animal_parameters("Herbivore", {"zeta": 3.2, "xi": 1.8})
@@ -367,11 +367,12 @@ if __name__ == '__main__':
     sim.add_population(population=ini_carns)
     sim.simulate(100, vis_years=1)
     sim.make_movie()
-    # #properties of the sim object
-    # print(sim.year)
-    # print(sim.num_animals)
-    # print(sim.num_animals_per_species)
-    # print(sim.animal_distribution)
+
+    #properties of the sim object
+    print(sim.year)
+    print(sim.num_animals)
+    print(sim.num_animals_per_species)
+    print(sim.animal_distribution)
 
     # sim.simulate(20, vis_years=5)
     # sim.make_movie()
