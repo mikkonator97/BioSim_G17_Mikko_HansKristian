@@ -76,7 +76,7 @@ class BioSim:
             self.add_population(ini_pop)
             self.save_csv = save_csv
             self.visualize = Visualize(self.map, frequency=2, years=200,
-                                   img_dir='.')
+                                       img_dir=self.img_base or ".")
             if self.img_base is not None:
                 self._image_counter = 0
                 self.vis_years = 1
@@ -88,7 +88,7 @@ class BioSim:
         the project specifications, that is Ocean cell at the map's edges and
         no other landscape than Ocean, Jungle, Savannah, Desert and Mountain,
         and returns a boolean.
-        :param map_string: multiline-string
+        :param island_map: multiline-string
         :return: boolean
         """
         valid_landscape = ['O', 'J', 'S', 'D', 'M']
@@ -115,7 +115,8 @@ class BioSim:
                             raise ValueError("Invalid landscape")
         return valid_string
 
-    def set_animal_parameters(self, species, params):
+    @staticmethod
+    def set_animal_parameters(species, params):
         """
         Set parameters for animal species.
 
@@ -137,7 +138,8 @@ class BioSim:
             else:
                 raise ValueError("Illegal animal parameter(s)")
 
-    def set_landscape_parameters(self, landscape, params):
+    @staticmethod
+    def set_landscape_parameters(landscape, params):
         """
         Set parameters for landscape type.
 
@@ -154,7 +156,7 @@ class BioSim:
             else:
                 raise ValueError("Illegal landscape parameter(s)")
 
-    def simulate(self, num_years, vis_years=1, img_years=None):
+    def simulate(self, num_years, vis_years=1, img_years=1):
         """
         Run simulation while visualizing the result.
 
@@ -182,12 +184,11 @@ class BioSim:
                 self.fill_animal_distribution_dataframe()
 
             if current_simulation_year % vis_years == 0:
-                self.visualize._update_graphics(self.map,
-                                                     current_simulation_year)
-                self.visualize._save_graphics()
+                self.visualize.update_graphics(self.map,
+                                               current_simulation_year)
+                self.visualize.save_graphics()
             if self.save_csv is True:
                 self.save_mid_simulation_result(herbivores, carnivores, total)
-
 
     def add_population(self, population):
         """
@@ -201,7 +202,7 @@ class BioSim:
             i = coordinates[0]
             j = coordinates[1]
             cell_pop = item['pop']
-            if self.map.cell_map[i][j].landscape not in {2,3,4}:
+            if self.map.cell_map[i][j].landscape not in {2, 3, 4}:
                 raise ValueError("The cell is uninhabitable!")
             self.map.cell_map[i][j].add_pop(cell_pop)
 
@@ -263,9 +264,6 @@ class BioSim:
 
     def make_movie(self):
         """Create MPEG4 movie from visualization images saved."""
-        # if (self.img_base is not None) and (self._year % self.vis_years == 0):
-        #     plt.savefig('{img_base}_{img_no:05d}.{type}'.format(img_base=self.img_base, img_no=self._image_counter, type=self.img_fmt))
-        #    self._image_counter += 1
         self.visualize.make_movie(movie_fmt='mp4')
 
     def save_mid_simulation_result(self, herbivores, carnivores, total):
@@ -273,6 +271,7 @@ class BioSim:
         with open('save mid simulation result', 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([self._year, herbivores, carnivores, total])
+
 
 if __name__ == '__main__':
     map1 = """\
@@ -338,33 +337,33 @@ if __name__ == '__main__':
             ],
         }
     ]
-    seed = 18
-    sim = BioSim(str(island_map), ini_herbs, seed)
+    # seed = 18
+    sim = BioSim(str(island_map), ini_herbs, seed=18)
 
-    sim.set_animal_parameters("Herbivore", {"zeta": 3.2, "xi": 1.8})
-    sim.set_animal_parameters(
-        "Carnivore",
-        {
-            "a_half": 70,
-            "phi_age": 0.5,
-            "omega": 0.3,
-            "F": 65,
-            "DeltaPhiMax": 9.0,
-        },
-    )
-    sim.set_animal_parameters(
-        "Carnivore",
-        {
-            "a_half": 70,
-            "phi_age": 0.5,
-            "omega": 0.3,
-            "F": 65,
-            "DeltaPhiMax": 9.0,
-        },
-    )
+    # sim.set_animal_parameters("Herbivore", {"zeta": 3.2, "xi": 1.8})
+    # sim.set_animal_parameters(
+    #     "Carnivore",
+    #     {
+    #         "a_half": 70,
+    #         "phi_age": 0.5,
+    #         "omega": 0.3,
+    #         "F": 65,
+    #         "DeltaPhiMax": 9.0,
+    #     },
+    # )
+    # sim.set_animal_parameters(
+    #     "Carnivore",
+    #     {
+    #         "a_half": 70,
+    #         "phi_age": 0.5,
+    #         "omega": 0.3,
+    #         "F": 65,
+    #         "DeltaPhiMax": 9.0,
+    #     },
+    # )
 
     # sim.add_population(population=ini_herbs)
-    sim.set_landscape_parameters("J", {"f_max": 800})
+    # sim.set_landscape_parameters("J", {"f_max": 800})
     sim.add_population(population=ini_carns)
     sim.simulate(100, vis_years=1)
 

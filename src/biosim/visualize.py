@@ -36,7 +36,7 @@ class Visualize(object):
         self.years = years
 
         if img_dir is not None:
-            self._img_base = os.path.join(img_dir, img_name)
+            self._img_base = img_dir #os.path.join(img_dir, img_name)
         else:
             self._img_base = None
         self._img_fmt = img_fmt
@@ -127,7 +127,7 @@ class Visualize(object):
                                self._total_line), ('Herbivores', 'Carnivores',
                                                    'Total'), prop={'size':6})
 
-    def _update_graphics(self, map, current_year):
+    def update_graphics(self, map, current_year):
         herbivore, carnivore, total = map.get_populations()
         self._update_stats_graph(herbivore, carnivore, current_year)
         map.get_population_maps()
@@ -174,7 +174,7 @@ class Visualize(object):
 
         #sb.heatmap(carnivore_spread, ax=self._carnivore_ax, cbar=False)
 
-    def _save_graphics(self):
+    def save_graphics(self):
         """Saves graphics to file if file name given."""
 
         if self._img_base is None:
