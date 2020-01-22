@@ -64,7 +64,11 @@ class Visualize(object):
 
 
     def _setup_graphics(self, map):
-        """Creates subplots."""
+        """
+        Creates subplots and displays the map. Also defines the lines wich is
+        going to be displayed in the stats graph. Also shows heatmaps with
+        current population of herbivores and carnivores.
+        """
 
         # create new figure window
         if self._fig is None:
@@ -111,12 +115,14 @@ class Visualize(object):
                                            np.full(self._final_step, np.nan))
             self._total_line = stats_plot[0]
 
+        # Creates herbivore heatmap
         if self._herbivore_ax is None:
             self._herbivore_ax = self._fig.add_subplot(2, 2, 3)
             self._herbivore_ax.set_title('Spread of herbivores')
             self.im_herbivore = self._herbivore_ax.imshow(map.map_herbivores,
                                                           vmax=300)
 
+        # Creates carnivore heatmap
         if self._carnivore_ax is None:
             self._carnivore_ax = self._fig.add_subplot(2, 2, 4)
             self._carnivore_ax.set_title('Spread of carnivores')
@@ -137,6 +143,13 @@ class Visualize(object):
 
 
     def _update_stats_graph(self, herbivore, carnivore, current_year):
+        """
+        Updates the graphics for the stats.
+        :param herbivore: int
+        :param carnivore: int
+        :param current_year: int
+        :return:
+        """
 
         # print(type(self._herbivore_line))
         #print(herbivore, carnivore)
@@ -145,7 +158,20 @@ class Visualize(object):
         carnivore_data = self._carnivore_line.get_ydata()
         total_data = self._total_line.get_ydata()
 
-        # print(herbivore_data)
+        # Converts nan values
+        added_herbivores = 0
+        added_carnivores = 0
+        for i in len(current_year):
+            if herbivore_data[i] is NaN:
+                if added_herbivores == 0:
+                    herbivore_step = added_herbivores / self.step
+                    carnivore_step = added_carnivores / self.step
+                if i != 0:
+                    herbivore_data[i] = herbivore_data[i-1] + herbivore_step
+                    carnivore_data[i] = carnivore_data[i - 1] + carnivore_step
+                    total_data[i] = herbivore_data[i] + carnivore_data[i]
+
+
 
         herbivore_data[current_year] = herbivore
         carnivore_data[current_year] = carnivore
