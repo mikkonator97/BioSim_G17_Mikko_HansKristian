@@ -23,6 +23,7 @@ class TestCell:
                    'pop': [{'species': 'Carnivore', 'age': 3, 'weight': 35},
                            {'species': 'Carnivore', 'age': 5, 'weight': 20},
                            {'species': 'Carnivore', 'age': 8, 'weight': 5}]}]
+
     carn_list = [{'loc': (4, 4),
                   'pop': [{'species': 'Carnivore', 'age': 3, 'weight': 35},
                           {'species': 'Carnivore', 'age': 5, 'weight': 20},
@@ -57,6 +58,13 @@ class TestCell:
         for item in self.fauna_list:
             cell_pop = item['pop']
             self.test_cell.add_pop(cell_pop)
+
+    @pytest.fixture(autouse=True)
+    def jungle_test_cell_herbivores(self):
+        self.test_cell_herbivores = Jungle()
+        for item in self.test:
+            cell_pop2 = item['pop']
+            self.test_cell_herbivores.add_pop(cell_pop2)
 
     def test_add_pop(self, test=test):
         """
@@ -377,3 +385,24 @@ class TestCell:
         for i in range(test_cell.number_herbivores()):
             new_weight = test_cell.population_herbivores[i].weight
             assert new_weight == weight2[i] - weight2[i] * 0.05
+
+    def test_single_cell_no_death_no_birth_herbivores(self):
+        """
+        Tests that the herbivores get around 170 kg when no threats, no births.
+        :return:
+        """
+        # Check that fixture works.
+        assert len(self.test_cell_herbivores.population_herbivores) == 6
+
+        # Simulate the functions in a year except migration, death and birth.
+        for i in range(100):
+            for creature in self.test_cell_herbivores.population_herbivores:
+                self.test_cell_herbivores.feed_herbivores(creature)
+            self.test_cell_herbivores.add_age()
+            self.test_cell_herbivores.lose_weight()
+            self.test_cell_herbivores.add_fodder()
+
+        # Tests that all creatures weigh inbetween 170 and 171
+        for creature in self.test_cell_herbivores.population_herbivores:
+            assert creature.weight < 171
+            assert creature.weight > 170
