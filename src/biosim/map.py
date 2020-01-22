@@ -33,7 +33,7 @@ class Map:
     def create_map(self):
         """
         Creates the map with cell objects and add lists with the adjacent
-         cell cordinates to each cell object.
+         cell coordinates to each cell object.
         :return:
         """
         for row_index in range(self.n_rows):
@@ -77,7 +77,6 @@ class Map:
         """
         # Will update preferred location to each creature.
         self.update_preferred_locations()
-        # for cell in self.cell_map:
         for y_coord in range(self.n_cols):
             for x_coord in range(self.n_rows):
                 self.migrate_herbivores(self.cell_map[x_coord][y_coord],
@@ -120,9 +119,9 @@ class Map:
         :return:
         """
         index = 0
+        current_cell = self.cell_map[x_coord][y_coord]
         while index < cell.number_carnivores():
-            creature =\
-                self.cell_map[x_coord][y_coord].population_carnivores[index]
+            creature = current_cell.population_carnivores[index]
             if creature.wants_to_migrate():
                 move_index = self.select_index_to_move(
                     cell.probability_carnivores)
@@ -171,19 +170,16 @@ class Map:
         propensities_herbivores = [0, 0, 0, 0]
         propensities_carnivores = [0, 0, 0, 0]
         index = 0
-        for adjacent_cell in self.cell_map[x_coordinate][
-                                            y_coordinate].adjacent_cells2:
-            x_adjacent, y_adjacent = adjacent_cell
-            lambda1 = 1
+        lambda1 = 1
+        current_cell = self.cell_map[x_coordinate][y_coordinate]
+        for _ in current_cell.adjacent_cells:
 
             # Inserting propensity into lists
-            herbivore_abundance = self.cell_map[x_adjacent][
-                y_adjacent].get_abundance_herbivore()
+            herbivore_abundance = current_cell.get_abundance_herbivore()
             propensities_herbivores[index] = math.exp(
                 lambda1 * herbivore_abundance)
 
-            carnivore_abundance = self.cell_map[x_adjacent][
-                y_adjacent].get_abundance_carnivore()
+            carnivore_abundance = current_cell.get_abundance_carnivore()
             propensities_carnivores[index] = math.exp(
                 lambda1 * carnivore_abundance)
             index += 1
@@ -204,21 +200,19 @@ class Map:
         """
         probabilities_herbivores = [0, 0, 0, 0]
         probabilities_carnivores = [0, 0, 0, 0]
-
+        current_cell = self.cell_map[x_coordinate][y_coordinate]
         if sum(propensities_herbivores) != 0:
             for i in range(len(propensities_herbivores)):
-                probabilities_herbivores[i] = propensities_herbivores[i] / sum(
-                    propensities_herbivores)
-            self.cell_map[x_coordinate][
-                y_coordinate].probability_herbivores = probabilities_herbivores
+                probabilities_herbivores[i] = propensities_herbivores[i]\
+                                              / sum(propensities_herbivores)
+
+            current_cell.probability_herbivores = probabilities_herbivores
 
         if sum(propensities_carnivores) != 0:
             for i in range(len(propensities_carnivores)):
-                probabilities_carnivores[i] = propensities_carnivores[i] / sum(
-                    propensities_carnivores)
-            self.cell_map[x_coordinate][
-                y_coordinate].probability_carnivores = probabilities_carnivores
-        # return propensities_herbivores, probabilities_carnivores
+                probabilities_carnivores[i] = propensities_carnivores[i]\
+                                              / sum(propensities_carnivores)
+            current_cell.probability_carnivores = probabilities_carnivores
 
     @staticmethod
     def select_index_to_move(probabilities):
@@ -260,8 +254,7 @@ class Map:
         """
         x_to, y_to = move_to
         x_from, y_from = move_from
-        carnivore = self.cell_map[x_from][y_from].population_carnivores.pop(
-            creature_index)
+        carnivore = self.cell_map[x_from][y_from].population_carnivores.pop(creature_index)
         self.cell_map[x_to][y_to].population_carnivores.append(carnivore)
 
     def get_populations(self):
@@ -315,8 +308,6 @@ class Map:
 
                     # Feed the carnivores
                     if len(current_cell.population_carnivores) > 0:
-                        # for carnivore in current_cell.population_carnivores:
-                            #carnivore.fitness = carnivore.calculate_fitness()
                         current_cell.ranked_fitness_carnivores()
                         current_cell.feed_carnivores()
                     current_cell.mating_season()
@@ -357,7 +348,7 @@ class Map:
         """
         for x_cords in range(self.n_rows):
             for y_cords in range(self.n_cols):
-                self.map_herbivores[x_cords][y_cords] = self.cell_map[x_cords][
-                    y_cords].number_herbivores()
-                self.map_carnivores[x_cords][y_cords] = self.cell_map[x_cords][
-                    y_cords].number_carnivores()
+                self.map_herbivores[x_cords][y_cords] =\
+                    self.cell_map[x_cords][y_cords].number_herbivores()
+                self.map_carnivores[x_cords][y_cords] =\
+                    self.cell_map[x_cords][y_cords].number_carnivores()

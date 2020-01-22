@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-a
 
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
@@ -61,7 +61,8 @@ class Fauna:
         :return: float
         """
         # is this self.gamma? check tommorrow
-        birth_probability = min(1, self.gamma * self.fitness * (population - 1))
+        birth_probability = min(1, self.gamma
+                                * self.fitness * (population - 1))
         birth_weight = np.random.normal(self.w_birth, self.sigma_birth)
 
         if self.weight > self.zeta * (9.5):
@@ -79,7 +80,8 @@ class Fauna:
             return 0.0
         else:
             q_pos = 1.0 / (1.0 + exp(self.phi_age * (self.age - self.a_half)))
-            q_neg = 1.0 / (1.0 + exp(-self.phi_weight * (self.weight - self.w_half)))
+            q_neg = 1.0 / (1.0 + exp(-self.phi_weight
+                                     * (self.weight - self.w_half)))
             phi = q_pos * q_neg
             return phi
 
@@ -108,7 +110,6 @@ class Fauna:
     @property
     def survival_chance(self):
         return 1 - (self.omega * (1 - self.fitness))
-
 
     def death(self):
         """

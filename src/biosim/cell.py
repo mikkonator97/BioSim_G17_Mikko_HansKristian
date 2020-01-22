@@ -3,14 +3,14 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-from biosim.fauna import Fauna, Herbivore, Carnivore
+from biosim.fauna import Herbivore, Carnivore
 import numpy as np
 
 
 class Cell:
     """
     This class contains information about the Cell object, methods for getting
-    information out of this cell, and methods for adding fodder to jungel and
+    information out of this cell, and methods for adding fodder to jungle and
     savannah cells.
     """
 
@@ -25,8 +25,8 @@ class Cell:
         self.population_herbivores = []
         self.population_carnivores = []
 
-        self.gamma_herbivore = 0.2
-        self.adjacent_cells2 = []
+        # self.gamma_herbivore = 0.2
+        self.adjacent_cells = []
         self.probability_herbivores = [0, 0, 0, 0]
         self.probability_carnivores = [0, 0, 0, 0]
 
@@ -59,11 +59,10 @@ class Cell:
 
         if self.landscape == 3:
             available_fodder = float(self.get_fodder())
-            f_max = self.f_max
             self.fodder = (available_fodder + self.alpha[3]
-                           * (f_max - available_fodder))
+                           * (self.f_max[3] - available_fodder))
         elif self.landscape == 4:
-            self.fodder = self.f_max
+            self.fodder = self.f_max[4]
 
     def add_pop(self, cell_pop):
         """
@@ -154,7 +153,8 @@ class Cell:
                         carnivore.eat(herbivore.weight, herbivore_eaten)
                     self.population_herbivores.remove(herbivore)
 
-    def successful_hunt(self, carnivore, herbivore):
+    @staticmethod
+    def successful_hunt(carnivore, herbivore):
         """
         Function which returns the probability of a successful hunt
         where the carnivore will pray.
