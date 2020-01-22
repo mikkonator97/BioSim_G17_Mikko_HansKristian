@@ -239,20 +239,3 @@ class TestMap(unittest.TestCase):
         self.map2.yearly_cycle()
         # Tests that there are a different number of creatures.
         assert pop_before != self.map2.get_populations()
-
-
-    def test_herbivores_no_death_no_birth(self):
-        self.map2.feedin
-
-
-
-
-
-
-
-
-
-
-
-
-
