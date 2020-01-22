@@ -3,17 +3,10 @@
 __author__ = 'Hans Kristian Lunda, Mikko Rekstad'
 __email__ = 'hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no'
 
-# import cv2
-import glob
-import os
-import argparse
 from biosim.cell import Cell
 from biosim.fauna import Herbivore, Carnivore
 from biosim.map import Map
 from biosim.visualize import Visualize
-import matplotlib.pyplot as plt
-import numpy as np
-import seaborn as sb
 import pandas as pd
 import csv
 
@@ -88,7 +81,8 @@ class BioSim:
         self.visualize = Visualize(self.map, frequency=2, years=200,
                                    img_dir='.')
 
-    def check_validity_of_string(self, map_string):
+    @staticmethod
+    def check_validity_of_string(island_map):
         """
         This function checks if the mapstring is valid according to
         the project specifications, that is Ocean cell at the map's edges and
@@ -98,7 +92,7 @@ class BioSim:
         :return: boolean
         """
         valid_landscape = ['O', 'J', 'S', 'D', 'M']
-        temp_lines = map_string.split()
+        temp_lines = island_map.split()
 
         for i in temp_lines[1:]:
             if len(i) != len(temp_lines[0]):
@@ -281,14 +275,6 @@ class BioSim:
         with open('save mid simulation result', 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([self._year, herbivores, carnivores, total])
-
-        # out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'),
-        #                       15, size)
-        #
-        # for i in range(len(img_array)):
-        #     out.write(img_array[i])
-        # out.release()
-
 
 if __name__ == '__main__':
     map1 = """\
