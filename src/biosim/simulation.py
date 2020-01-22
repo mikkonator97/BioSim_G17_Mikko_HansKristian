@@ -75,11 +75,11 @@ class BioSim:
             self.map = Map(self.island_map)
             self.add_population(ini_pop)
             self.save_csv = save_csv
+            self.visualize = Visualize(self.map, frequency=2, years=200,
+                                   img_dir='.')
             if self.img_base is not None:
                 self._image_counter = 0
                 self.vis_years = 1
-        self.visualize = Visualize(self.map, frequency=2, years=200,
-                                   img_dir='.')
 
     @staticmethod
     def check_validity_of_string(island_map):
@@ -169,9 +169,7 @@ class BioSim:
         current_simulation_year = 0
         while current_simulation_year < num_years:
             print('Ingoing population: ', self.map.get_populations())
-            self.map.feeding_and_procreation()
-            self.map.migration()
-            self.map.agein_weight_loss_and_death()
+            self.map.yearly_cycle()
             print("current_simulation_year", current_simulation_year + 1,
                   " out of ", num_years)
             current_simulation_year += 1
