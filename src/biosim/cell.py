@@ -224,10 +224,9 @@ class Cell:
         Increases the age for all the creatures in the population list.
         :return:
         """
-        for creature in self.population_herbivores:
-            creature.age += 1
-        for creature in self.population_carnivores:
-            creature.age += 1
+        [herbivore.age+1 for herbivore in self.population_herbivores]
+        [carnivore.age + 1 for carnivore in self.population_carnivores]
+
 
     def lose_weight(self):
         """
