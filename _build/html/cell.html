@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Cell &#8212; INF200_January_project_group_17 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Fauna" href="fauna.html" />
+    <link rel="prev" title="Map" href="map.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="cell">
+<h1>Cell<a class="headerlink" href="#cell" title="Permalink to this headline">¶</a></h1>
+<p>The cell module contains code for the cell’s properties and code for managing
+its population.</p>
+<div class="section" id="module-biosim.cell">
+<span id="the-cell-module"></span><h2>The cell module<a class="headerlink" href="#module-biosim.cell" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="biosim.cell.Cell">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.cell.</code><code class="sig-name descname">Cell</code><span class="sig-paren">(</span><em class="sig-param">coordinates=None</em>, <em class="sig-param">landscape=None</em>, <em class="sig-param">fodder=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class contains information about the Cell object, methods for getting
+information out of this cell, and methods for adding fodder to jungel and
+savannah cells.</p>
+<dl class="method">
+<dt id="biosim.cell.Cell.add_age">
+<code class="sig-name descname">add_age</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.add_age"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.add_age" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increases the age for all the creatures in the population list.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.add_fodder">
+<code class="sig-name descname">add_fodder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.add_fodder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.add_fodder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which adds fodder to the jungle and savannah cells.
+The jungle cells gets a fixed amount, and the savannah gets an amount
+based on the available fodder in the cell.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.add_pop">
+<code class="sig-name descname">add_pop</code><span class="sig-paren">(</span><em class="sig-param">cell_pop</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.add_pop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.add_pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a herbivore or a carnivore object to a cell.
+Species, weight and age are supplied from a dictionary.
+:param cell_pop: dictionary
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.alter_population">
+<code class="sig-name descname">alter_population</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.alter_population"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.alter_population" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs through the population of both species. Uses while-loops to avoid
+iteration errors when creatures are removed. They are removed if the
+probability is higher than the chances for them to live.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.feed_carnivores">
+<code class="sig-name descname">feed_carnivores</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.feed_carnivores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.feed_carnivores" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will feed the carnivores, where each carnivore will
+feast on the herbivores based on both carnivore and herbivore fitness.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.feed_herbivores">
+<code class="sig-name descname">feed_herbivores</code><span class="sig-paren">(</span><em class="sig-param">creature</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.feed_herbivores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.feed_herbivores" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each creature in the population of the cell, fodder is subtracted
+from the cell, and the creature gets an increase in weight.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.get_abundance_carnivore">
+<code class="sig-name descname">get_abundance_carnivore</code><span class="sig-paren">(</span><em class="sig-param">f=50.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.get_abundance_carnivore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.get_abundance_carnivore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the relative attractiveness for carnivores based on the
+weight of the herbivores, number of carnivores and their
+relative appetite.
+:param f: float
+:return: float</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.get_abundance_herbivore">
+<code class="sig-name descname">get_abundance_herbivore</code><span class="sig-paren">(</span><em class="sig-param">f=10.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.get_abundance_herbivore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.get_abundance_herbivore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the relative attractiveness for herbivores based on the
+amount of fodder, number of herbivores and their relative appetite.
+:param f: float
+:return: float</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.get_fodder">
+<code class="sig-name descname">get_fodder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.get_fodder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.get_fodder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Amount of fodder in the cell
+:return: int</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.lose_weight">
+<code class="sig-name descname">lose_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.lose_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.lose_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls the reduce weight method for each creature in the population
+list.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.mating_season">
+<code class="sig-name descname">mating_season</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.mating_season"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.mating_season" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calls birth for each herbivore and carnivore and
+append a new object to the current herbivore/carnivore
+population in this cell.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.number_carnivores">
+<code class="sig-name descname">number_carnivores</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.number_carnivores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.number_carnivores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of carnivores as an int</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.number_herbivores">
+<code class="sig-name descname">number_herbivores</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.number_herbivores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.number_herbivores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of herbivores as an int</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.ranked_fitness_carnivores">
+<code class="sig-name descname">ranked_fitness_carnivores</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.ranked_fitness_carnivores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.ranked_fitness_carnivores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ranks carnivores in this cell from fittest to least fit.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.ranked_fitness_herbivores">
+<code class="sig-name descname">ranked_fitness_herbivores</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.ranked_fitness_herbivores"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.ranked_fitness_herbivores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ranks herbivores in this cell from fittest to least fit.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.ranked_fitness_herbivores_weakest">
+<code class="sig-name descname">ranked_fitness_herbivores_weakest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.ranked_fitness_herbivores_weakest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.ranked_fitness_herbivores_weakest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ranks herbivores in this cell from least fit to fittest.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.cell.Cell.successful_hunt">
+<code class="sig-name descname">successful_hunt</code><span class="sig-paren">(</span><em class="sig-param">carnivore</em>, <em class="sig-param">herbivore</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/cell.html#Cell.successful_hunt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Cell.successful_hunt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which returns the probability of a successful hunt
+where the carnivore will pray.
+:return: float</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="biosim.cell.Desert">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.cell.</code><code class="sig-name descname">Desert</code><a class="reference internal" href="_modules/biosim/cell.html#Desert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Desert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass for Desert cells. Does not need much info, other that habitable.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="biosim.cell.Jungle">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.cell.</code><code class="sig-name descname">Jungle</code><a class="reference internal" href="_modules/biosim/cell.html#Jungle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Jungle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass for Jungle cells. Defines variables unique for Jungle cells.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="biosim.cell.Mountain">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.cell.</code><code class="sig-name descname">Mountain</code><a class="reference internal" href="_modules/biosim/cell.html#Mountain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Mountain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass for Mountain cells. Does not need much info, other that habitable.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="biosim.cell.Ocean">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.cell.</code><code class="sig-name descname">Ocean</code><a class="reference internal" href="_modules/biosim/cell.html#Ocean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Ocean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass for Ocean cells. Does not need much info, other than habitable.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="biosim.cell.Savannah">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.cell.</code><code class="sig-name descname">Savannah</code><a class="reference internal" href="_modules/biosim/cell.html#Savannah"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.cell.Savannah" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass for Savannah cells. Defines variables unique for Savannah cells.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">INF200_January_project_group_17</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sim.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map.html">Map</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cell</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-biosim.cell">The cell module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fauna.html">Fauna</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="map.html" title="previous chapter">Map</a></li>
+      <li>Next: <a href="fauna.html" title="next chapter">Fauna</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Hans Kristian Lunda, Mikko Rekstad.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/cell.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

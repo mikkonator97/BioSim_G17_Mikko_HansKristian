@@ -1,0 +1,395 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>biosim.cell &#8212; INF200_January_project_group_17 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for biosim.cell</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-a</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Hans Kristian Lunda, Mikko Rekstad&#39;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s1">&#39;hans.kristian.lunda@nmbu.no, mikkreks@nmbu.no&#39;</span>
+
+<span class="kn">from</span> <span class="nn">biosim.fauna</span> <span class="kn">import</span> <span class="n">Fauna</span><span class="p">,</span> <span class="n">Herbivore</span><span class="p">,</span> <span class="n">Carnivore</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="Cell"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell">[docs]</a><span class="k">class</span> <span class="nc">Cell</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class contains information about the Cell object, methods for getting</span>
+<span class="sd">    information out of this cell, and methods for adding fodder to jungel and</span>
+<span class="sd">    savannah cells.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">landscape</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fodder</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">300.0</span><span class="p">,</span> <span class="mf">800.0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="n">coordinates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">landscape</span> <span class="o">=</span> <span class="n">landscape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span> <span class="o">=</span> <span class="n">fodder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">population</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma_herbivore</span> <span class="o">=</span> <span class="mf">0.2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adjacent_cells2</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">probability_herbivores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">probability_carnivores</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">adjacent_cells_herbivore_attractiveness</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adjacent_cells_carnivore_attractiveness</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F_h</span> <span class="o">=</span> <span class="mi">10</span>
+
+<div class="viewcode-block" id="Cell.number_herbivores"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.number_herbivores">[docs]</a>    <span class="k">def</span> <span class="nf">number_herbivores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the number of herbivores as an int&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cell.number_carnivores"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.number_carnivores">[docs]</a>    <span class="k">def</span> <span class="nf">number_carnivores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the number of carnivores as an int&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cell.get_fodder"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.get_fodder">[docs]</a>    <span class="k">def</span> <span class="nf">get_fodder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Amount of fodder in the cell</span>
+<span class="sd">        :return: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span></div>
+
+<div class="viewcode-block" id="Cell.add_fodder"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.add_fodder">[docs]</a>    <span class="k">def</span> <span class="nf">add_fodder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function which adds fodder to the jungle and savannah cells.</span>
+<span class="sd">        The jungle cells gets a fixed amount, and the savannah gets an amount</span>
+<span class="sd">        based on the available fodder in the cell.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">landscape</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">available_fodder</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_fodder</span><span class="p">())</span>
+            <span class="n">f_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span> <span class="o">=</span> <span class="p">(</span><span class="n">available_fodder</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                           <span class="o">*</span> <span class="p">(</span><span class="n">f_max</span> <span class="o">-</span> <span class="n">available_fodder</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">landscape</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span></div>
+
+<div class="viewcode-block" id="Cell.add_pop"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.add_pop">[docs]</a>    <span class="k">def</span> <span class="nf">add_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell_pop</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a herbivore or a carnivore object to a cell.</span>
+<span class="sd">        Species, weight and age are supplied from a dictionary.</span>
+<span class="sd">        :param cell_pop: dictionary</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">creature</span> <span class="ow">in</span> <span class="n">cell_pop</span><span class="p">:</span>
+            <span class="n">species</span> <span class="o">=</span> <span class="n">creature</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;species&#39;</span><span class="p">)</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="n">creature</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;weight&#39;</span><span class="p">)</span>
+            <span class="n">age</span> <span class="o">=</span> <span class="n">creature</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;age&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">species</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;herbivore&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Herbivore</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+                                                            <span class="n">age</span><span class="o">=</span><span class="n">age</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Carnivore</span><span class="p">(</span><span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">,</span>
+                                                            <span class="n">age</span><span class="o">=</span><span class="n">age</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Cell.alter_population"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.alter_population">[docs]</a>    <span class="k">def</span> <span class="nf">alter_population</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Runs through the population of both species. Uses while-loops to avoid</span>
+<span class="sd">        iteration errors when creatures are removed. They are removed if the</span>
+<span class="sd">        probability is higher than the chances for them to live.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">number_of_herbivores</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">number_of_herbivores</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">death</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">state</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+                <span class="n">number_of_herbivores</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">index</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">index2</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">number_of_carnivores</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">index2</span> <span class="o">&lt;</span> <span class="n">number_of_carnivores</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="p">[</span><span class="n">index2</span><span class="p">]</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="p">[</span><span class="n">index2</span><span class="p">]</span><span class="o">.</span><span class="n">death</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="p">[</span><span class="n">index2</span><span class="p">]</span><span class="o">.</span><span class="n">state</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index2</span><span class="p">)</span>
+                <span class="n">number_of_carnivores</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">index2</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">index2</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="Cell.feed_herbivores"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.feed_herbivores">[docs]</a>    <span class="k">def</span> <span class="nf">feed_herbivores</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        For each creature in the population of the cell, fodder is subtracted</span>
+<span class="sd">        from the cell, and the creature gets an increase in weight.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span> <span class="o">-=</span> <span class="mi">10</span>
+            <span class="n">fodder</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fodder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">creature</span><span class="o">.</span><span class="n">weight</span> <span class="o">+=</span> <span class="n">creature</span><span class="o">.</span><span class="n">beta</span> <span class="o">*</span> <span class="n">fodder</span></div>
+
+<div class="viewcode-block" id="Cell.feed_carnivores"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.feed_carnivores">[docs]</a>    <span class="k">def</span> <span class="nf">feed_carnivores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will feed the carnivores, where each carnivore will</span>
+<span class="sd">        feast on the herbivores based on both carnivore and herbivore fitness.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranked_fitness_herbivores_weakest</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ranked_fitness_carnivores</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">carnivore</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="p">:</span>
+            <span class="n">herbivore_eaten</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">herbivore</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">herbivore_eaten</span> <span class="o">&gt;=</span> <span class="mi">50</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+                <span class="n">probability_of_successful_hunt</span> <span class="o">=</span> \
+                    <span class="bp">self</span><span class="o">.</span><span class="n">successful_hunt</span><span class="p">(</span><span class="n">carnivore</span><span class="p">,</span> <span class="n">herbivore</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">probability_of_successful_hunt</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">kill_probability</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">kill_probability</span> <span class="o">&lt;</span> <span class="n">probability_of_successful_hunt</span><span class="p">:</span>
+                    <span class="n">herbivore_eaten</span> <span class="o">+=</span> \
+                        <span class="n">carnivore</span><span class="o">.</span><span class="n">eat</span><span class="p">(</span><span class="n">herbivore</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">herbivore_eaten</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">herbivore</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cell.successful_hunt"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.successful_hunt">[docs]</a>    <span class="k">def</span> <span class="nf">successful_hunt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">carnivore</span><span class="p">,</span> <span class="n">herbivore</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function which returns the probability of a successful hunt</span>
+<span class="sd">        where the carnivore will pray.</span>
+<span class="sd">        :return: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">herbivore</span><span class="o">.</span><span class="n">fitness</span> <span class="o">&gt;=</span> <span class="n">carnivore</span><span class="o">.</span><span class="n">fitness</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+        <span class="k">elif</span> <span class="n">carnivore</span><span class="o">.</span><span class="n">DeltaPhiMax</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">carnivore</span><span class="o">.</span><span class="n">fitness</span> <span class="o">-</span> <span class="n">herbivore</span><span class="o">.</span><span class="n">fitness</span><span class="p">):</span>
+            <span class="n">fitness_difference</span> <span class="o">=</span> <span class="p">(</span><span class="n">carnivore</span><span class="o">.</span><span class="n">fitness</span> <span class="o">-</span> <span class="n">herbivore</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">fitness_difference</span> <span class="o">/</span> <span class="n">carnivore</span><span class="o">.</span><span class="n">DeltaPhiMax</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span></div>
+
+<div class="viewcode-block" id="Cell.mating_season"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.mating_season">[docs]</a>    <span class="k">def</span> <span class="nf">mating_season</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calls birth for each herbivore and carnivore and</span>
+<span class="sd">        append a new object to the current herbivore/carnivore</span>
+<span class="sd">        population in this cell.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">herbivore</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="p">:</span>
+            <span class="n">new_creature</span> <span class="o">=</span> <span class="p">(</span><span class="n">herbivore</span><span class="o">.</span><span class="n">birth</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_herbivores</span><span class="p">()))</span>
+            <span class="k">if</span> <span class="n">new_creature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_creature</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">carnivore</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="p">:</span>
+            <span class="n">new_creature</span> <span class="o">=</span> <span class="p">(</span><span class="n">carnivore</span><span class="o">.</span><span class="n">birth</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_carnivores</span><span class="p">()))</span>
+            <span class="k">if</span> <span class="n">new_creature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_creature</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cell.ranked_fitness_herbivores"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.ranked_fitness_herbivores">[docs]</a>    <span class="k">def</span> <span class="nf">ranked_fitness_herbivores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Ranks herbivores in this cell from fittest to least fit.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cell.ranked_fitness_herbivores_weakest"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.ranked_fitness_herbivores_weakest">[docs]</a>    <span class="k">def</span> <span class="nf">ranked_fitness_herbivores_weakest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Ranks herbivores in this cell from least fit to fittest.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cell.ranked_fitness_carnivores"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.ranked_fitness_carnivores">[docs]</a>    <span class="k">def</span> <span class="nf">ranked_fitness_carnivores</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Ranks carnivores in this cell from fittest to least fit.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">fitness</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Cell.get_abundance_herbivore"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.get_abundance_herbivore">[docs]</a>    <span class="k">def</span> <span class="nf">get_abundance_herbivore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mf">10.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the relative attractiveness for herbivores based on the</span>
+<span class="sd">        amount of fodder, number of herbivores and their relative appetite.</span>
+<span class="sd">        :param f: float</span>
+<span class="sd">        :return: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">abundance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span> <span class="o">/</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">number_herbivores</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">abundance</span></div>
+
+<div class="viewcode-block" id="Cell.get_abundance_carnivore"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.get_abundance_carnivore">[docs]</a>    <span class="k">def</span> <span class="nf">get_abundance_carnivore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mf">50.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the relative attractiveness for carnivores based on the</span>
+<span class="sd">        weight of the herbivores, number of carnivores and their</span>
+<span class="sd">        relative appetite.</span>
+<span class="sd">        :param f: float</span>
+<span class="sd">        :return: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">food</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">creature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="p">:</span>
+            <span class="n">food</span> <span class="o">+=</span> <span class="n">creature</span><span class="o">.</span><span class="n">weight</span>
+        <span class="n">abundance</span> <span class="o">=</span> <span class="n">food</span> <span class="o">/</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">number_carnivores</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">abundance</span></div>
+
+<div class="viewcode-block" id="Cell.add_age"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.add_age">[docs]</a>    <span class="k">def</span> <span class="nf">add_age</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Increases the age for all the creatures in the population list.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">creature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="p">:</span>
+            <span class="n">creature</span><span class="o">.</span><span class="n">age</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">creature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="p">:</span>
+            <span class="n">creature</span><span class="o">.</span><span class="n">age</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="Cell.lose_weight"><a class="viewcode-back" href="../../cell.html#biosim.cell.Cell.lose_weight">[docs]</a>    <span class="k">def</span> <span class="nf">lose_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calls the reduce weight method for each creature in the population</span>
+<span class="sd">        list.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">creature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_herbivores</span><span class="p">:</span>
+            <span class="n">creature</span><span class="o">.</span><span class="n">reduce_weight</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">creature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">population_carnivores</span><span class="p">:</span>
+            <span class="n">creature</span><span class="o">.</span><span class="n">reduce_weight</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="Ocean"><a class="viewcode-back" href="../../cell.html#biosim.cell.Ocean">[docs]</a><span class="k">class</span> <span class="nc">Ocean</span><span class="p">(</span><span class="n">Cell</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Subclass for Ocean cells. Does not need much info, other than habitable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">landscape</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fodder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">habitable</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Mountain"><a class="viewcode-back" href="../../cell.html#biosim.cell.Mountain">[docs]</a><span class="k">class</span> <span class="nc">Mountain</span><span class="p">(</span><span class="n">Cell</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Subclass for Mountain cells. Does not need much info, other that habitable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">landscape</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fodder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">habitable</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Desert"><a class="viewcode-back" href="../../cell.html#biosim.cell.Desert">[docs]</a><span class="k">class</span> <span class="nc">Desert</span><span class="p">(</span><span class="n">Cell</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Subclass for Desert cells. Does not need much info, other that habitable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">landscape</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">fodder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">habitable</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Savannah"><a class="viewcode-back" href="../../cell.html#biosim.cell.Savannah">[docs]</a><span class="k">class</span> <span class="nc">Savannah</span><span class="p">(</span><span class="n">Cell</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Subclass for Savannah cells. Defines variables unique for Savannah cells.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">landscape</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">fodder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">habitable</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span></div>
+
+
+<div class="viewcode-block" id="Jungle"><a class="viewcode-back" href="../../cell.html#biosim.cell.Jungle">[docs]</a><span class="k">class</span> <span class="nc">Jungle</span><span class="p">(</span><span class="n">Cell</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Subclass for Jungle cells. Defines variables unique for Jungle cells.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">coordinates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">landscape</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fodder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">habitable</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fodder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_max</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">INF200_January_project_group_17</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../sim.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../map.html">Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cell.html">Cell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fauna.html">Fauna</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Hans Kristian Lunda, Mikko Rekstad.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

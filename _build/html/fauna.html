@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fauna &#8212; INF200_January_project_group_17 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Cell" href="cell.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="fauna">
+<h1>Fauna<a class="headerlink" href="#fauna" title="Permalink to this headline">¶</a></h1>
+<p>The fauna module contains code code for the carnivores, the herbivores and
+the common code for these classes.</p>
+<div class="section" id="module-biosim.fauna">
+<span id="the-fauna-module"></span><h2>The fauna module<a class="headerlink" href="#module-biosim.fauna" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="biosim.fauna.Carnivore">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.fauna.</code><code class="sig-name descname">Carnivore</code><span class="sig-paren">(</span><em class="sig-param">weight</em>, <em class="sig-param">age=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Carnivore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Carnivore" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class contains all methods which are related to the carnivore objects.</p>
+<dl class="method">
+<dt id="biosim.fauna.Carnivore.eat">
+<code class="sig-name descname">eat</code><span class="sig-paren">(</span><em class="sig-param">fodder_amount=0</em>, <em class="sig-param">herbivore_already_eaten=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Carnivore.eat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Carnivore.eat" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will increase the creatures weight when it eats.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="biosim.fauna.Fauna">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.fauna.</code><code class="sig-name descname">Fauna</code><span class="sig-paren">(</span><em class="sig-param">weight=0</em>, <em class="sig-param">age=0</em>, <em class="sig-param">seed=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Fauna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Fauna" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class will include the common properties for all creatures on
+Rossumøya.</p>
+<dl class="method">
+<dt id="biosim.fauna.Fauna.birth">
+<code class="sig-name descname">birth</code><span class="sig-paren">(</span><em class="sig-param">population</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Fauna.birth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Fauna.birth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will return a baby if the creature is supposed to give birth.
+:param population: int
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.fauna.Fauna.death">
+<code class="sig-name descname">death</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Fauna.death"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Fauna.death" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True/False if the creature dies.
+:return: boolean</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.fauna.Fauna.find_birth_weight">
+<code class="sig-name descname">find_birth_weight</code><span class="sig-paren">(</span><em class="sig-param">population</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Fauna.find_birth_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Fauna.find_birth_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function calculates the probability of giving birth,
+and the birth weight.
+:param population: int
+:return: float</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.fauna.Fauna.fitness">
+<em class="property">property </em><code class="sig-name descname">fitness</code><a class="headerlink" href="#biosim.fauna.Fauna.fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the creatures fitness
+:return: float</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.fauna.Fauna.get_age">
+<code class="sig-name descname">get_age</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Fauna.get_age"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Fauna.get_age" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the creatures age
+:return: int</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.fauna.Fauna.get_weight">
+<code class="sig-name descname">get_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Fauna.get_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Fauna.get_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the creatures weight
+:return: float</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.fauna.Fauna.reduce_weight">
+<code class="sig-name descname">reduce_weight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Fauna.reduce_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Fauna.reduce_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduces the creatures weight
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="biosim.fauna.Fauna.wants_to_migrate">
+<code class="sig-name descname">wants_to_migrate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Fauna.wants_to_migrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Fauna.wants_to_migrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the creature wants to migrate.
+:return: boolean</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="biosim.fauna.Herbivore">
+<em class="property">class </em><code class="sig-prename descclassname">biosim.fauna.</code><code class="sig-name descname">Herbivore</code><span class="sig-paren">(</span><em class="sig-param">weight</em>, <em class="sig-param">age=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/biosim/fauna.html#Herbivore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#biosim.fauna.Herbivore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">INF200_January_project_group_17</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sim.html">Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map.html">Map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell.html">Cell</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fauna</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-biosim.fauna">The fauna module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="cell.html" title="previous chapter">Cell</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Hans Kristian Lunda, Mikko Rekstad.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/fauna.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
